@@ -3,6 +3,7 @@ import Card from "../components/Card";
 
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";
+import TwoCards from "../components/TwoCards";
 import { RootTabScreenProps } from "../types";
 
 export default function TabOneScreen({
@@ -18,6 +19,7 @@ export default function TabOneScreen({
       />
       <EditScreenInfo path="/screens/TabOneScreen.tsx" />
       <Card />
+      <TwoCards />
     </View>
   );
 }
