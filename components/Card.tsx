@@ -10,12 +10,12 @@ export default function Card() {
       underlayColor="rgba(0, 0, 255, 0.4)"
       onPress={() => console.log("pressed")}
     >
-      <View style={styles.face}>
-        <Text style={styles.value}>
+      <View style={styles.front}>
+        <Text style={styles.rankAndSuit}>
           K
           <FontAwesomeIcon size={28} icon={faHeart} color={"red"} />
         </Text>
-        <Text style={[styles.value, styles.bottomValue]}>
+        <Text style={[styles.rankAndSuit, styles.bottomRankAndSuit]}>
           K
           <Text>
             <FontAwesomeIcon size={28} icon={faHeart} color={"red"} />
@@ -35,10 +35,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: "white",
   },
-  face: {
+  front: {
     height: "100%",
   },
-  value: {
+  rankAndSuit: {
     fontWeight: "bold",
     fontSize: 30,
     color: "red",
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     height: "50%",
     marginHorizontal: 8,
   },
-  bottomValue: {
+  bottomRankAndSuit: {
     transform: [
       {
         rotateX: "180deg",
