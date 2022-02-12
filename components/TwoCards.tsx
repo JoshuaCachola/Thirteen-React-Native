@@ -1,4 +1,4 @@
-import Card from "./Card";
+import PlayingCard from "./PlayingCard";
 import { View, StyleSheet } from "react-native";
 
 // This component displays holding two cards
@@ -6,10 +6,10 @@ export default function TwoCards() {
   return (
     <View style={styles.container}>
       <View style={styles.cardOne}>
-        <Card />
+        <PlayingCard />
       </View>
       <View style={styles.cardTwo}>
-        <Card />
+        <PlayingCard />
       </View>
     </View>
   );

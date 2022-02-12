@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import Card from "../components/Card";
+import Card from "../components/PlayingCard";
 
 import EditScreenInfo from "../components/EditScreenInfo";
 import { Text, View } from "../components/Themed";

@@ -1,12 +1,18 @@
 import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import useSuit from "../hooks/useSuit";
 
-// This component displays holding one card
-export default function Card() {
+export interface Card {
+  value: number;
+  suit: string;
+}
+
+// Card Component
+export default function PlayingCard({ value, suit }: Card) {
+  // Handles state of pressing card
   const [isCardPressed, setCardPressed] = useState(false);
-  console.log(isCardPressed);
+  const cardSuit = useSuit("heart");
   return (
     <TouchableHighlight
       style={
@@ -16,19 +22,15 @@ export default function Card() {
       }
       underlayColor="rgba(0, 0, 255, 0.4)"
       onPress={() => setCardPressed(!isCardPressed)}
-      // onShowUnderlay={() => setCardPressed(!isCardPressed)}
-      // onHideUnderlay={() => setCardPressed(!isCardPressed)}
     >
       <View style={styles.front}>
         <Text style={styles.rankAndSuit}>
-          K
-          <FontAwesomeIcon size={28} icon={faHeart} color={"red"} />
+          <Text style={styles.value}>{value}</Text>
+          <FontAwesomeIcon size={28} icon={cardSuit} color={"red"} />
         </Text>
-        <Text style={[styles.rankAndSuit, styles.bottomRankAndSuit]}>
-          K
-          <Text>
-            <FontAwesomeIcon size={28} icon={faHeart} color={"red"} />
-          </Text>
+        <Text style={[styles.rankAndSuit, styles.bottomValueAndSuit]}>
+          <Text style={styles.bottomValue}>{value}</Text>
+          <FontAwesomeIcon size={28} icon={cardSuit} color={"red"} />
         </Text>
       </View>
     </TouchableHighlight>
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
     height: "50%",
     marginHorizontal: 8,
   },
-  bottomRankAndSuit: {
+  bottomValueAndSuit: {
     transform: [
       {
         rotateX: "180deg",
@@ -71,5 +73,16 @@ const styles = StyleSheet.create({
     borderWidth: 10,
     borderColor: "yellow",
     backgroundColor: "rgb(0, 0, 200)",
+  },
+  value: {
+    marginLeft: 3,
+  },
+  bottomValue: {
+    marginRight: 5,
+    transform: [
+      {
+        rotateY: "180deg",
+      },
+    ],
   },
 });
