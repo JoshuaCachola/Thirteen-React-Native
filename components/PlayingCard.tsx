@@ -14,8 +14,10 @@ export default function PlayingCard({ value, suit }: Card) {
   // Handles state of pressing card
   const [isCardPressed, setCardPressed] = useState(false);
 
+  // hooks to get card suit and card color
   const cardSuit = useSuit(suit);
   const color = useColor(suit);
+
   return (
     <TouchableHighlight
       style={

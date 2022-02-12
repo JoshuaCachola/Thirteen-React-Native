@@ -3,13 +3,17 @@ import { View, StyleSheet } from "react-native";
 import { useEffect, useState } from "react";
 import { Card } from "./PlayingCard";
 
-// This component displays holding two cards
-export default function Hand({ cards }: Card[]) {
+interface Props {
+  cards: Card[];
+}
+
+// This component displays holding a hand of cards
+export default function Hand(props: Props) {
   const [cardsInHand, setCardsInHand] = useState<Card[]>([]);
 
   // sets cards on first render
   useEffect(() => {
-    setCardsInHand(cards);
+    setCardsInHand(props.cards);
   }, []);
 
   return (

@@ -18,6 +18,7 @@ export enum CardSuits {
 export default function useSuit(suit: CardSuits) {
   const [cardSuitIcon, setSuitIcon] = useState<IconDefinition>(faCube);
 
+  // switch case for setting state of suit on first render
   useEffect(() => {
     switch (suit) {
       case 0:

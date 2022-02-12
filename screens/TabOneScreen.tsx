@@ -1,35 +1,21 @@
-import { StyleSheet } from "react-native";
-import { Card } from "../components/PlayingCard";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import { View } from "../components/Themed";
-import Hand from "../components/Hand";
-import { RootTabScreenProps } from "../types";
 
-const cards: Card[] = [
-  {
-    value: 2,
-    suit: 0,
-  },
-  {
-    value: 3,
-    suit: 1,
-  },
-  {
-    value: 4,
-    suit: 2,
-  },
-  {
-    value: 5,
-    suit: 3,
-  },
-];
-
-export default function TabOneScreen({
-  navigation,
-}: RootTabScreenProps<"TabOne">) {
+export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-      <Hand cards={cards} />
+      <View>
+        <TouchableOpacity style={styles.button}>
+          <Text>Learn To Play</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text>Join Game</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text>Find Game</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -40,4 +26,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  button: {
+    backgroundColor: "yellow",
+    padding: 10,
+    margin: 10,
+    borderRadius: 6,
+    alignItems: "center",
+  },
+  // title: {
+  //   fontSize: 20,
+  //   fontWeight: "bold",
+  // },
+  // separator: {
+  //   marginVertical: 30,
+  //   height: 1,
+  //   width: "80%",
+  // },
 });
