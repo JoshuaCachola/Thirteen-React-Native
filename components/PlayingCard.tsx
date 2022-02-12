@@ -1,18 +1,21 @@
 import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useState } from "react";
-import useSuit from "../hooks/useSuit";
+import useSuit, { CardSuits } from "../hooks/useSuit";
+import useColor from "../hooks/useColor";
 
 export interface Card {
   value: number;
-  suit: string;
+  suit: CardSuits;
 }
 
 // Card Component
 export default function PlayingCard({ value, suit }: Card) {
   // Handles state of pressing card
   const [isCardPressed, setCardPressed] = useState(false);
-  const cardSuit = useSuit("heart");
+
+  const cardSuit = useSuit(suit);
+  const color = useColor(suit);
   return (
     <TouchableHighlight
       style={
@@ -24,13 +27,19 @@ export default function PlayingCard({ value, suit }: Card) {
       onPress={() => setCardPressed(!isCardPressed)}
     >
       <View style={styles.front}>
-        <Text style={styles.rankAndSuit}>
+        <Text style={[{ color: `${color}` }, styles.rankAndSuit]}>
           <Text style={styles.value}>{value}</Text>
-          <FontAwesomeIcon size={28} icon={cardSuit} color={"red"} />
+          <FontAwesomeIcon size={28} icon={cardSuit} color={color} />
         </Text>
-        <Text style={[styles.rankAndSuit, styles.bottomValueAndSuit]}>
+        <Text
+          style={[
+            { color: `${color}` },
+            styles.rankAndSuit,
+            styles.bottomValueAndSuit,
+          ]}
+        >
           <Text style={styles.bottomValue}>{value}</Text>
-          <FontAwesomeIcon size={28} icon={cardSuit} color={"red"} />
+          <FontAwesomeIcon size={28} icon={cardSuit} color={color} />
         </Text>
       </View>
     </TouchableHighlight>
@@ -52,7 +61,6 @@ const styles = StyleSheet.create({
   rankAndSuit: {
     fontWeight: "bold",
     fontSize: 30,
-    color: "red",
     display: "flex",
     flexDirection: "column",
     height: "50%",
@@ -66,7 +74,6 @@ const styles = StyleSheet.create({
     ],
     alignContent: "flex-end",
     alignItems: "flex-end",
-    flexBasis: "auto",
   },
   selectCard: {
     bottom: 30,

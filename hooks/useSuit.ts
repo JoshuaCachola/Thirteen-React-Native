@@ -8,23 +8,28 @@ import {
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { useEffect, useState } from "react";
 
-export type CardSuits = "heart" | "diamond" | "spade" | "club";
+export enum CardSuits {
+  "heart",
+  "diamond",
+  "spade",
+  "club",
+}
 
 export default function useSuit(suit: CardSuits) {
-  const [cardSuit, setSuit] = useState<IconDefinition>(faSpa);
+  const [cardSuitIcon, setSuitIcon] = useState<IconDefinition>(faCube);
 
   useEffect(() => {
     switch (suit) {
-      case "spade":
-        setSuit(faSpa);
-      case "club":
-        setSuit(faCube);
-      case "heart":
-        setSuit(faHeart);
-      case "diamond":
-        setSuit(faDiamond);
+      case 0:
+        return setSuitIcon(faHeart);
+      case 1:
+        return setSuitIcon(faDiamond);
+      case 2:
+        return setSuitIcon(faSpa);
+      case 3:
+        return setSuitIcon(faCube);
     }
-  });
+  }, []);
 
-  return cardSuit;
+  return cardSuitIcon;
 }
