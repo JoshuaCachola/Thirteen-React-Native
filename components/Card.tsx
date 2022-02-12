@@ -1,14 +1,23 @@
 import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 // This component displays holding one card
 export default function Card() {
+  const [isCardPressed, setCardPressed] = useState(false);
+  console.log(isCardPressed);
   return (
     <TouchableHighlight
-      style={styles.container}
+      style={
+        isCardPressed
+          ? [styles.container, styles.selectCard]
+          : [styles.container]
+      }
       underlayColor="rgba(0, 0, 255, 0.4)"
-      onPress={() => console.log("pressed")}
+      onPress={() => setCardPressed(!isCardPressed)}
+      // onShowUnderlay={() => setCardPressed(!isCardPressed)}
+      // onHideUnderlay={() => setCardPressed(!isCardPressed)}
     >
       <View style={styles.front}>
         <Text style={styles.rankAndSuit}>
@@ -56,5 +65,11 @@ const styles = StyleSheet.create({
     alignContent: "flex-end",
     alignItems: "flex-end",
     flexBasis: "auto",
+  },
+  selectCard: {
+    bottom: 30,
+    borderWidth: 10,
+    borderColor: "yellow",
+    backgroundColor: "rgb(0, 0, 200)",
   },
 });

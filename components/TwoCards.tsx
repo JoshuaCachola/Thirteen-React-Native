@@ -22,20 +22,20 @@ const styles = StyleSheet.create({
   cardOne: {
     position: "absolute",
     zIndex: 1,
-    transform: [
-      {
-        rotate: "-15deg",
-      },
-    ],
+    // transform: [
+    //   {
+    //     rotate: "-15deg",
+    //   },
+    // ],
   },
   cardTwo: {
     position: "absolute",
     zIndex: 2,
-    transform: [
-      {
-        rotate: "15deg",
-      },
-    ],
-    left: 50,
+    // transform: [
+    //   {
+    //     rotate: "15deg",
+    //   },
+    // ],
+    left: 40,
   },
 });
