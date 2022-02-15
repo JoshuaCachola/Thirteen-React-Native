@@ -3,7 +3,6 @@ import { Card } from "../components/PlayingCard";
 
 import { View } from "../components/Themed";
 import Hand from "../components/Hand";
-import { RootTabScreenProps } from "../types";
 import { useState } from "react";
 
 const exampleCards: Card[] = [
@@ -25,9 +24,7 @@ const exampleCards: Card[] = [
   },
 ];
 
-export default function TabOneScreen({
-  navigation,
-}: RootTabScreenProps<"TabOne">) {
+export default function Game() {
   const [cards, setCards] = useState<Card[]>(exampleCards);
 
   return (

@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import { View } from "../components/Themed";
 
-export default function TabTwoScreen() {
+export default function Home() {
   return (
     <View style={styles.container}>
       <View>

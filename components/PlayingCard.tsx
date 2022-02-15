@@ -50,8 +50,8 @@ export default function PlayingCard({ value, suit }: Card) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "150px",
-    height: "250px",
+    width: 150,
+    height: 250,
     borderRadius: 8,
     borderColor: "#C5C5C5",
     borderWidth: 1,

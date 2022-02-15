@@ -39,5 +39,6 @@ const styles = StyleSheet.create({
   },
   hand: {
     position: "absolute",
+    // top: 0i
   },
 });
