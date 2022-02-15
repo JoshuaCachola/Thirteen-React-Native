@@ -33,13 +33,4 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: "center",
   },
-  // title: {
-  //   fontSize: 20,
-  //   fontWeight: "bold",
-  // },
-  // separator: {
-  //   marginVertical: 30,
-  //   height: 1,
-  //   width: "80%",
-  // },
 });

@@ -3,16 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useState } from "react";
 import useSuit, { CardSuits } from "../hooks/useSuit";
 import useColor from "../hooks/useColor";
+import FaIcon from "../helper/fontAwsomeHelper";
 
 export interface Card {
   value: number;
   suit: CardSuits;
+  selected: boolean;
 }
 
 // Card Component
-export default function PlayingCard({ value, suit }: Card) {
+export default function PlayingCard({ value, suit, selected }: Card) {
   // Handles state of pressing card
-  const [isCardPressed, setCardPressed] = useState(false);
+  const [isCardPressed, setCardPressed] = useState(selected);
 
   // hooks to get card suit and card color
   const cardSuit = useSuit(suit);
@@ -26,12 +28,16 @@ export default function PlayingCard({ value, suit }: Card) {
           : [styles.container]
       }
       underlayColor="rgba(0, 0, 255, 0.4)"
-      onPress={() => setCardPressed(!isCardPressed)}
+      onPress={() => 
+        {
+          setCardPressed(!isCardPressed)
+
+      }}
     >
       <View style={styles.front}>
         <Text style={[{ color: `${color}` }, styles.rankAndSuit]}>
           <Text style={styles.value}>{value}</Text>
-          <FontAwesomeIcon size={28} icon={cardSuit} color={color} />
+          <FaIcon size={28} icon={cardSuit} color={color} />
         </Text>
         <Text
           style={[
@@ -41,7 +47,7 @@ export default function PlayingCard({ value, suit }: Card) {
           ]}
         >
           <Text style={styles.bottomValue}>{value}</Text>
-          <FontAwesomeIcon size={28} icon={cardSuit} color={color} />
+          <FaIcon size={28} icon={cardSuit} color={color} />
         </Text>
       </View>
     </TouchableHighlight>

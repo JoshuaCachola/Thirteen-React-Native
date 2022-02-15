@@ -9,18 +9,22 @@ const exampleCards: Card[] = [
   {
     value: 2,
     suit: 0,
+    selected: false
   },
   {
     value: 3,
     suit: 1,
+    selected: false
   },
   {
     value: 4,
     suit: 2,
+    selected: false
   },
   {
     value: 5,
     suit: 3,
+    selected: false
   },
 ];
 

@@ -1,7 +1,7 @@
 import PlayingCard from "./PlayingCard";
 import { View, StyleSheet } from "react-native";
-import { useEffect, useState } from "react";
 import { Card } from "./PlayingCard";
+import useCardReducer from "../hooks/useCardReducer";
 
 interface Props {
   cards: Card[];
@@ -9,23 +9,18 @@ interface Props {
 
 // This component displays holding a hand of cards
 export default function Hand(props: Props) {
-  const [cardsInHand, setCardsInHand] = useState<Card[]>([]);
-
-  // sets cards on first render
-  useEffect(() => {
-    setCardsInHand(props.cards);
-  }, []);
+  const [cardsInHand, dispatch] = useCardReducer({cards: props.cards});
 
   return (
     <View style={styles.container}>
-      {cardsInHand &&
-        cardsInHand.map((card: Card, idx: number) => {
+      {"cards" in cardsInHand &&
+        cardsInHand.cards.map((card: Card, idx: number) => {
           return (
             <View
               key={card.value + card.suit}
               style={[{ zIndex: idx, left: idx * 40 }, styles.hand]}
             >
-              <PlayingCard value={card.value} suit={card.suit} />
+              <PlayingCard value={card.value} suit={card.suit} selected={card.selected} />
             </View>
           );
         })}
@@ -39,6 +34,5 @@ const styles = StyleSheet.create({
   },
   hand: {
     position: "absolute",
-    // top: 0i
   },
 });
