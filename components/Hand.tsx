@@ -17,7 +17,7 @@ export default function Hand(props: Props) {
         cardsInHand.cards.map((card: Card, idx: number) => {
           return (
             <View
-              key={card.value + card.suit}
+              key={idx}
               style={[{ zIndex: idx, left: idx * 40 }, styles.hand]}
             >
               <PlayingCard value={card.value} suit={card.suit} selected={card.selected} />
@@ -31,8 +31,16 @@ export default function Hand(props: Props) {
 const styles = StyleSheet.create({
   container: {
     position: "relative",
+
   },
   hand: {
     position: "absolute",
+    bottom: 0,
+    right: 0,
+    transform: [
+      {
+        translateX: 50
+      }
+    ]
   },
 });

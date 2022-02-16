@@ -11,7 +11,7 @@ export interface CardAction extends HandState {
 }
 
 // card reducer
-const reducer = (state: HandState, action: CardAction) => {
+const reducer = (state: HandState, action: CardAction): HandState => {
     switch (action.type) {
       case "SELECT":
         const selectedCards = state.cards.map((card: Card) => {

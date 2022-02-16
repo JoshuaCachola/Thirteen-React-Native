@@ -16,7 +16,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   );
 }
 
-// Navigation for tabs on Home screen
+// Navigation for bottom tabs on Home screen
 const BottomTab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
@@ -39,13 +39,13 @@ const BottomTabNavigator = () => {
     >
       {/* Join game tab */}
       <BottomTab.Screen
-        name="Home"
-        component={Home}
+        name="Game"
+        component={Game}
         options={{headerShown: false}}
       />
       <BottomTab.Screen
-        name="Game"
-        component={Game}
+        name="Home"
+        component={Home}
         options={{headerShown: false}}
       />
     </BottomTab.Navigator>

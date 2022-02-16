@@ -1,5 +1,4 @@
 import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useState } from "react";
 import useSuit, { CardSuits } from "../hooks/useSuit";
 import useColor from "../hooks/useColor";
@@ -37,7 +36,7 @@ export default function PlayingCard({ value, suit, selected }: Card) {
       <View style={styles.front}>
         <Text style={[{ color: `${color}` }, styles.rankAndSuit]}>
           <Text style={styles.value}>{value}</Text>
-          <FaIcon size={28} icon={cardSuit} color={color} />
+          <FaIcon size={20} icon={cardSuit} color={color} />
         </Text>
         <Text
           style={[
@@ -47,7 +46,7 @@ export default function PlayingCard({ value, suit, selected }: Card) {
           ]}
         >
           <Text style={styles.bottomValue}>{value}</Text>
-          <FaIcon size={28} icon={cardSuit} color={color} />
+          <FaIcon size={20} icon={cardSuit} color={color} />
         </Text>
       </View>
     </TouchableHighlight>
@@ -56,8 +55,8 @@ export default function PlayingCard({ value, suit, selected }: Card) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 150,
-    height: 250,
+    width: 75,
+    height: 125,
     borderRadius: 8,
     borderColor: "#C5C5C5",
     borderWidth: 1,
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
   },
   rankAndSuit: {
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: 24,
     display: "flex",
     flexDirection: "column",
     height: "50%",
