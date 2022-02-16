@@ -1,85 +1,102 @@
-import { StyleSheet, Text } from "react-native";
+import { Animated, StyleSheet, Text } from "react-native";
 import { Card } from "../components/PlayingCard";
 
 import { View } from "../components/Themed";
 import Hand from "../components/Hand";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const exampleCards: Card[] = [
   {
     value: 2,
     suit: 0,
-    selected: false
+    selected: false,
+    // animation: new Animated.ValueXY(),
   },
-  // {
-  //   value: 3,
-  //   suit: 1,
-  //   selected: false
-  // },
-  // {
-  //   value: 4,
-  //   suit: 2,
-  //   selected: false
-  // },
-  // {
-  //   value: 5,
-  //   suit: 3,
-  //   selected: false
-  // },
-  // {
-  //   value: 2,
-  //   suit: 0,
-  //   selected: false
-  // },
-  // {
-  //   value: 3,
-  //   suit: 1,
-  //   selected: false
-  // },
-  // {
-  //   value: 4,
-  //   suit: 2,
-  //   selected: false
-  // },
-  // {
-  //   value: 5,
-  //   suit: 3,
-  //   selected: false
-  // },
-  // {
-  //   value: 2,
-  //   suit: 0,
-  //   selected: false
-  // },
-  // {
-  //   value: 3,
-  //   suit: 1,
-  //   selected: false
-  // },
-  // {
-  //   value: 4,
-  //   suit: 2,
-  //   selected: false
-  // },
-  // {
-  //   value: 5,
-  //   suit: 3,
-  //   selected: false
-  // },
-  // {
-  //   value: 5,
-  //   suit: 3,
-  //   selected: false
-  // },
+  {
+    value: 3,
+    suit: 1,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 4,
+    suit: 2,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 5,
+    suit: 3,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 2,
+    suit: 0,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 3,
+    suit: 1,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 4,
+    suit: 2,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 5,
+    suit: 3,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 2,
+    suit: 0,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 3,
+    suit: 1,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 4,
+    suit: 2,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 5,
+    suit: 3,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
+  {
+    value: 5,
+    suit: 3,
+    selected: false,
+    // animation: new Animated.ValueXY()
+  },
 ];
 
 export default function Game() {
   const [cards, setCards] = useState<Card[]>(exampleCards);
 
+  useEffect(() => {
+    setCards(exampleCards);
+  }, [])
+
   return (
     <View style={styles.container}>
-      <View style={styles.top}>
-        <Text>This is the top</Text>
+      <View style={styles.playedCardsArea}>
+        <Text>Play Area</Text>
       </View>
       <View style={styles.hand}>
         <Hand cards={cards} />
@@ -94,9 +111,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "column",
   },
-  top: {
+  playedCardsArea: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderStyle: "dashed",
+    borderColor: "red",
+    width: 300,
+    height: 100,
+    transform: [
+      {
+        translateX: 180
+      },
+    ]
   },
   hand: {
     flex: 1,
