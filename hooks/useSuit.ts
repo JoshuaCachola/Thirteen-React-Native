@@ -4,16 +4,10 @@ import {
   faCube,
   faSpa,
   faDiamond,
-} from "@fortawesome/free-solid-svg-icons";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { useEffect, useState } from "react";
-
-export enum CardSuits {
-  "heart",
-  "diamond",
-  "spade",
-  "club",
-}
+} from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { useEffect, useState } from 'react';
+import { CardSuits } from '../helper/Card';
 
 export default function useSuit(suit: CardSuits) {
   const [cardSuitIcon, setSuitIcon] = useState<IconDefinition>(faCube);

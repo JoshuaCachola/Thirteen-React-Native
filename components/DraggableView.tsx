@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
-import { Animated, PanResponder, StyleSheet, View } from 'react-native';
-import PlayingCard, { Card } from './PlayingCard';
+import { useEffect, useRef } from 'react';
+import { Animated, PanResponder, StyleSheet } from 'react-native';
+import { Card } from '../helper/Card';
+import PlayingCard from './PlayingCard';
 
 interface DraggableProps {
   card: Card;
@@ -8,10 +9,12 @@ interface DraggableProps {
 }
 
 // Pan responder hook - allows cards to be dragged around the screen
-export default function DraggableView({ card, idx, ...props }: DraggableProps) {
+export default function DraggableView({ card, idx }: DraggableProps) {
   const draggableCard = useRef(new Animated.ValueXY()).current;
 
-  // console.log(draggableCard.x._value);
+  // useEffect(() => {
+  // }, [draggableCard.x, draggableCard.y]);
+
   const panResponder = PanResponder.create({
     // Ask to be the responder:
     onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -71,11 +74,7 @@ export default function DraggableView({ card, idx, ...props }: DraggableProps) {
       ]}
       {...panResponder.panHandlers}
     >
-      <PlayingCard
-        value={card.value}
-        suit={card.suit}
-        selected={card.selected}
-      />
+      <PlayingCard value={card.value} suit={card.suit} />
     </Animated.View>
   );
 }

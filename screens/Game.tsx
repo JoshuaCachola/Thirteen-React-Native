@@ -1,97 +1,23 @@
-import { Animated, StyleSheet, Text } from "react-native";
-import { Card } from "../components/PlayingCard";
-
-import { View } from "../components/Themed";
-import Hand from "../components/Hand";
-import { useEffect, useState } from "react";
-
-const exampleCards: Card[] = [
-  {
-    value: 2,
-    suit: 0,
-    selected: false,
-    // animation: new Animated.ValueXY(),
-  },
-  {
-    value: 3,
-    suit: 1,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 4,
-    suit: 2,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 5,
-    suit: 3,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 2,
-    suit: 0,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 3,
-    suit: 1,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 4,
-    suit: 2,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 5,
-    suit: 3,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 2,
-    suit: 0,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 3,
-    suit: 1,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 4,
-    suit: 2,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 5,
-    suit: 3,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-  {
-    value: 5,
-    suit: 3,
-    selected: false,
-    // animation: new Animated.ValueXY()
-  },
-];
+import { StyleSheet, Text } from 'react-native';
+import { View } from '../components/Themed';
+import Hand from '../components/Hand';
+import { useEffect, useRef, useState } from 'react';
+import { Deck } from '../helper/Deck';
+import { CardInterface } from '../helper/Card';
 
 export default function Game() {
-  const [cards, setCards] = useState<Card[]>(exampleCards);
+  const [cards, setCards] = useState<CardInterface[]>(() => {
+    const { deck } = new Deck();
+    return deck.slice(0, 14);
+  });
 
-  useEffect(() => {
-    setCards(exampleCards);
-  }, [])
+  // const playArea = useRef(null);
+
+  // useEffect(() => {
+  //   const { deck } = new Deck();
+
+  //   setCards(deck.slice(0, 14));
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -108,25 +34,26 @@ export default function Game() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: "space-between",
-    flexDirection: "column",
+    justifyContent: 'space-between',
+    flexDirection: 'column',
   },
   playedCardsArea: {
     flex: 1,
-    justifyContent: "center",
+    // justifyContent: 'center',
     borderWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "red",
-    width: 300,
-    height: 100,
-    transform: [
-      {
-        translateX: 180
-      },
-    ]
+    borderStyle: 'dashed',
+    borderColor: 'red',
+    backgroundColor: 'blue',
+    // width: '100%',
+    // height: 100,
+    // transform: [
+    //   {
+    //     translateX: 180,
+    //   },
+    // ],
   },
   hand: {
     flex: 1,
-    justifyContent: "flex-end",
-  }
+    justifyContent: 'flex-end',
+  },
 });

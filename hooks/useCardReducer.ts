@@ -1,31 +1,31 @@
 import { useReducer } from 'react';
-import { Card } from '../components/PlayingCard';
+import { CardInterface } from '../helper/Card';
 
 export interface HandState {
-  cards: Card[];
+  cards: CardInterface[];
 }
 
 export interface CardAction extends HandState {
   type: string;
-  payload: Card;
+  payload: CardInterface;
 }
 
 // card reducer
 const reducer = (state: HandState, action: CardAction): HandState => {
   switch (action.type) {
-    case 'SELECT':
-      const selectedCards = state.cards.map((card: Card) => {
-        if (
-          card.value === action.payload.value &&
-          card.suit === action.payload.suit
-        ) {
-          return { ...card, selected: !card.selected };
-        }
-      });
-      return { cards: selectedCards } as HandState;
+    // case 'SELECT':
+    //   const selectedCards = state.cards.map((card: Card) => {
+    //     if (
+    //       card.value === action.payload.value &&
+    //       card.suit === action.payload.suit
+    //     ) {
+    //       return { ...card, selected: !card.selected };
+    //     }
+    //   });
+    //   return { cards: selectedCards } as HandState;
     case 'REMOVE':
       const filteredCards = state.cards.filter(
-        (card: Card) =>
+        (card: CardInterface) =>
           card.value !== action.payload.value &&
           card.suit !== action.payload.suit
       );

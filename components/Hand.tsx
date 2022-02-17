@@ -1,11 +1,10 @@
-import PlayingCard from './PlayingCard';
 import { View, StyleSheet } from 'react-native';
-import { Card } from './PlayingCard';
+import { CardInterface, CardSuits } from '../helper/Card';
 import useCardReducer from '../hooks/useCardReducer';
 import DraggableView from './DraggableView';
 
 interface Props {
-  cards: Card[];
+  cards: CardInterface[];
 }
 
 // This component displays holding a hand of cards
@@ -15,8 +14,14 @@ export default function Hand(props: Props) {
   return (
     <View style={styles.container}>
       {'cards' in cardsInHand &&
-        cardsInHand.cards.map((card: Card, idx: number) => {
-          return <DraggableView key={idx} idx={idx} card={card} />;
+        cardsInHand.cards.map((card: CardInterface, idx: number) => {
+          return (
+            <DraggableView
+              key={card.value.toString() + card.suit.toString()}
+              idx={idx}
+              card={card}
+            />
+          );
         })}
     </View>
   );
@@ -25,6 +30,5 @@ export default function Hand(props: Props) {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    backgroundColor: 'blue',
   },
 });

@@ -1,24 +1,12 @@
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  Animated,
-} from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { useState } from 'react';
-import useSuit, { CardSuits } from '../hooks/useSuit';
+import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
-
-export interface Card {
-  value: number;
-  suit: CardSuits;
-  selected: boolean;
-  // animation: Animated.ValueXY;
-}
+import { CardInterface } from '../helper/Card';
 
 // Card Component
-export default function PlayingCard({ value, suit, selected }: Card) {
+export default function PlayingCard({ value, suit }: CardInterface) {
   // Handles state of pressing card
   // const [isCardPressed, setCardPressed] = useState(selected);
 
@@ -29,26 +17,20 @@ export default function PlayingCard({ value, suit, selected }: Card) {
   return (
     <View style={styles.container}>
       <View style={styles.front}>
-        <Text
-          style={[
-            { color: `${color}` },
-            styles.rankAndSuit,
-            styles.topValueAndSuit,
-          ]}
-        >
-          <Text style={styles.value}>{value}</Text>
-          <FaIcon size={10} icon={cardSuit} color={color} />
-        </Text>
-        <Text
-          style={[
-            { color: `${color}` },
-            styles.rankAndSuit,
-            styles.bottomValueAndSuit,
-          ]}
-        >
-          <Text style={styles.bottomValue}>{value}</Text>
-          <FaIcon size={10} icon={cardSuit} color={color} />
-        </Text>
+        <View style={[styles.rankAndSuit, styles.topValueAndSuit]}>
+          <Text style={[{ color: `${color}` }, styles.value]}>{value}</Text>
+          <Text>
+            <FaIcon size={10} icon={cardSuit} color={color} />
+          </Text>
+        </View>
+        <View style={[styles.rankAndSuit, styles.bottomValueAndSuit]}>
+          <Text style={[{ color: `${color}` }, styles.bottomValue]}>
+            {value}
+          </Text>
+          <Text>
+            <FaIcon size={10} icon={cardSuit} color={color} />
+          </Text>
+        </View>
       </View>
     </View>
   );
@@ -74,6 +56,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     marginHorizontal: 8,
+    backgroundColor: 'purple',
+    // height: '50%',
   },
   topValueAndSuit: {
     justifyContent: 'flex-start',
@@ -86,7 +70,9 @@ const styles = StyleSheet.create({
       },
     ],
     alignItems: 'flex-end',
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
+    backgroundColor: 'yellow',
+    flex: 1,
   },
   selectCard: {
     bottom: 30,
