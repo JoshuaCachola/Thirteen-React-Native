@@ -11,7 +11,7 @@ export default function Game() {
     return deck.slice(0, 14);
   });
 
-  // const playArea = useRef(null);
+  const playArea = useRef(null);
 
   // useEffect(() => {
   //   const { deck } = new Deck();
@@ -39,18 +39,10 @@ const styles = StyleSheet.create({
   },
   playedCardsArea: {
     flex: 1,
-    // justifyContent: 'center',
     borderWidth: 1,
     borderStyle: 'dashed',
     borderColor: 'red',
     backgroundColor: 'blue',
-    // width: '100%',
-    // height: 100,
-    // transform: [
-    //   {
-    //     translateX: 180,
-    //   },
-    // ],
   },
   hand: {
     flex: 1,

@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native';
-import { CardInterface, CardSuits } from '../helper/Card';
+import { CardInterface } from '../helper/Card';
 import useCardReducer from '../hooks/useCardReducer';
 import DraggableView from './DraggableView';
 

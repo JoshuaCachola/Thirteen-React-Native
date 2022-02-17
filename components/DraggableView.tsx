@@ -18,9 +18,9 @@ export default function DraggableView({ card, idx }: DraggableProps) {
   const panResponder = PanResponder.create({
     // Ask to be the responder:
     onStartShouldSetPanResponder: (evt, gestureState) => true,
-    // onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-    // onMoveShouldSetPanResponder: (evt, gestureState) => true,
-    // onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+    onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+    onMoveShouldSetPanResponder: (evt, gestureState) => true,
+    onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
     onPanResponderGrant: (evt, gestureState) => {
       // The gesture has started. Show visual feedback so the user knows

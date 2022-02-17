@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import { CardSuits } from "./useSuit";
+import { useEffect, useState } from 'react';
+import { CardSuits } from '../helper/Card';
 
 export default function useColor(suit: CardSuits) {
-  const [suitColor, setSuitColor] = useState("red");
+  const [suitColor, setSuitColor] = useState('red');
 
   // set color of suit on first render
   // 0-1 === "red", 2-3 == "black". Refer to CardSuits enum
   useEffect(() => {
     if (suit === 2 || suit === 3) {
-      setSuitColor("black");
+      setSuitColor('black');
     }
   }, []);
 

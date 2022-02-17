@@ -18,15 +18,13 @@ export default function PlayingCard({ value, suit }: CardInterface) {
     <View style={styles.container}>
       <View style={styles.front}>
         <View style={[styles.rankAndSuit, styles.topValueAndSuit]}>
-          <Text style={[{ color: `${color}` }, styles.value]}>{value}</Text>
+          <Text style={[{ color }, styles.value]}>{value}</Text>
           <Text>
             <FaIcon size={10} icon={cardSuit} color={color} />
           </Text>
         </View>
         <View style={[styles.rankAndSuit, styles.bottomValueAndSuit]}>
-          <Text style={[{ color: `${color}` }, styles.bottomValue]}>
-            {value}
-          </Text>
+          <Text style={[{ color }, styles.bottomValue]}>{value}</Text>
           <Text>
             <FaIcon size={10} icon={cardSuit} color={color} />
           </Text>
@@ -56,8 +54,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     marginHorizontal: 8,
-    backgroundColor: 'purple',
-    // height: '50%',
   },
   topValueAndSuit: {
     justifyContent: 'flex-start',
@@ -70,21 +66,19 @@ const styles = StyleSheet.create({
       },
     ],
     alignItems: 'flex-end',
-    // justifyContent: 'flex-end',
-    backgroundColor: 'yellow',
     flex: 1,
   },
-  selectCard: {
-    bottom: 30,
-    borderWidth: 10,
-    borderColor: 'yellow',
-    backgroundColor: 'rgb(0, 0, 200)',
-  },
+  // selectCard: {
+  //   bottom: 30,
+  //   borderWidth: 10,
+  //   borderColor: 'yellow',
+  //   backgroundColor: 'rgb(0, 0, 200)',
+  // },
   value: {
-    marginLeft: 3,
+    margin: 1,
   },
   bottomValue: {
-    marginRight: 5,
+    marginRight: 1,
     transform: [
       {
         rotateY: '180deg',

@@ -9,6 +9,9 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState } from 'react';
 import { CardSuits } from '../helper/Card';
 
+// This is the useSuit hook
+// input: suit
+// return: state of card's suit
 export default function useSuit(suit: CardSuits) {
   const [cardSuitIcon, setSuitIcon] = useState<IconDefinition>(faCube);
 

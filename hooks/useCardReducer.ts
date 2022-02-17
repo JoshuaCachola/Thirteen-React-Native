@@ -1,4 +1,5 @@
 import { useReducer } from 'react';
+import { PLAY } from '../constants/Actions';
 import { CardInterface } from '../helper/Card';
 
 export interface HandState {
@@ -23,7 +24,7 @@ const reducer = (state: HandState, action: CardAction): HandState => {
     //     }
     //   });
     //   return { cards: selectedCards } as HandState;
-    case 'REMOVE':
+    case PLAY:
       const filteredCards = state.cards.filter(
         (card: CardInterface) =>
           card.value !== action.payload.value &&
