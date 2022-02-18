@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { Animated, PanResponder, StyleSheet } from 'react-native';
+import { useRef, useState } from 'react';
+import { Animated, Handle, PanResponder, StyleSheet } from 'react-native';
 import { Card } from '../helper/Card';
 import PlayingCard from './PlayingCard';
 
@@ -10,17 +10,15 @@ interface DraggableProps {
 
 // Pan responder hook - allows cards to be dragged around the screen
 export default function DraggableView({ card, idx }: DraggableProps) {
+  const [dragging, setDraggings] = useState(false);
   const draggableCard = useRef(new Animated.ValueXY()).current;
-
-  // useEffect(() => {
-  // }, [draggableCard.x, draggableCard.y]);
 
   const panResponder = PanResponder.create({
     // Ask to be the responder:
     onStartShouldSetPanResponder: (evt, gestureState) => true,
-    onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-    onMoveShouldSetPanResponder: (evt, gestureState) => true,
-    onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+    // onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+    // onMoveShouldSetPanResponder: (evt, gestureState) => true,
+    // onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
     onPanResponderGrant: (evt, gestureState) => {
       // The gesture has started. Show visual feedback so the user knows

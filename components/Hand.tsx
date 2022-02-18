@@ -1,5 +1,6 @@
-import { View, StyleSheet } from 'react-native';
-import { CardInterface } from '../helper/Card';
+import { useEffect, useState } from 'react';
+import { View, StyleSheet, Animated } from 'react-native';
+import { Card, CardInterface } from '../helper/Card';
 import useCardReducer from '../hooks/useCardReducer';
 import DraggableView from './DraggableView';
 
