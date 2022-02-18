@@ -18,7 +18,6 @@ export default function Hand(props: Props) {
   const [cardsInHand, setCardsInHand] = useState(props.cards);
   const [selectedCards, setSelectedCards] = useState<boolean[]>([]);
 
-  console.log(cardsInHand);
   return (
     <View style={styles.container}>
       {cardsInHand.map((card: CardInterface, idx: number) => {

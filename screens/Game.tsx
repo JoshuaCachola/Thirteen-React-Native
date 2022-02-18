@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Deck } from '../helper/Deck';
 import { CardInterface } from '../helper/Card';
 import PlayArea from '../components/PlayArea';
+import PlayerStack from '../components/PlayerStack';
+import PlayedCardsStack from '../components/PlayedCardsStack';
 
 export default function Game() {
   const [cards, setCards] = useState<CardInterface[]>(() => {
@@ -25,13 +27,13 @@ export default function Game() {
       {/* Top */}
       <View style={styles.topContainer}>
         <View style={styles.playerStack}>
-          <Text>Player Stack Rotation</Text>
+          <PlayerStack />
         </View>
         <View style={styles.playedCardsArea}>
           <PlayArea />
         </View>
         <View style={styles.playedCardsStack}>
-          <Text>Played Card Stack Rotation</Text>
+          <PlayedCardsStack />
         </View>
       </View>
       {/* Bottom */}
