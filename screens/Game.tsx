@@ -4,11 +4,12 @@ import Hand from '../components/Hand';
 import { useEffect, useRef, useState } from 'react';
 import { Deck } from '../helper/Deck';
 import { CardInterface } from '../helper/Card';
+import PlayArea from '../components/PlayArea';
 
 export default function Game() {
   const [cards, setCards] = useState<CardInterface[]>(() => {
     const { deck } = new Deck();
-    return deck.slice(0, 14);
+    return deck.slice(0, 13);
   });
 
   const playArea = useRef(null);
@@ -21,11 +22,23 @@ export default function Game() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.playedCardsArea}>
-        <Text>Play Area</Text>
+      {/* Top */}
+      <View style={styles.topContainer}>
+        <View style={styles.playerStack}>
+          <Text>Player Stack Rotation</Text>
+        </View>
+        <View style={styles.playedCardsArea}>
+          <PlayArea />
+        </View>
+        <View style={styles.playedCardsStack}>
+          <Text>Played Card Stack Rotation</Text>
+        </View>
       </View>
-      <View style={styles.hand}>
-        <Hand cards={cards} />
+      {/* Bottom */}
+      <View style={styles.bottomContainer}>
+        <View>
+          <Hand cards={cards} />
+        </View>
       </View>
     </View>
   );
@@ -38,14 +51,27 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   playedCardsArea: {
-    flex: 1,
+    flex: 6,
     borderWidth: 1,
     borderStyle: 'dashed',
     borderColor: 'red',
     backgroundColor: 'blue',
   },
-  hand: {
+  bottomContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    backgroundColor: 'yellow',
+  },
+  topContainer: {
+    flex: 2,
+    justifyContent: 'flex-start',
+    backgroundColor: 'green',
+    flexDirection: 'row',
+  },
+  playedCardsStack: {
+    flex: 2,
+  },
+  playerStack: {
+    flex: 2,
   },
 });

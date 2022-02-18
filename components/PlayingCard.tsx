@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
     borderColor: '#C5C5C5',
     borderWidth: 1,
     backgroundColor: 'white',
-    flexGrow: 1,
     justifyContent: 'space-between',
   },
   front: {

@@ -1,18 +1,23 @@
-import { useReducer } from 'react';
 import { PLAY } from '../constants/Actions';
-import { CardInterface } from '../helper/Card';
+import { CardInterface, CardSuits } from '../helper/Card';
 
 export interface HandState {
-  cards: CardInterface[];
+  cards: [];
 }
 
-export interface CardAction extends HandState {
+interface CardAction {
   type: string;
-  payload: CardInterface;
+  payload: {
+    value: number;
+    suit: CardSuits;
+  };
 }
 
 // card reducer
-export const reducer = (state: HandState, action: CardAction): HandState => {
+export default function handReducer(
+  state: HandState,
+  action: CardAction
+): HandState {
   switch (action.type) {
     // case 'SELECT':
     //   const selectedCards = state.cards.map((card: Card) => {
@@ -34,11 +39,4 @@ export const reducer = (state: HandState, action: CardAction): HandState => {
     default:
       return state;
   }
-};
-
-// card reducer hook
-export default function useCardReducer(state: HandState) {
-  const [cardsInHand, dispatch] = useReducer(reducer, state);
-
-  return [cardsInHand, dispatch];
 }
