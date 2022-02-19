@@ -20,30 +20,28 @@ export default function Game() {
   const [playedCards, setPlayedCards] = useState<CardInterface[][]>([]);
 
   return (
-    <HandContext.Provider value={cards}>
-      <PlayedCardsContext.Provider value={{ playedCards }}>
-        <View style={styles.container}>
-          {/* Top */}
-          <View style={styles.topContainer}>
-            <View style={styles.playerStack}>
-              <PlayerStack />
-            </View>
-            <View style={styles.playedCardsArea}>
-              <PlayArea />
-            </View>
-            <View style={styles.playedCardsStack}>
-              <PlayedCardsStack />
-            </View>
+    <PlayedCardsContext.Provider value={{ playedCards }}>
+      <View style={styles.container}>
+        {/* Top */}
+        <View style={styles.topContainer}>
+          <View style={styles.playerStack}>
+            <PlayerStack />
           </View>
-          {/* Bottom */}
-          <View style={styles.bottomContainer}>
-            <View>
-              <Hand cards={cards} />
-            </View>
+          <View style={styles.playedCardsArea}>
+            <PlayArea />
+          </View>
+          <View style={styles.playedCardsStack}>
+            <PlayedCardsStack />
           </View>
         </View>
-      </PlayedCardsContext.Provider>
-    </HandContext.Provider>
+        {/* Bottom */}
+        <View style={styles.bottomContainer}>
+          <View>
+            <Hand cards={cards} />
+          </View>
+        </View>
+      </View>
+    </PlayedCardsContext.Provider>
   );
 }
 

@@ -1,21 +1,42 @@
 import { View, StyleSheet, Text } from 'react-native';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
-import { CardInterface } from '../helper/Card';
+import { CardInterface, CardSuits } from '../helper/Card';
+import { HandContext } from '../context/HandContext';
+
+interface PlayingCardProp {
+  idx: number;
+  value: number;
+  suit: CardSuits;
+  staged: boolean;
+}
 
 // Card Component
-export default function PlayingCard({ value, suit, staged }: CardInterface) {
-  // Handles state of pressing card
-  const [isCardPressed, setCardPressed] = useState(staged);
+export default function PlayingCard({
+  idx,
+  value,
+  suit,
+  staged,
+}: PlayingCardProp) {
+  const handContext = useContext(HandContext);
+  console.log(handContext);
 
+  // Handles state of pressing card
+  const [card, setCard] = useState<CardInterface>();
   // hooks to get card suit and card color
+
   const cardSuit = useSuit(suit);
   const color = useColor(suit);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      // onTouchStart={() => {
+      //   setCard({ ...card, staged: !card.staged });
+      // }}
+    >
       <View style={styles.front}>
         <View style={[styles.rankAndSuit, styles.topValueAndSuit]}>
           <Text style={[{ color }, styles.value]}>{value}</Text>

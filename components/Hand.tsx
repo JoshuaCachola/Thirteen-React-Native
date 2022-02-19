@@ -3,6 +3,9 @@ import { View, StyleSheet } from 'react-native';
 import { CardInterface } from '../helper/Card';
 import InteractiveView from './InteractiveView';
 import { PlayedCardsContext } from '../context/PlayedCardsContext';
+import PlayingCard from './PlayingCard';
+import { HandContext } from '../context/HandContext';
+
 interface Props {
   cards: CardInterface[];
 }
@@ -12,28 +15,38 @@ export default function Hand(props: Props) {
   const [cardsInHand, setCardsInHand] = useState<CardInterface[]>(props.cards);
   const playedCards = useContext(PlayedCardsContext);
 
-  const stageCardsMemo = useMemo(() => {
-    const selectedCards: CardInterface[] = [];
-    cardsInHand.forEach((card) => {
-      if (card.staged) {
-        cardsInHand.push(card);
-      }
-    });
-    console.log(playedCards);
-  }, [cardsInHand]);
+  // const stageCardsMemo = useMemo(() => {
+  //   const selectedCards: CardInterface[] = [];
+  //   cardsInHand.forEach((card) => {
+  //     if (card.staged) {
+  //       cardsInHand.push(card);
+  //     }
+  //   });
+  //   console.log(playedCards);
+  // }, [cardsInHand]);
 
   return (
-    <View style={styles.container}>
-      {cardsInHand.map((card: CardInterface, idx: number) => {
-        return (
-          <InteractiveView
-            key={card.value.toString() + card.suit.toString()}
-            idx={idx}
-            card={card}
-          />
-        );
-      })}
-    </View>
+    <HandContext.Provider value={cardsInHand}>
+      <View style={styles.container}>
+        {cardsInHand.map((card: CardInterface, idx: number) => {
+          // return (
+          //   <InteractiveView
+          //     key={card.value.toString() + card.suit.toString()}
+          //     idx={idx}
+          //     card={card}
+          //   />
+          // );
+          <View key={card.value.toString() + card.suit.toString()}>
+            <PlayingCard
+              value={card.value}
+              suit={card.suit}
+              staged={card.staged}
+              idx={idx}
+            />
+          </View>;
+        })}
+      </View>
+    </HandContext.Provider>
   );
 }
 
