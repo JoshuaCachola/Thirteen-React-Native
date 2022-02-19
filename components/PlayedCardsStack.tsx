@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Card } from '../helper/Card';
+import { CardInterface } from '../helper/Card';
 import PlayingCard from './PlayingCard';
 
 export default function PlayedCardsStack() {
-  const [playedCards, setPlayedCards] = useState<Card[][]>([
+  const [playedCards, setPlayedCards] = useState<CardInterface[][]>([
     [
-      { value: 3, suit: 2 },
-      { value: 3, suit: 3 },
+      { value: 3, suit: 2, staged: true },
+      { value: 3, suit: 3, staged: true },
     ],
   ]);
 
@@ -16,11 +16,15 @@ export default function PlayedCardsStack() {
       <Text style={[{ color: 'grey' }]}>Pair of 3's</Text>
       <View>
         {playedCards &&
-          playedCards.map((sequences: Card[]) => {
-            return sequences.map((card: Card) => {
+          playedCards.map((sequences: CardInterface[]) => {
+            return sequences.map((card: CardInterface) => {
               return (
                 <View key={card.value.toString() + card.suit.toString()}>
-                  <PlayingCard value={card.value} suit={card.suit} />
+                  <PlayingCard
+                    value={card.value}
+                    suit={card.suit}
+                    staged={card.staged}
+                  />
                 </View>
               );
             });

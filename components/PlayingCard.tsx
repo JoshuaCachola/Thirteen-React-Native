@@ -6,9 +6,9 @@ import FaIcon from '../helper/fontAwsomeHelper';
 import { CardInterface } from '../helper/Card';
 
 // Card Component
-export default function PlayingCard({ value, suit }: CardInterface) {
+export default function PlayingCard({ value, suit, staged }: CardInterface) {
   // Handles state of pressing card
-  // const [isCardPressed, setCardPressed] = useState(selected);
+  const [isCardPressed, setCardPressed] = useState(staged);
 
   // hooks to get card suit and card color
   const cardSuit = useSuit(suit);
@@ -67,12 +67,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     flex: 1,
   },
-  // selectCard: {
-  //   bottom: 30,
-  //   borderWidth: 10,
-  //   borderColor: 'yellow',
-  //   backgroundColor: 'rgb(0, 0, 200)',
-  // },
+  selectCard: {
+    bottom: 30,
+    borderWidth: 10,
+    borderColor: 'yellow',
+    backgroundColor: 'rgb(0, 0, 200)',
+  },
   value: {
     margin: 1,
   },

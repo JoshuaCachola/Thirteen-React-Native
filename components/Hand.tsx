@@ -1,22 +1,26 @@
-import { useEffect, useReducer, useState } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
-import { Card, CardInterface } from '../helper/Card';
-import handReducer from '../reducers/handReducer';
+import { useContext, useEffect, useMemo, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { CardInterface } from '../helper/Card';
 import InteractiveView from './InteractiveView';
-import { HandState } from '../reducers/handReducer';
+import { PlayedCardsContext } from '../context/PlayedCardsContext';
 interface Props {
   cards: CardInterface[];
 }
 
-const initialState: HandState = {
-  cards: [],
-};
-
 // This component displays holding a hand of cards
 export default function Hand(props: Props) {
-  // const [cardsInHand, dispatch] = useReducer(handReducer, initialState);
-  const [cardsInHand, setCardsInHand] = useState(props.cards);
-  const [selectedCards, setSelectedCards] = useState<boolean[]>([]);
+  const [cardsInHand, setCardsInHand] = useState<CardInterface[]>(props.cards);
+  const playedCards = useContext(PlayedCardsContext);
+
+  const stageCardsMemo = useMemo(() => {
+    const selectedCards: CardInterface[] = [];
+    cardsInHand.forEach((card) => {
+      if (card.staged) {
+        cardsInHand.push(card);
+      }
+    });
+    console.log(playedCards);
+  }, [cardsInHand]);
 
   return (
     <View style={styles.container}>

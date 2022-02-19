@@ -20,7 +20,7 @@ export default function InteractiveView({ card, idx }: InteractiveProps) {
         },
       ]}
     >
-      <PlayingCard value={card.value} suit={card.suit} />
+      <PlayingCard value={card.value} suit={card.suit} staged={card.staged} />
     </Animated.View>
   );
 }
