@@ -1,8 +1,8 @@
 import { Card, CardInterface } from './Card';
 
 const unShuffledDeck: CardInterface[] = [
-  { value: 3, suit: 0, staged: false },
-  { value: 3, suit: 1, staged: false },
+  { value: 3, suit: 0, staged: true },
+  { value: 3, suit: 1, staged: true },
   { value: 3, suit: 2, staged: false },
   { value: 3, suit: 3, staged: false },
   { value: 4, suit: 0, staged: false },

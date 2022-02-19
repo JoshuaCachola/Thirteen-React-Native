@@ -1,26 +1,35 @@
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Deck } from '../helper/Deck';
 import { CardInterface } from '../helper/Card';
 import PlayArea from '../components/PlayArea';
 import PlayerStack from '../components/PlayerStack';
 import PlayedCardsStack from '../components/PlayedCardsStack';
-import { PlayedCardsContext } from '../context/PlayedCardsContext';
-import { HandContext } from '../context/HandContext';
+import { CardsContext } from '../context/CardsContext';
 
 export default function Game() {
   const [cards, setCards] = useState<CardInterface[]>(() => {
     const { deck } = new Deck();
     return deck.slice(0, 13);
+    // setCards(deck.slice(0, 13));
   });
 
-  // stack of cards that were played
-  const [playedCards, setPlayedCards] = useState<CardInterface[][]>([]);
+  // useEffect(() => {
+  //   const { deck } = new Deck();
+  //   setCards(deck.slice(0, 13));
+  // }, []);
 
   return (
-    <PlayedCardsContext.Provider value={{ playedCards }}>
+    <CardsContext.Provider
+      value={{
+        playedCards: [[]],
+        hand: cards,
+        stagedCards: [],
+        setHand: setCards,
+      }}
+    >
       <View style={styles.container}>
         {/* Top */}
         <View style={styles.topContainer}>
@@ -41,7 +50,7 @@ export default function Game() {
           </View>
         </View>
       </View>
-    </PlayedCardsContext.Provider>
+    </CardsContext.Provider>
   );
 }
 

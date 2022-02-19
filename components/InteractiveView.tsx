@@ -1,5 +1,4 @@
-import { useRef, useState } from 'react';
-import { Animated, Handle, PanResponder, StyleSheet } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import { Card } from '../helper/Card';
 import PlayingCard from './PlayingCard';
 
@@ -20,7 +19,12 @@ export default function InteractiveView({ card, idx }: InteractiveProps) {
         },
       ]}
     >
-      {/* <PlayingCard value={card.value} suit={card.suit} staged={card.staged} /> */}
+      <PlayingCard
+        idx={idx}
+        value={card.value}
+        suit={card.suit}
+        staged={card.staged}
+      />
     </Animated.View>
   );
 }

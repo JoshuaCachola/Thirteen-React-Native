@@ -1,34 +1,42 @@
-import { useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Card } from '../helper/Card';
+import { CardsContext } from '../context/CardsContext';
+import { Card, CardInterface } from '../helper/Card';
 import PlayingCard from './PlayingCard';
 
 export default function PlayArea() {
-  const [cards, setCards] = useState<Card[]>([
-    {
-      value: 3,
-      suit: 0,
-    },
-    {
-      value: 4,
-      suit: 1,
-    },
-  ]);
+  const [cards, setCards] = useState<CardInterface[]>([]);
+  const { hand, setHand } = useContext(CardsContext);
+
+  useEffect(() => {
+    const staged: CardInterface[] = [];
+    // hand.forEach((card) => {
+    //   if (card.staged) {
+    //     staged.push(card);
+    //   }
+    // });
+    hand.forEach((card) => {
+      if (card.staged) staged.push(card);
+    });
+    setCards(staged);
+  }, [hand, setHand]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Play Area</Text>
       <View style={styles.cards}>
         {cards &&
-          cards.map((card: Card) => {
+          cards.map((card: Card, idx) => {
             return (
-              // <View key={card.value.toString() + card.suit.toString()}>
-              <PlayingCard
-                key={card.value.toString() + card.suit.toString()}
-                value={card.value}
-                suit={card.suit}
-              />
-              // </View>
+              <View key={`played-${card.value}-${card.suit}`}>
+                <PlayingCard
+                  idx={idx}
+                  // key={card.value.toString() + card.suit.toString()}
+                  value={card.value}
+                  suit={card.suit}
+                  staged={card.staged}
+                />
+              </View>
             );
           })}
       </View>

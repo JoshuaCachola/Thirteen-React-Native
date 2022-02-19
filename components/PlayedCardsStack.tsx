@@ -17,10 +17,11 @@ export default function PlayedCardsStack() {
       <View>
         {playedCards &&
           playedCards.map((sequences: CardInterface[]) => {
-            return sequences.map((card: CardInterface) => {
+            return sequences.map((card: CardInterface, idx) => {
               return (
                 <View key={card.value.toString() + card.suit.toString()}>
                   <PlayingCard
+                    idx={idx}
                     value={card.value}
                     suit={card.suit}
                     staged={card.staged}

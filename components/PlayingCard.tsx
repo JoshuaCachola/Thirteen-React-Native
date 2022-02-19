@@ -1,10 +1,10 @@
-import { View, StyleSheet, Text } from 'react-native';
-import { useContext, useEffect, useState } from 'react';
+import { View, StyleSheet, Text, TouchableHighlight } from 'react-native';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
 import { CardInterface, CardSuits } from '../helper/Card';
-import { HandContext } from '../context/HandContext';
+import { CardsContext } from '../context/CardsContext';
 
 interface PlayingCardProp {
   idx: number;
@@ -20,22 +20,28 @@ export default function PlayingCard({
   suit,
   staged,
 }: PlayingCardProp) {
-  const handContext = useContext(HandContext);
-  console.log(handContext);
-
   // Handles state of pressing card
-  const [card, setCard] = useState<CardInterface>();
+  const [isCardStaged, setIsCardStaged] = useState(false);
+
   // hooks to get card suit and card color
+  const { hand, setHand } = useContext(CardsContext);
 
   const cardSuit = useSuit(suit);
   const color = useColor(suit);
 
+  const handlePress = (idx: number) => {
+    const newHand = [...hand];
+    newHand[idx].staged = !newHand[idx].staged;
+    setHand(newHand);
+  };
+
+  console.log(hand);
   return (
-    <View
+    <TouchableHighlight
       style={styles.container}
-      // onTouchStart={() => {
-      //   setCard({ ...card, staged: !card.staged });
-      // }}
+      onPress={() => {
+        handlePress(idx);
+      }}
     >
       <View style={styles.front}>
         <View style={[styles.rankAndSuit, styles.topValueAndSuit]}>
@@ -51,7 +57,7 @@ export default function PlayingCard({
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableHighlight>
   );
 }
 
