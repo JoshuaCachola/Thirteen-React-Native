@@ -1,12 +1,12 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { CardsContext } from '../context/CardsContext';
+import { Hand, HandContext } from '../context/HandContext';
 import { Card, CardInterface } from '../helper/Card';
 import PlayingCard from './PlayingCard';
 
 export default function PlayArea() {
   const [cards, setCards] = useState<CardInterface[]>([]);
-  const { hand, setHand } = useContext(CardsContext);
+  const { hand, setHand } = useContext<Hand>(HandContext);
 
   useEffect(() => {
     const staged: CardInterface[] = [];

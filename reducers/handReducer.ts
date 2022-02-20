@@ -19,16 +19,6 @@ export default function handReducer(
   action: CardAction
 ): HandState {
   switch (action.type) {
-    // case 'SELECT':
-    //   const selectedCards = state.cards.map((card: Card) => {
-    //     if (
-    //       card.value === action.payload.value &&
-    //       card.suit === action.payload.suit
-    //     ) {
-    //       return { ...card, selected: !card.selected };
-    //     }
-    //   });
-    //   return { cards: selectedCards } as HandState;
     case PLAY:
       const filteredCards = state.cards.filter(
         (card: CardInterface) =>

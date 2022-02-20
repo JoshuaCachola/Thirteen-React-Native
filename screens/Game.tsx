@@ -1,35 +1,28 @@
 import { StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Deck } from '../helper/Deck';
 import { CardInterface } from '../helper/Card';
 import PlayArea from '../components/PlayArea';
 import PlayerStack from '../components/PlayerStack';
 import PlayedCardsStack from '../components/PlayedCardsStack';
-import { CardsContext } from '../context/CardsContext';
+import { HandContext } from '../context/HandContext';
+import { PlayFromHandContext } from '../context/PlayFromHandContext';
 
 export default function Game() {
-  const [cards, setCards] = useState<CardInterface[]>(() => {
+  // state => HandContext
+  const [hand, setHand] = useState<CardInterface[]>(() => {
     const { deck } = new Deck();
     return deck.slice(0, 13);
-    // setCards(deck.slice(0, 13));
   });
+  const [stagedCards, setStagedCards] = useState<CardInterface[]>([]);
 
-  // useEffect(() => {
-  //   const { deck } = new Deck();
-  //   setCards(deck.slice(0, 13));
-  // }, []);
+  // state => PlayFromHandContext
+  const [playedCards, setPlayedCards] = useState<CardInterface[]>([]);
 
   return (
-    <CardsContext.Provider
-      value={{
-        playedCards: [[]],
-        hand: cards,
-        stagedCards: [],
-        setHand: setCards,
-      }}
-    >
+    <PlayFromHandContext.Provider value={{ playedCards, setPlayedCards }}>
       <View style={styles.container}>
         {/* Top */}
         <View style={styles.topContainer}>
@@ -44,13 +37,17 @@ export default function Game() {
           </View>
         </View>
         {/* Bottom */}
-        <View style={styles.bottomContainer}>
-          <View>
-            <Hand cards={cards} />
+        <HandContext.Provider
+          value={{ hand, setHand, stagedCards, setStagedCards }}
+        >
+          <View style={styles.bottomContainer}>
+            <View>
+              <Hand />
+            </View>
           </View>
-        </View>
+        </HandContext.Provider>
       </View>
-    </CardsContext.Provider>
+    </PlayFromHandContext.Provider>
   );
 }
 

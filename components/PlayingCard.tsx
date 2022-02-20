@@ -3,8 +3,8 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
-import { CardInterface, CardSuits } from '../helper/Card';
-import { CardsContext } from '../context/CardsContext';
+import { CardSuits } from '../helper/Card';
+import { HandContext } from '../context/HandContext';
 
 interface PlayingCardProp {
   idx: number;
@@ -24,7 +24,7 @@ export default function PlayingCard({
   const [isCardStaged, setIsCardStaged] = useState(false);
 
   // hooks to get card suit and card color
-  const { hand, setHand } = useContext(CardsContext);
+  const { hand, setHand } = useContext(HandContext);
 
   const cardSuit = useSuit(suit);
   const color = useColor(suit);
@@ -35,7 +35,6 @@ export default function PlayingCard({
     setHand(newHand);
   };
 
-  console.log(hand);
   return (
     <TouchableHighlight
       style={styles.container}

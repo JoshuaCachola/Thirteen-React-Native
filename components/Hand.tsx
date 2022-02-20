@@ -1,8 +1,7 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CardInterface } from '../helper/Card';
 import InteractiveView from './InteractiveView';
-import PlayingCard from './PlayingCard';
 import { HandContext } from '../context/HandContext';
 
 interface Props {
@@ -10,23 +9,21 @@ interface Props {
 }
 
 // This component displays holding a hand of cards
-export default function Hand(props: Props) {
-  const [cardsInHand, setCardsInHand] = useState<CardInterface[]>(props.cards);
+export default function Hand() {
+  const { hand } = useContext(HandContext);
 
   return (
-    <HandContext.Provider value={cardsInHand}>
-      <View style={styles.container}>
-        {cardsInHand.map((card: CardInterface, idx: number) => {
-          return (
-            <InteractiveView
-              key={`hand-${card.value}-${card.suit}`}
-              idx={idx}
-              card={card}
-            />
-          );
-        })}
-      </View>
-    </HandContext.Provider>
+    <View style={styles.container}>
+      {hand.map((card: CardInterface, idx: number) => {
+        return (
+          <InteractiveView
+            key={`hand-${card.value}-${card.suit}`}
+            idx={idx}
+            card={card}
+          />
+        );
+      })}
+    </View>
   );
 }
 
