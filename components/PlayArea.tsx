@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Hand, HandContext } from '../context/HandContext';
-import { Card, CardInterface } from '../helper/Card';
+import { Card, CardInterface } from '../classes/Card';
 import PlayingCard from './PlayingCard';
 
 export default function PlayArea() {
@@ -9,16 +9,16 @@ export default function PlayArea() {
   const { hand, setHand } = useContext<Hand>(HandContext);
 
   useEffect(() => {
-    const staged: CardInterface[] = [];
+    const selected: CardInterface[] = [];
     // hand.forEach((card) => {
-    //   if (card.staged) {
-    //     staged.push(card);
+    //   if (card.selected) {
+    //     selected.push(card);
     //   }
     // });
     hand.forEach((card) => {
-      if (card.staged) staged.push(card);
+      if (card.selected) selected.push(card);
     });
-    setCards(staged);
+    setCards(selected);
   }, [hand, setHand]);
 
   return (
@@ -34,7 +34,7 @@ export default function PlayArea() {
                   // key={card.value.toString() + card.suit.toString()}
                   value={card.value}
                   suit={card.suit}
-                  staged={card.staged}
+                  selected={card.selected}
                 />
               </View>
             );

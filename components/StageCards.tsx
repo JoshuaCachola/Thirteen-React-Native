@@ -1,28 +1,28 @@
 import { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { HandContext } from '../context/HandContext';
-import { Card } from '../helper/Card';
+import { Card } from '../classes/Card';
 import PlayingCard from './PlayingCard';
 
-// Staged Card component
-// - When a card is touched from the hand, modal of staged cards will appear
+// selected Card component
+// - When a card is touched from the hand, modal of selected cards will appear
 // - Cards will be in a staging phase before being able to play them
 export default function StageCards() {
-  const { stagedCards, setStagedCards } = useContext(HandContext);
+  const { selectedCards, setselectedCards } = useContext(HandContext);
   const { hand, setHand } = useContext(HandContext);
 
   const handleOnPress = () => {};
 
   return (
     <View style={styles.container}>
-      {stagedCards.map((card: Card, idx) => {
+      {selectedCards.map((card: Card, idx) => {
         return (
-          <View key={`staged-${card.value}-${card.value}`}>
+          <View key={`selected-${card.value}-${card.value}`}>
             <PlayingCard
               idx={idx}
               value={card.value}
               suit={card.suit}
-              staged={card.staged}
+              selected={card.selected}
             />
           </View>
         );

@@ -1,9 +1,8 @@
 import { useContext, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { CardInterface } from '../helper/Card';
+import { CardInterface } from '../classes/Card';
 import InteractiveView from './InteractiveView';
 import { HandContext } from '../context/HandContext';
-import StageCards from './StageCards';
 import { calculatePositions, Position } from '../helper/calculatePositions';
 
 // This component displays holding a hand of cards
@@ -23,7 +22,14 @@ export default function Hand() {
   return (
     <View style={styles.container}>
       {/* Hand */}
-      <View style={styles.hand}>
+      <View
+        style={[
+          styles.hand,
+          {
+            transform: [{ translateX: -20 * hand.length }, { translateY: 0 }],
+          },
+        ]}
+      >
         {hand.map((card: CardInterface, idx: number) => {
           return (
             <InteractiveView
@@ -36,7 +42,7 @@ export default function Hand() {
         })}
       </View>
       {/* Staged Cards */}
-      <StageCards />
+      {/* <StageCards /> */}
     </View>
   );
 }
@@ -44,14 +50,13 @@ export default function Hand() {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    display: 'flex',
+    flex: 1,
     flexDirection: 'row',
+    justifyContent: 'center',
   },
   hand: {
-    justifyContent: 'flex-start',
+    marginVertical: 0,
+    marginHorizontal: 'auto',
   },
-  stagedCards: {
-    // flex: 1,
-    justifyContent: 'flex-end',
-  },
+  stagedCards: {},
 });

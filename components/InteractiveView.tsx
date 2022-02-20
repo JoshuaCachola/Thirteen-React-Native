@@ -1,6 +1,6 @@
 import { Animated, StyleSheet } from 'react-native';
 import { Position } from '../helper/calculatePositions';
-import { Card } from '../helper/Card';
+import { Card } from '../classes/Card';
 import PlayingCard from './PlayingCard';
 
 interface InteractiveProps {
@@ -16,26 +16,12 @@ export default function InteractiveView({
   cardPosition,
 }: InteractiveProps) {
   return (
-    <Animated.View
-      style={[
-        styles.hand,
-        {
-          zIndex: idx,
-          left: idx * 40,
-          transform: [
-            {
-              rotate: `${cardPosition.rotate}`,
-            },
-          ],
-          bottom: cardPosition.bottom,
-        },
-      ]}
-    >
+    <Animated.View style={[styles.hand, cardPosition]}>
       <PlayingCard
         idx={idx}
         value={card.value}
         suit={card.suit}
-        staged={card.staged}
+        selected={card.selected}
       />
     </Animated.View>
   );

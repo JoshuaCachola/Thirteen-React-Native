@@ -1,9 +1,9 @@
-import { StyleSheet } from 'react-native';
+import { Button, StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
 import { useState } from 'react';
-import { Deck } from '../helper/Deck';
-import { CardInterface } from '../helper/Card';
+import { Deck } from '../classes/Deck';
+import { CardInterface } from '../classes/Card';
 import PlayArea from '../components/PlayArea';
 import PlayerStack from '../components/PlayerStack';
 import PlayedCardsStack from '../components/PlayedCardsStack';
@@ -16,11 +16,15 @@ export default function Game() {
     const { deck } = new Deck();
     return deck.slice(0, 13);
   });
-  const [stagedCards, setStagedCards] = useState<CardInterface[]>([]);
+  const [selectedCards, setselectedCards] = useState<CardInterface[]>([]);
 
   // state => PlayFromHandContext
   const [playedCards, setPlayedCards] = useState<CardInterface[]>([]);
 
+  const handleRedeal = () => {
+    const { deck } = new Deck();
+    setHand(deck.slice(0, 13));
+  };
   return (
     <PlayFromHandContext.Provider value={{ playedCards, setPlayedCards }}>
       <View style={styles.container}>
@@ -38,13 +42,14 @@ export default function Game() {
         </View>
         {/* Bottom */}
         <HandContext.Provider
-          value={{ hand, setHand, stagedCards, setStagedCards }}
+          value={{ hand, setHand, selectedCards, setselectedCards }}
         >
           <View style={styles.bottomContainer}>
             <Hand />
           </View>
         </HandContext.Provider>
       </View>
+      {/* <Button title='redeal' onPress={() => handleRedeal()} /> */}
     </PlayFromHandContext.Provider>
   );
 }

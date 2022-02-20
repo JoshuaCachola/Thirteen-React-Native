@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useEffect, useState } from 'react';
-import { CardSuits } from '../helper/Card';
+import { CardSuits } from '../classes/Card';
 
 // This is the useSuit hook
 // input: suit

@@ -25,10 +25,10 @@ export default function PlayerStack() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 2,
+    flexGrow: 1,
     borderWidth: 2,
     borderRadius: 4,
-    borderColor: 'purple',
+    justifyContent: 'space-between',
   },
   player: {
     fontWeight: 'bold',

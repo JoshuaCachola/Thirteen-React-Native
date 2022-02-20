@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { CardInterface } from '../helper/Card';
+import { CardInterface } from '../classes/Card';
 import PlayingCard from './PlayingCard';
 
 export default function PlayedCardsStack() {
   const [playedCards, setPlayedCards] = useState<CardInterface[][]>([
-    [
-      { value: 3, suit: 2, staged: true },
-      { value: 3, suit: 3, staged: true },
-    ],
+    // [
+    //   { value: 3, suit: 2, selected: true },
+    //   { value: 3, suit: 3, selected: true },
+    // ],
+    [],
   ]);
 
   return (
@@ -24,7 +25,7 @@ export default function PlayedCardsStack() {
                     idx={idx}
                     value={card.value}
                     suit={card.suit}
-                    staged={card.staged}
+                    selected={card.selected}
                   />
                 </View>
               );
@@ -36,5 +37,8 @@ export default function PlayedCardsStack() {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+  },
 });

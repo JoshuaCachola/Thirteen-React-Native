@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CardSuits } from '../helper/Card';
+import { CardSuits } from '../classes/Card';
 
 export default function useColor(suit: CardSuits) {
   const [suitColor, setSuitColor] = useState('red');

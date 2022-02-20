@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { CardInterface } from '../helper/Card';
+import { CardInterface } from '../classes/Card';
 
 export interface PlayFromHand {
   playedCards: CardInterface[];

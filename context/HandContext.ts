@@ -1,19 +1,19 @@
 import { createContext } from 'react';
-import { CardInterface } from '../helper/Card';
+import { CardInterface } from '../classes/Card';
 
-// context shared between hand and staged cards
+// context shared between hand and selected cards
 // hand: cards that the user can play
-// stagedCards: cards that are touched that the player is deciding to play
+// selectedCards: cards that are touched that the player is deciding to play
 export interface Hand {
-  stagedCards: CardInterface[];
+  selectedCards: CardInterface[];
   hand: CardInterface[];
   setHand: (cards: CardInterface[]) => void;
-  setStagedCards: (cards: CardInterface[]) => void;
+  setselectedCards: (cards: CardInterface[]) => void;
 }
 
 export const HandContext = createContext<Hand>({
-  stagedCards: [],
+  selectedCards: [],
   hand: [],
   setHand: () => {},
-  setStagedCards: () => {},
+  setselectedCards: () => {},
 });

@@ -3,14 +3,15 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
-import { CardInterface, CardSuits } from '../helper/Card';
+import { CardSuits } from '../classes/Card';
 import { HandContext } from '../context/HandContext';
+import { cardValues } from '../helper/sequences';
 
 interface PlayingCardProp {
   idx: number;
   value: number;
   suit: CardSuits;
-  staged: boolean;
+  selected: boolean;
 }
 
 // Card Component
@@ -18,50 +19,53 @@ export default function PlayingCard({
   idx,
   value,
   suit,
-  staged,
+  selected,
 }: PlayingCardProp) {
   // Handles state of pressing card
-  const [isCardStaged, setIsCardStaged] = useState(false);
+  const [isCardselected, setIsCardselected] = useState(false);
 
   // hooks to get card suit and card color
-  const { hand, setHand, stagedCards, setStagedCards } =
+  const { hand, setHand, selectedCards, setselectedCards } =
     useContext(HandContext);
 
   const cardSuit = useSuit(suit);
   const color = useColor(suit);
 
-  const handleOnPress = () => {
-    const newHand: CardInterface[] = [];
-    const staged: CardInterface[] = [];
+  // const handleOnPress = () => {
+  //   const newHand: CardInterface[] = [];
+  //   const selected: CardInterface[] = [];
 
-    hand.forEach((card) => {
-      if (card.value === value && card.suit === suit) {
-        staged.push(card);
-      } else {
-        newHand.push(card);
-      }
-    });
+  //   hand.forEach((card) => {
+  //     if (card.value === value && card.suit === suit) {
+  //       selected.push(card);
+  //     } else {
+  //       newHand.push(card);
+  //     }
+  //   });
 
-    setHand(newHand);
-    setStagedCards(staged);
-  };
+  //   setHand(newHand);
+  //   setselectedCards(selected);
+  // };
 
   return (
     <TouchableHighlight
-      style={styles.container}
+      style={[styles.container, isCardselected ? styles.selectCard : null]}
       onPress={() => {
-        handleOnPress();
+        // handleOnPress();
+        setIsCardselected(!isCardselected);
       }}
     >
       <View style={styles.front}>
         <View style={[styles.rankAndSuit, styles.topValueAndSuit]}>
-          <Text style={[{ color }, styles.value]}>{value}</Text>
+          <Text style={[{ color }, styles.value]}>{cardValues[value]}</Text>
           <Text>
             <FaIcon size={10} icon={cardSuit} color={color} />
           </Text>
         </View>
         <View style={[styles.rankAndSuit, styles.bottomValueAndSuit]}>
-          <Text style={[{ color }, styles.bottomValue]}>{value}</Text>
+          <Text style={[{ color }, styles.bottomValue]}>
+            {cardValues[value]}
+          </Text>
           <Text>
             <FaIcon size={10} icon={cardSuit} color={color} />
           </Text>
@@ -106,9 +110,8 @@ const styles = StyleSheet.create({
   },
   selectCard: {
     bottom: 30,
-    borderWidth: 10,
-    borderColor: 'yellow',
-    backgroundColor: 'rgb(0, 0, 200)',
+    borderWidth: 2,
+    borderColor: 'red',
   },
   value: {
     margin: 1,

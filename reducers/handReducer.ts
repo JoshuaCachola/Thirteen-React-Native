@@ -1,5 +1,5 @@
 import { PLAY } from '../constants/Actions';
-import { CardInterface, CardSuits } from '../helper/Card';
+import { CardInterface, CardSuits } from '../classes/Card';
 
 export interface HandState {
   cards: [];

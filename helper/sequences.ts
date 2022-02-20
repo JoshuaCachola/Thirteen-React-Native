@@ -1,0 +1,45 @@
+export enum CardValues {
+  'THREE' = 3,
+  'FOUR',
+  'FIVE',
+  'SIX',
+  'SEVEN',
+  'EIGHT',
+  'NINE',
+  'TEN',
+  'JACK',
+  'QUEEN',
+  'KING',
+  'ACE',
+  'TWO',
+}
+
+export const cardValues = [
+  null,
+  null,
+  null,
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  'J',
+  'Q',
+  'K',
+  'A',
+  '2',
+];
+
+export enum Sequences {
+  'SINGLE',
+  'DOUBLE',
+  'TRIPLE',
+  'QUAD',
+  'STRAIGHT',
+  'SINGLE-BOMB',
+  'DOUBLE-BOMB',
+  'TRIPLE-BOMB',
+}
