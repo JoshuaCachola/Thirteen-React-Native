@@ -3,7 +3,7 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
-import { CardSuits } from '../helper/Card';
+import { CardInterface, CardSuits } from '../helper/Card';
 import { HandContext } from '../context/HandContext';
 
 interface PlayingCardProp {
@@ -24,22 +24,33 @@ export default function PlayingCard({
   const [isCardStaged, setIsCardStaged] = useState(false);
 
   // hooks to get card suit and card color
-  const { hand, setHand } = useContext(HandContext);
+  const { hand, setHand, stagedCards, setStagedCards } =
+    useContext(HandContext);
 
   const cardSuit = useSuit(suit);
   const color = useColor(suit);
 
-  const handlePress = (idx: number) => {
-    const newHand = [...hand];
-    newHand[idx].staged = !newHand[idx].staged;
+  const handleOnPress = () => {
+    const newHand: CardInterface[] = [];
+    const staged: CardInterface[] = [];
+
+    hand.forEach((card) => {
+      if (card.value === value && card.suit === suit) {
+        staged.push(card);
+      } else {
+        newHand.push(card);
+      }
+    });
+
     setHand(newHand);
+    setStagedCards(staged);
   };
 
   return (
     <TouchableHighlight
       style={styles.container}
       onPress={() => {
-        handlePress(idx);
+        handleOnPress();
       }}
     >
       <View style={styles.front}>

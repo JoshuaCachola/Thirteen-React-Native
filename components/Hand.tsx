@@ -1,28 +1,42 @@
-import { useContext } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CardInterface } from '../helper/Card';
 import InteractiveView from './InteractiveView';
 import { HandContext } from '../context/HandContext';
-
-interface Props {
-  cards: CardInterface[];
-}
+import StageCards from './StageCards';
+import { calculatePositions, Position } from '../helper/calculatePositions';
 
 // This component displays holding a hand of cards
 export default function Hand() {
   const { hand } = useContext(HandContext);
+  const [positions, setPositions] = useState<Position[]>(() => {
+    return calculatePositions(hand.length);
+  });
+
+  console.log(positions);
+
+  useMemo(() => {
+    const newPositions = calculatePositions(hand.length);
+    setPositions(newPositions);
+  }, [hand.length]);
 
   return (
     <View style={styles.container}>
-      {hand.map((card: CardInterface, idx: number) => {
-        return (
-          <InteractiveView
-            key={`hand-${card.value}-${card.suit}`}
-            idx={idx}
-            card={card}
-          />
-        );
-      })}
+      {/* Hand */}
+      <View style={styles.hand}>
+        {hand.map((card: CardInterface, idx: number) => {
+          return (
+            <InteractiveView
+              key={`hand-${card.value}-${card.suit}`}
+              idx={idx}
+              card={card}
+              cardPosition={positions[idx]}
+            />
+          );
+        })}
+      </View>
+      {/* Staged Cards */}
+      <StageCards />
     </View>
   );
 }
@@ -30,5 +44,14 @@ export default function Hand() {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  hand: {
+    justifyContent: 'flex-start',
+  },
+  stagedCards: {
+    // flex: 1,
+    justifyContent: 'flex-end',
   },
 });

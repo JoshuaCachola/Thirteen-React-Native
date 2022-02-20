@@ -41,9 +41,7 @@ export default function Game() {
           value={{ hand, setHand, stagedCards, setStagedCards }}
         >
           <View style={styles.bottomContainer}>
-            <View>
-              <Hand />
-            </View>
+            <Hand />
           </View>
         </HandContext.Provider>
       </View>
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: 'yellow',
+    backgroundColor: 'purple',
   },
   topContainer: {
     flex: 2,
