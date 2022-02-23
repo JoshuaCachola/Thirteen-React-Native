@@ -12,8 +12,6 @@ export default function Hand() {
     return calculatePositions(hand.length);
   });
 
-  console.log(positions);
-
   useMemo(() => {
     const newPositions = calculatePositions(hand.length);
     setPositions(newPositions);

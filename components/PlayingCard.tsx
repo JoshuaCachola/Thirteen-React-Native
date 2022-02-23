@@ -3,7 +3,7 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
-import { CardSuits } from '../classes/Card';
+import { CardInterface, CardSuits } from '../classes/Card';
 import { HandContext } from '../context/HandContext';
 import { cardValues } from '../helper/sequences';
 
@@ -24,34 +24,34 @@ export default function PlayingCard({
   // Handles state of pressing card
   const [isCardselected, setIsCardselected] = useState(false);
 
-  // hooks to get card suit and card color
-  const { hand, setHand, selectedCards, setselectedCards } =
+  const { hand, setHand, selectedCards, setSelectedCards } =
     useContext(HandContext);
 
+  // hooks to get card suit and card color
   const cardSuit = useSuit(suit);
   const color = useColor(suit);
 
-  // const handleOnPress = () => {
-  //   const newHand: CardInterface[] = [];
-  //   const selected: CardInterface[] = [];
+  const handleOnPress = () => {
+    const newHand: CardInterface[] = [];
+    const selected: CardInterface[] = [];
 
-  //   hand.forEach((card) => {
-  //     if (card.value === value && card.suit === suit) {
-  //       selected.push(card);
-  //     } else {
-  //       newHand.push(card);
-  //     }
-  //   });
+    hand.forEach((card) => {
+      if (card.value === value && card.suit === suit) {
+        selected.push(card);
+      } else {
+        newHand.push(card);
+      }
+    });
 
-  //   setHand(newHand);
-  //   setselectedCards(selected);
-  // };
+    setHand(newHand);
+    setSelectedCards(selected);
+  };
 
   return (
     <TouchableHighlight
       style={[styles.container, isCardselected ? styles.selectCard : null]}
       onPress={() => {
-        // handleOnPress();
+        handleOnPress();
         setIsCardselected(!isCardselected);
       }}
     >
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     bottom: 30,
     borderWidth: 2,
     borderColor: 'red',
+    borderStyle: 'dashed',
   },
   value: {
     margin: 1,

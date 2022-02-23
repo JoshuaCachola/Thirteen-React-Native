@@ -6,7 +6,8 @@ import PlayingCard from './PlayingCard';
 
 export default function PlayArea() {
   const [cards, setCards] = useState<CardInterface[]>([]);
-  const { hand, setHand } = useContext<Hand>(HandContext);
+  const { hand, setHand, selectedCards, setSelectedCards } =
+    useContext<Hand>(HandContext);
 
   useEffect(() => {
     const selected: CardInterface[] = [];

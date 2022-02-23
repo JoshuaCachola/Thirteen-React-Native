@@ -8,12 +8,12 @@ export interface Hand {
   selectedCards: CardInterface[];
   hand: CardInterface[];
   setHand: (cards: CardInterface[]) => void;
-  setselectedCards: (cards: CardInterface[]) => void;
+  setSelectedCards: (cards: CardInterface[]) => void;
 }
 
 export const HandContext = createContext<Hand>({
   selectedCards: [],
   hand: [],
   setHand: () => {},
-  setselectedCards: () => {},
+  setSelectedCards: () => {},
 });
