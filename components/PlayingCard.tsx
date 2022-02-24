@@ -6,6 +6,7 @@ import FaIcon from '../helper/fontAwsomeHelper';
 import { CardInterface, CardSuits } from '../classes/Card';
 import { HandContext } from '../context/HandContext';
 import { cardValues } from '../helper/sequences';
+import { PlayFromHandContext } from '../context/PlayFromHandContext';
 
 interface PlayingCardProp {
   idx: number;
@@ -22,10 +23,11 @@ export default function PlayingCard({
   selected,
 }: PlayingCardProp) {
   // Handles state of pressing card
-  const [isCardselected, setIsCardselected] = useState(false);
+  const [isCardSelected, setIsCardSelected] = useState(false);
 
   const { hand, setHand, selectedCards, setSelectedCards } =
     useContext(HandContext);
+  const { playedCards, setPlayedCards } = useContext(PlayFromHandContext);
 
   // hooks to get card suit and card color
   const cardSuit = useSuit(suit);
@@ -33,26 +35,23 @@ export default function PlayingCard({
 
   const handleOnPress = () => {
     const newHand: CardInterface[] = [];
-    const selected: CardInterface[] = [];
 
     hand.forEach((card) => {
       if (card.value === value && card.suit === suit) {
-        selected.push(card);
-      } else {
-        newHand.push(card);
+        card.selected = !card.selected;
       }
+      newHand.push(card);
     });
-
     setHand(newHand);
-    setSelectedCards(selected);
+    // setIsCardSelected(!isCardSelected);
   };
 
   return (
     <TouchableHighlight
-      style={[styles.container, isCardselected ? styles.selectCard : null]}
+      style={[styles.container, isCardSelected ? styles.selectCard : null]}
       onPress={() => {
         handleOnPress();
-        setIsCardselected(!isCardselected);
+        setIsCardSelected(!isCardSelected);
       }}
     >
       <View style={styles.front}>

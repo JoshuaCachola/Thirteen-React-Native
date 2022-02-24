@@ -1,13 +1,16 @@
 import { useContext, useMemo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Button } from 'react-native';
 import { CardInterface } from '../classes/Card';
 import InteractiveView from './InteractiveView';
 import { HandContext } from '../context/HandContext';
 import { calculatePositions, Position } from '../helper/calculatePositions';
+import { PlayFromHandContext } from '../context/PlayFromHandContext';
 
 // This component displays holding a hand of cards
 export default function Hand() {
-  const { hand } = useContext(HandContext);
+  const { hand, setHand } = useContext(HandContext);
+  const { playedCards, setPlayedCards } = useContext(PlayFromHandContext);
+
   const [positions, setPositions] = useState<Position[]>(() => {
     return calculatePositions(hand.length);
   });
@@ -16,6 +19,21 @@ export default function Hand() {
     const newPositions = calculatePositions(hand.length);
     setPositions(newPositions);
   }, [hand.length]);
+
+  const handlePlayCards = () => {
+    const acceptedSequence: string[] = [];
+    const newHand: CardInterface[] = [];
+    hand.forEach((card) => {
+      if (card.selected) {
+        card.played === true;
+        acceptedSequence.push(`${card.value},${card.suit}`);
+      } else {
+        newHand.push(card);
+      }
+    });
+    setPlayedCards([...playedCards, acceptedSequence]);
+    setHand(newHand);
+  };
 
   return (
     <View style={styles.container}>
@@ -29,18 +47,18 @@ export default function Hand() {
         ]}
       >
         {hand.map((card: CardInterface, idx: number) => {
-          return (
-            <InteractiveView
-              key={`hand-${card.value}-${card.suit}`}
-              idx={idx}
-              card={card}
-              cardPosition={positions[idx]}
-            />
-          );
+          if (!card.played)
+            return (
+              <InteractiveView
+                key={`hand-${card.value}-${card.suit}`}
+                idx={idx}
+                card={card}
+                cardPosition={positions[idx]}
+              />
+            );
         })}
       </View>
-      {/* Staged Cards */}
-      {/* <StageCards /> */}
+      <Button title='Play' onPress={() => handlePlayCards()}></Button>
     </View>
   );
 }

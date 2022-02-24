@@ -2,8 +2,8 @@ import { createContext } from 'react';
 import { CardInterface } from '../classes/Card';
 
 export interface PlayFromHand {
-  playedCards: CardInterface[];
-  setPlayedCards: (cards: CardInterface[]) => void;
+  playedCards: string[][];
+  setPlayedCards: (cards: string[][]) => void;
 }
 
 export const PlayFromHandContext = createContext<PlayFromHand>({
