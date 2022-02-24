@@ -6,17 +6,7 @@ import PlayingCard from './PlayingCard';
 import { PlayFromHandContext } from '../context/PlayFromHandContext';
 
 export default function PlayArea() {
-  const [cards, setCards] = useState<CardInterface[]>([]);
-
   const { playedCards } = useContext(PlayFromHandContext);
-  // useMemo(() => {
-  //   const selected: CardInterface[] = [];
-  //   selectedCards.forEach((card) => {
-  //     selected.push(card);
-  //   });
-
-  //   setCards(selected);
-  // }, [selectedCards]);
 
   return (
     <View style={styles.container}>

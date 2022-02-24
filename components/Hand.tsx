@@ -15,6 +15,8 @@ export default function Hand() {
     return calculatePositions(hand.length);
   });
 
+  // recalculates position of cards whenever a player plays a sequence
+  // allows hand to be centered
   useMemo(() => {
     const newPositions = calculatePositions(hand.length);
     setPositions(newPositions);

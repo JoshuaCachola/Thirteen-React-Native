@@ -10,8 +10,11 @@ import PlayedCardsStack from '../components/PlayedCardsStack';
 import { HandContext } from '../context/HandContext';
 import { PlayFromHandContext } from '../context/PlayFromHandContext';
 import StageCards from '../components/StageCards';
+import { GameState } from '../classes/GameState';
+import uuid from 'react-native-uuid';
 
 export default function Game() {
+  const [game, setGame] = useState(new GameState(uuid.v4().toString()));
   // state => HandContext
   const [hand, setHand] = useState<CardInterface[]>(() => {
     const { deck } = new Deck();
@@ -20,7 +23,7 @@ export default function Game() {
   const [selectedCards, setSelectedCards] = useState<CardInterface[]>([]);
 
   // state => PlayFromHandContext
-  const [playedCards, setPlayedCards] = useState<CardInterface[]>([]);
+  const [playedCards, setPlayedCards] = useState<string[][]>([]);
 
   return (
     <PlayFromHandContext.Provider value={{ playedCards, setPlayedCards }}>

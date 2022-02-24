@@ -1,4 +1,4 @@
-import { Card, CardInterface } from './Card';
+import { CardInterface } from './Card';
 
 const unShuffledDeck: CardInterface[] = [
   { value: 3, suit: 0, selected: false, played: false },
