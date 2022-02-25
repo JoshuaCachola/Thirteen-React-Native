@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Deck } from '../classes/Deck';
 import { CardInterface } from '../classes/Card';
 import PlayArea from '../components/PlayArea';
@@ -16,14 +16,17 @@ import uuid from 'react-native-uuid';
 export default function Game() {
   const [game, setGame] = useState(new GameState(uuid.v4().toString()));
   // state => HandContext
-  const [hand, setHand] = useState<CardInterface[]>(() => {
-    const { deck } = new Deck();
-    return deck.slice(0, 13);
-  });
+  const [hand, setHand] = useState<CardInterface[]>([]);
   const [selectedCards, setSelectedCards] = useState<CardInterface[]>([]);
 
   // state => PlayFromHandContext
   const [playedCards, setPlayedCards] = useState<string[][]>([]);
+
+  useEffect(() => {
+    const hands = game.deal();
+    console.log(hands);
+    setHand(hands[0]);
+  }, []);
 
   return (
     <PlayFromHandContext.Provider value={{ playedCards, setPlayedCards }}>

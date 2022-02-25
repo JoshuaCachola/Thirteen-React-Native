@@ -62,16 +62,6 @@ export class Deck {
     this.deck = this.shuffle(unShuffledDeck);
   }
 
-  // createDeck() {
-  //   let deck: CardInterface[] = [];
-  //   for (let i = 3; 3 <= 15; i++) {
-  //     for (let j = 0; j < 4; j++) {
-  //       deck.push(new Card(i, j));
-  //     }
-  //   }
-  //   return deck;
-  // }
-
   // shuffles deck by iterating over the deck by idx
   // with a random number between 0 and 51
   shuffle(deck: CardInterface[]) {

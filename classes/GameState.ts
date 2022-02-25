@@ -3,16 +3,9 @@ import { Deck } from './Deck';
 
 type combination = 'SINGLE' | 'DOUBLE' | 'TRIPLE' | 'STRAIGHT' | null;
 
-export interface GameInterface {
-  combination: {
-    type: combination;
-    length?: number;
-  };
-}
-
 // Game object
 // holds the state of the game
-export class GameState implements GameInterface {
+export class GameState {
   combination: {
     type: combination;
     length: number;
@@ -65,13 +58,12 @@ export class GameState implements GameInterface {
     return rotation.reverse();
   }
 
-  deal(deck: CardInterface[]) {
+  // deals four hands from a newly created and shuffled deck
+  deal() {
     const hands: CardInterface[][] = [[], [], [], []];
-    deck.forEach((card: CardInterface) => {
-      hands[0].push(card);
-      hands[1].push(card);
-      hands[2].push(card);
-      hands[3].push(card);
+    const { deck } = new Deck();
+    deck.forEach((card: CardInterface, idx) => {
+      hands[idx % 4].push(card);
     });
     return hands;
   }
