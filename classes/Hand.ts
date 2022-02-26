@@ -13,8 +13,7 @@ type combinationTypes =
   | 'TRIPLE'
   | 'STRAIGHT'
   | 'BOMB!'
-  | 'BOMB!!'
-  | null;
+  | 'BOMB!!';
 
 export class Hand {
   hand: CardInterface[];
@@ -31,7 +30,7 @@ export class Hand {
   // card combination which we check by the length of the
   // incoming card combination
   isValidCombination(
-    type: combinationTypes,
+    type: string,
     incoming: CardInterface[],
     current?: CardInterface[]
   ) {

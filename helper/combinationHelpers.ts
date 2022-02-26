@@ -1,4 +1,5 @@
 import { Card, CardInterface } from '../classes/Card';
+import { combinationConstants } from '../constants/CombinationConstants';
 
 export enum CardValues {
   'THREE' = 3,
@@ -61,22 +62,6 @@ export const isStraight = (combinationObj: combination) => {
   }
 
   return true;
-};
-
-// will check valid combination at the beginning of the round
-export const isValidCombination = (combination: CardInterface[]) => {
-  const combinationObj = createObj(combination);
-
-  switch (combination.length) {
-    case 1:
-      return true;
-    case 2:
-      return Object.keys(combinationObj).length === 1;
-    case 3 && 4:
-      return (
-        Object.keys(combinationObj).length === 1 || isStraight(combinationObj)
-      );
-  }
 };
 
 export const isValidSingle = (
@@ -165,6 +150,48 @@ export const getHighestCard = (cards: CardInterface[]) => {
   const cardValues = cards.map((card) => card.value);
   const maxValue = Math.max(...cardValues);
   // return maxValue + Math.max(cards[maxValue]);
+};
+
+export const isValidCombination = (
+  type: string,
+  incoming: CardInterface[],
+  current?: CardInterface[]
+) => {
+  if (!type) {
+    checkCombinationByCardLength(incoming);
+  }
+  switch (type) {
+    case combinationConstants.SINGLE:
+      return isValidSingle(current!, incoming);
+    case combinationConstants.DOUBLE:
+      return isIncomingHigherValue(current!, incoming);
+    case combinationConstants.TRIPLE:
+      return isIncomingHigherValue(current!, incoming);
+    case combinationConstants.STRAIGHT:
+      return isValidStraight(current!, incoming);
+    case combinationConstants.BOMB:
+      return isValidBomb(current!, incoming);
+  }
+};
+
+const checkCombinationByCardLength = (
+  cards: CardInterface[],
+  type?: string
+) => {
+  switch (cards.length) {
+    case 2:
+      return areAllSameValue(cards);
+    case 3:
+      if (type) {
+        return combinationConstants.TRIPLE ? areAllSameValue(cards) : null;
+        // : isValidStraight(cards);
+      }
+  }
+};
+
+const areAllSameValue = (cards: CardInterface[]) => {
+  const cardsObj = createObj(cards);
+  return Object.keys(cardValues).length === 1;
 };
 
 export const sortByCombination = (cards: CardInterface[]) => {};

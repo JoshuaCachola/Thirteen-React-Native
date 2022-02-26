@@ -66,7 +66,7 @@ export class GameState {
     deck.forEach((card: CardInterface, idx) => {
       hands[idx % 4].push(card);
     });
-    return hands.map((hand) => new Hand(hand));
+    return hands;
   }
 
   // starts the game and sets
