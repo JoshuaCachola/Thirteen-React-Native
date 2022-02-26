@@ -5,7 +5,7 @@ import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
 import { CardInterface, CardSuits } from '../classes/Card';
 import { HandContext } from '../context/HandContext';
-import { cardValues } from '../helper/combinations';
+import { cardValues } from '../helper/combinationHelpers';
 import { PlayFromHandContext } from '../context/PlayFromHandContext';
 
 interface PlayingCardProp {
@@ -43,7 +43,6 @@ export default function PlayingCard({
       newHand.push(card);
     });
     setHand(newHand);
-    // setIsCardSelected(!isCardSelected);
   };
 
   return (

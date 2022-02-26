@@ -22,6 +22,8 @@ export default function Hand() {
     setPositions(newPositions);
   }, [hand.length]);
 
+  // handles playing cards when cards are selected
+  // and play button is pressed
   const handlePlayCards = () => {
     const acceptedSequence: string[] = [];
     const newHand: CardInterface[] = [];
@@ -32,10 +34,15 @@ export default function Hand() {
       } else {
         newHand.push(card);
       }
+      card.selected = false;
     });
     setPlayedCards([...playedCards, acceptedSequence]);
     setHand(newHand);
   };
+
+  useMemo(() => {
+    const selectedCards: CardInterface[] = hand.filter((card) => card.selected);
+  }, []);
 
   return (
     <View style={styles.container}>

@@ -1,3 +1,4 @@
+import { Hand } from '../classes/Hand';
 import { CardInterface } from './Card';
 import { Deck } from './Deck';
 
@@ -65,7 +66,7 @@ export class GameState {
     deck.forEach((card: CardInterface, idx) => {
       hands[idx % 4].push(card);
     });
-    return hands;
+    return hands.map((hand) => new Hand(hand));
   }
 
   // starts the game and sets
