@@ -25,6 +25,7 @@ export default function PlayingCard({
   const [isCardSelected, setIsCardSelected] = useState(false);
   const [isValid, setIsValid] = useState(false);
 
+  console.log(isValid);
   const { hand, setHand, selectedCards, setSelectedCards } =
     useContext(HandContext);
 
@@ -46,16 +47,17 @@ export default function PlayingCard({
 
   useEffect(() => {
     const selected = hand.filter((card) => card.selected);
-    const isValid = isValidCombination(selected);
-    setIsValid(isValid);
+    const isCombinationValid = isValidCombination(selected);
+    setIsValid(isCombinationValid);
   }, [hand]);
 
   return (
     <TouchableHighlight
       style={[
         styles.container,
-        isCardSelected ? styles.selectCard : null,
-        isValid && isCardSelected ? styles.validSelect : styles.invalidSelect,
+        isCardSelected && styles.selectCard,
+        isCardSelected && isValid && styles.validSelect,
+        isCardSelected && !isValid && styles.invalidSelect,
       ]}
       onPress={() => {
         handleOnPress();

@@ -53,7 +53,6 @@ export const createObj = (cards: CardInterface[]) => {
 
 // checks if incoming single value is higher than
 // if current card is a "TWO" a bomb can be played
-//
 export const isValidSingle = (
   current: CardInterface,
   incoming: CardInterface[]
@@ -89,10 +88,16 @@ const doesCurrentHaveHigherSuit = (
   return Math.max(...incomingSuits) > current.suit;
 };
 
+// checks if cards follow a sequential order
+// checks if a cards in the straight is a 'Two'
+// if so return false
 export const isValidStraight = (cards: CardInterface[]) => {
   sortCards(cards);
   for (let i = 1; i < cards.length; i++) {
-    if (cards[i].value !== cards[i - 1].value + 1) {
+    if (
+      cards[i].value !== cards[i - 1].value + 1 ||
+      cards[i].value === CardValues['TWO']
+    ) {
       return false;
     }
   }
@@ -135,6 +140,8 @@ export const getHighestCard = (cards: CardInterface[]) => {
   return cards[cards.length - 1];
 };
 
+// checks for valid combination during selecting cards
+// from the players hand
 export const isValidCombination = (
   incoming: CardInterface[],
   type?: string,
@@ -154,13 +161,21 @@ export const isValidCombination = (
       return (
         areAllSameValue(incoming) && isIncomingHigherValue(current!, incoming)
       );
+    case combinationConstants.BOMB:
+      return (
+        isValidBomb(incoming, combinationConstants.BOMB) &&
+        isIncomingHigherValue(current!, incoming)
+      );
     default:
-      return isValidStraight(incoming);
-    // case combinationConstants.BOMB:
-    //   return isValidBomb(current!, incoming);
+      return (
+        isValidStraight(incoming) && isIncomingHigherValue(current!, incoming)
+      );
   }
 };
 
+// checks is combination is valid by the possible combination types that a
+// number of cards can possibly be
+// used only for when there isn't a combination already set
 const checkCombinationByCardLength = (
   cards: CardInterface[],
   type?: string
@@ -189,11 +204,19 @@ const checkCombinationByCardLength = (
           : isValidStraight(cards);
       }
     default:
-      return isValidStraight(cards);
+      return cards.length === 0 ? false : isValidStraight(cards);
   }
 };
 
+// checks if all of the values of the cards are the same
+// for doubles, triples, and four of a kind bombs
 const areAllSameValue = (cards: CardInterface[]) => {
-  const cardsObj = createObj(cards);
-  return Object.keys(cardsObj).length === 1;
+  let value = cards[0].value;
+  for (let i = 1; i < cards.length; i++) {
+    if (cards[i].value !== value) {
+      return false;
+    }
+  }
+
+  return true;
 };
