@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet, Button } from 'react-native';
 import { CardInterface } from '../classes/Card';
 import InteractiveView from './InteractiveView';

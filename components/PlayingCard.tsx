@@ -1,12 +1,11 @@
 import { View, StyleSheet, Text, TouchableHighlight } from 'react-native';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
 import { CardInterface, CardSuits } from '../classes/Card';
 import { HandContext } from '../context/HandContext';
-import { cardValues } from '../helper/combinationHelpers';
-import { PlayFromHandContext } from '../context/PlayFromHandContext';
+import { cardValues, isValidCombination } from '../helper/combinationHelpers';
 
 interface PlayingCardProp {
   idx: number;
@@ -24,10 +23,10 @@ export default function PlayingCard({
 }: PlayingCardProp) {
   // Handles state of pressing card
   const [isCardSelected, setIsCardSelected] = useState(false);
+  const [isValid, setIsValid] = useState(false);
 
   const { hand, setHand, selectedCards, setSelectedCards } =
     useContext(HandContext);
-  const { playedCards, setPlayedCards } = useContext(PlayFromHandContext);
 
   // hooks to get card suit and card color
   const cardSuit = useSuit(suit);
@@ -45,9 +44,19 @@ export default function PlayingCard({
     setHand(newHand);
   };
 
+  useEffect(() => {
+    const selected = hand.filter((card) => card.selected);
+    const isValid = isValidCombination(selected);
+    setIsValid(isValid);
+  }, [hand]);
+
   return (
     <TouchableHighlight
-      style={[styles.container, isCardSelected ? styles.selectCard : null]}
+      style={[
+        styles.container,
+        isCardSelected ? styles.selectCard : null,
+        isValid && isCardSelected ? styles.validSelect : styles.invalidSelect,
+      ]}
       onPress={() => {
         handleOnPress();
         setIsCardSelected(!isCardSelected);
@@ -109,8 +118,14 @@ const styles = StyleSheet.create({
   selectCard: {
     bottom: 30,
     borderWidth: 2,
+  },
+  invalidSelect: {
     borderColor: 'red',
     borderStyle: 'dashed',
+  },
+  validSelect: {
+    borderColor: 'green',
+    borderStyle: 'solid',
   },
   value: {
     margin: 1,

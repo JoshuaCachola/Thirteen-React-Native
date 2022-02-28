@@ -1,4 +1,4 @@
-import { Card, CardInterface } from '../classes/Card';
+import { Card, CardInterface, CardSuits } from '../classes/Card';
 import { combinationConstants } from '../constants/CombinationConstants';
 
 export enum CardValues {
@@ -51,126 +51,113 @@ export const createObj = (cards: CardInterface[]) => {
   return obj;
 };
 
-export const isStraight = (combinationObj: combination) => {
-  const keys = Object.keys(combinationObj).sort();
-
-  if (parseInt(keys[keys.length - 1]) === 15) return false;
-  for (let i = 1; i < keys.length; i++) {
-    if (parseInt(keys[i - 1]) !== parseInt(keys[i]) + 1) {
-      return false;
-    }
-  }
-
-  return true;
-};
-
+// checks if incoming single value is higher than
+// if current card is a "TWO" a bomb can be played
+//
 export const isValidSingle = (
-  current: CardInterface[],
+  current: CardInterface,
   incoming: CardInterface[]
 ) => {
-  if (
-    (current[0].value === CardValues['TWO'] && incoming.length === 4) ||
-    incoming.length === 6
-  ) {
-    return isValidBomb(current, incoming);
-  } else if (
-    incoming[0].value > current[0].value ||
-    (incoming[0].value === current[0].value &&
-      incoming[0].suit > current[0].suit)
-  ) {
-    return true;
+  if (current.value !== CardValues['TWO']) {
+    return (
+      incoming[0].value > current.value ||
+      (incoming[0].value === current.value && incoming[0].suit > current.suit)
+    );
   }
-  return false;
+  return incoming.length === 6
+    ? isValidBomb(incoming, combinationConstants.BOMB)
+    : areAllSameValue(incoming);
 };
 
 export const isIncomingHigherValue = (
-  current: CardInterface[],
+  current: CardInterface,
   incoming: CardInterface[]
 ) => {
-  if (incoming[0].value > current[0].value) {
+  if (incoming[0].value > current.value) {
     return true;
-  } else if (incoming[0].value === current[0].value) {
+  } else if (incoming[0].value === current.value) {
     return doesCurrentHaveHigherSuit(current, incoming);
   }
   return false;
 };
 
 const doesCurrentHaveHigherSuit = (
-  current: CardInterface[],
-  incoming: CardInterface[]
-) => {
-  const currentSuits = current.map((card) => card.suit);
-  const incomingSuits = incoming.map((card) => card.suit);
-  if (Math.max(...incomingSuits) > Math.max(...currentSuits)) {
-    return true;
-  }
-  return false;
-};
-
-export const isValidStraight = (
-  current: CardInterface[],
-  incoming: CardInterface[]
-) => {
-  const straightLength = current.length;
-  if (incoming[straightLength - 1].value === CardValues['TWO']) {
-    return false;
-  }
-  return isIncomingHigherValue(
-    [current[straightLength - 1]],
-    [incoming[straightLength - 1]]
-  );
-};
-
-export const isValidBomb = (
-  current: CardInterface[],
-  incoming: CardInterface[]
-) => {
-  if (current.length === 4) {
-    return isIncomingHigherValue(current, incoming);
-  }
-
-  const currentObj = createObj(current);
-  const incomingObj = createObj(incoming);
-};
-
-export const isIncomingHigher = (
   current: CardInterface,
-  incoming: CardInterface
+  incoming: CardInterface[]
 ) => {
-  if (
-    incoming.value > current.value ||
-    (incoming.value === current.value && incoming.suit > current.suit)
-  ) {
-    return true;
-  }
-  return false;
+  const incomingSuits = incoming.map((card) => card.suit);
+  return Math.max(...incomingSuits) > current.suit;
 };
 
+export const isValidStraight = (cards: CardInterface[]) => {
+  sortCards(cards);
+  for (let i = 1; i < cards.length; i++) {
+    if (cards[i].value !== cards[i - 1].value + 1) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// sorts by value in ascending order
+// if value is the same, then sorts by suit in ascending order
+const sortCards = (cards: CardInterface[]) => {
+  return cards.sort((a, b) => {
+    const difference = a.value - b.value;
+    if (difference === 0) {
+      return a.suit - b.suit;
+    }
+    return difference;
+  });
+};
+
+export const isValidBomb = (incoming: CardInterface[], type: string) => {
+  const incomingObj = createObj(incoming);
+  const values = [];
+  for (let [k, v] of Object.entries(incomingObj)) {
+    if (v.length !== 2 && type === combinationConstants.BOMB) return false;
+    else if (v.length !== 3 && type === combinationConstants.DOUBLE_BOMB)
+      return false;
+    values.push(parseInt(k));
+  }
+
+  values.sort();
+  for (let i = 1; i < values.length; i++) {
+    if (values[i - 1] + 1 !== values[i]) return false;
+  }
+
+  return true;
+};
+
+// sets the highest card on the GameState object
 export const getHighestCard = (cards: CardInterface[]) => {
-  const cardValues = cards.map((card) => card.value);
-  const maxValue = Math.max(...cardValues);
-  // return maxValue + Math.max(cards[maxValue]);
+  sortCards(cards);
+  return cards[cards.length - 1];
 };
 
 export const isValidCombination = (
-  type: string,
   incoming: CardInterface[],
-  current?: CardInterface[]
-) => {
+  type?: string,
+  current?: CardInterface
+): boolean => {
   if (!type) {
-    checkCombinationByCardLength(incoming);
+    return checkCombinationByCardLength(incoming);
   }
   switch (type) {
     case combinationConstants.SINGLE:
       return isValidSingle(current!, incoming);
     case combinationConstants.DOUBLE:
-      return isIncomingHigherValue(current!, incoming);
+      return (
+        areAllSameValue(incoming) && isIncomingHigherValue(current!, incoming)
+      );
     case combinationConstants.TRIPLE:
-      return isIncomingHigherValue(current!, incoming);
-    case combinationConstants.STRAIGHT:
-      return isValidStraight(current!, incoming);
-    case combinationConstants.BOMB:
-      return isValidBomb(current!, incoming);
+      return (
+        areAllSameValue(incoming) && isIncomingHigherValue(current!, incoming)
+      );
+    default:
+      return isValidStraight(incoming);
+    // case combinationConstants.BOMB:
+    //   return isValidBomb(current!, incoming);
   }
 };
 
@@ -179,49 +166,34 @@ const checkCombinationByCardLength = (
   type?: string
 ) => {
   switch (cards.length) {
+    case 1:
+      return true;
     case 2:
       return areAllSameValue(cards);
     case 3:
       if (type) {
-        return combinationConstants.TRIPLE ? areAllSameValue(cards) : null;
-        // : isValidStraight(cards);
+        return combinationConstants.TRIPLE
+          ? areAllSameValue(cards)
+          : isValidStraight(cards);
       }
+    case 4:
+      if (type) {
+        return combinationConstants.BOMB
+          ? areAllSameValue(cards)
+          : isValidStraight(cards);
+      }
+    case 6:
+      if (type) {
+        return combinationConstants.BOMB
+          ? isValidBomb(cards, combinationConstants.BOMB)
+          : isValidStraight(cards);
+      }
+    default:
+      return isValidStraight(cards);
   }
 };
 
 const areAllSameValue = (cards: CardInterface[]) => {
   const cardsObj = createObj(cards);
-  return Object.keys(cardValues).length === 1;
+  return Object.keys(cardsObj).length === 1;
 };
-
-export const sortByCombination = (cards: CardInterface[]) => {};
-
-// const isSingleHigherCB = (highest: Card | null, incomingCard: Card) => {
-//   if (!highest || incomingCard.value > highest.value) {
-//     return true;
-//   } else if (
-//     incomingCard.value < highest.value ||
-//     (highest.value === incomingCard.value && incomingCard.suit < highest.suit)
-//   ) {
-//     return false;
-//   }
-// };
-
-// const SequenceCBMap = {
-//   1: [isSingleHigherCB],
-// };
-
-// checks for sequence of cards played
-// const getSequence = (...cards: CardInterface[]) => {
-//   if (cards.length === 1) {
-//     return 'SINGLE';
-//   } else if (cards.length === 2) {
-//     if (cards[0].value === cards[1].value) {
-//       return 'DOUBLE';
-//     } else {
-//       return null;
-//     }
-//   }
-
-//   cards.sort((a, b) => a.value - b.value);
-// };

@@ -1,10 +1,10 @@
 import { Animated, StyleSheet } from 'react-native';
 import { Position } from '../helper/calculatePositions';
-import { Card } from '../classes/Card';
+import { Card, CardInterface } from '../classes/Card';
 import PlayingCard from './PlayingCard';
 
 interface InteractiveProps {
-  card: Card;
+  card: CardInterface;
   idx: number;
   cardPosition: Position;
 }

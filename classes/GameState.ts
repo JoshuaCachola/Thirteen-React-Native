@@ -1,4 +1,3 @@
-import { Hand } from '../classes/Hand';
 import { CardInterface } from './Card';
 import { Deck } from './Deck';
 
@@ -18,6 +17,8 @@ export class GameState {
   ableToStartGame: boolean;
   currentPlayer: string | null;
   hands: CardInterface[][];
+  combinationType: string | null;
+  highestCard: CardInterface | null;
 
   constructor(roomId: string) {
     this.combination = {
@@ -31,6 +32,8 @@ export class GameState {
     this.currentPlayer = null;
     this.playerRotation = [];
     this.hands = [];
+    this.combinationType = null;
+    this.highestCard = null;
   }
 
   // change to player object
