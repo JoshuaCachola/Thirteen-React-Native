@@ -1,5 +1,5 @@
 import { View, StyleSheet, Text, TouchableHighlight } from 'react-native';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
@@ -25,7 +25,6 @@ export default function PlayingCard({
   const [isCardSelected, setIsCardSelected] = useState(false);
   const [isValid, setIsValid] = useState(false);
 
-  console.log(isValid);
   const { hand, setHand, selectedCards, setSelectedCards } =
     useContext(HandContext);
 
@@ -45,7 +44,7 @@ export default function PlayingCard({
     setHand(newHand);
   };
 
-  useEffect(() => {
+  useMemo(() => {
     const selected = hand.filter((card) => card.selected);
     const isCombinationValid = isValidCombination(selected);
     setIsValid(isCombinationValid);

@@ -5,4 +5,5 @@ export const combinationConstants = {
   STRAIGHT: 'STRAIGHT',
   BOMB: 'BOMB!',
   DOUBLE_BOMB: 'BOMB!!',
+  TRIPLE_BOMB: 'BOMB!!!',
 };

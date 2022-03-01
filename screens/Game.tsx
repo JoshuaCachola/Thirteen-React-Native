@@ -12,6 +12,7 @@ import { PlayFromHandContext } from '../context/PlayFromHandContext';
 import StageCards from '../components/StageCards';
 import { GameState } from '../classes/GameState';
 import uuid from 'react-native-uuid';
+import { sortCards } from '../helper/combinationHelpers';
 
 export default function Game() {
   const [game, setGame] = useState(new GameState(uuid.v4().toString()));
@@ -24,8 +25,7 @@ export default function Game() {
 
   useEffect(() => {
     const hands = game.deal();
-    console.log(hands);
-    setHand(hands[0]);
+    setHand(sortCards(hands[0]));
   }, []);
 
   return (

@@ -5,12 +5,12 @@ import InteractiveView from './InteractiveView';
 import { HandContext } from '../context/HandContext';
 import { calculatePositions, Position } from '../helper/calculatePositions';
 import { PlayFromHandContext } from '../context/PlayFromHandContext';
+import { sortCards } from '../helper/combinationHelpers';
 
 // This component displays holding a hand of cards
 export default function Hand() {
   const { hand, setHand } = useContext(HandContext);
   const { playedCards, setPlayedCards } = useContext(PlayFromHandContext);
-
   const [positions, setPositions] = useState<Position[]>(() => {
     return calculatePositions(hand.length);
   });
@@ -83,5 +83,4 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     marginHorizontal: 'auto',
   },
-  stagedCards: {},
 });
