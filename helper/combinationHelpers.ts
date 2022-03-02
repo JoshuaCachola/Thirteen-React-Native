@@ -1,21 +1,21 @@
 import { CardInterface } from '../classes/Card';
 import { combinationConstants } from '../constants/CombinationConstants';
 
-export enum CardValues {
-  'THREE' = 3,
-  'FOUR',
-  'FIVE',
-  'SIX',
-  'SEVEN',
-  'EIGHT',
-  'NINE',
-  'TEN',
-  'JACK',
-  'QUEEN',
-  'KING',
-  'ACE',
-  'TWO',
-}
+export const CardValues = {
+  '3': 3,
+  '4': 4,
+  '5': 5,
+  '6': 6,
+  '7': 7,
+  '8': 8,
+  '9': 9,
+  '10': 10,
+  J: 11,
+  Q: 12,
+  K: 13,
+  A: 14,
+  '2': 15,
+};
 
 export const cardValues = [
   null,
@@ -35,6 +35,14 @@ export const cardValues = [
   'A',
   '2',
 ];
+
+type multipleObj = { [key: string]: number };
+
+const multiples: multipleObj = {
+  DOUBLE: 2,
+  TRIPLE: 3,
+  QUAD: 4,
+};
 
 type combination = { [key: number]: number[] };
 
@@ -60,7 +68,7 @@ export const isValidSingle = (
   current: CardInterface,
   incoming: CardInterface[]
 ) => {
-  if (current.value !== CardValues['TWO']) {
+  if (current.value !== CardValues['2']) {
     return (
       incoming[0].value > current.value ||
       (incoming[0].value === current.value && incoming[0].suit > current.suit)
@@ -105,7 +113,7 @@ export const isValidStraight = (cards: CardInterface[]) => {
   for (let i = 1; i < cards.length; i++) {
     if (
       cards[i].value !== cards[i - 1].value + 1 ||
-      cards[i].value === CardValues['TWO']
+      cards[i].value === CardValues['2']
     ) {
       return false;
     }
@@ -121,19 +129,38 @@ export const sortCards = (cards: CardInterface[]) => {
   });
 };
 
+// checks to see if all types of bombs are valid
 export const isValidBomb = (incoming: CardInterface[], type: string) => {
   // checks for four of a kind bombs
-  if (incoming.length) {
+  if (incoming.length === 4) {
     return areAllSameValue(incoming);
   }
 
   const incomingObj = createObj(incoming);
   const values = [];
   for (let [k, v] of Object.entries(incomingObj)) {
-    if (v.length !== 2 && type === combinationConstants.BOMB) return false;
-    else if (v.length !== 3 && type === combinationConstants.DOUBLE_BOMB)
-      return false;
+    if (v.length !== 2) return false;
     values.push(parseInt(k));
+  }
+
+  switch (type) {
+    case combinationConstants.BOMB:
+      if (values.length !== 3) {
+        return false;
+      }
+      break;
+    case combinationConstants.DOUBLE_BOMB:
+      if (values.length !== 4) {
+        return false;
+      }
+      break;
+    case combinationConstants.TRIPLE_BOMB:
+      if (values.length !== 5) {
+        return false;
+      }
+      break;
+    default:
+      break;
   }
 
   values.sort();
@@ -176,6 +203,16 @@ export const isValidCombination = (
         isValidBomb(incoming, combinationConstants.BOMB) &&
         isIncomingHigherValue(current!, incoming)
       );
+    case combinationConstants.DOUBLE_BOMB:
+      return (
+        isValidBomb(incoming, combinationConstants.DOUBLE_BOMB) &&
+        isIncomingHigherValue(current!, incoming)
+      );
+    case combinationConstants.TRIPLE_BOMB:
+      return (
+        isValidBomb(incoming, combinationConstants.TRIPLE_BOMB) &&
+        isIncomingHigherValue(current!, incoming)
+      );
     default:
       return (
         isValidStraight(incoming) && isIncomingHigherValue(current!, incoming)
@@ -214,4 +251,34 @@ const areAllSameValue = (cards: CardInterface[]) => {
   }
 
   return true;
+};
+
+type cardCombinations = { [key: string]: number[] };
+
+// creates an array of pairs of cards by index
+// returns the array and length
+export const getMultiples = (cards: CardInterface[], type: string) => {
+  const values = Array(16).fill(null);
+  const pairs: cardCombinations = {};
+
+  for (let i = 0; i < cards.length; i++) {
+    // in the values array, push the index of the card
+    // to the index of the value
+    const cardValue = cards[i].value;
+    if (!values[cardValue]) {
+      values[cardValue] = [];
+    }
+    values[cardValue].push(i);
+
+    if (values[cardValue].length === multiples[type]) {
+      if (!(cardValue in pairs)) {
+        pairs[cardValues[cardValue]!] = [values[cardValue]];
+      } else {
+        pairs[cardValues[cardValue]!].push(values[cardValue]);
+      }
+      values[cardValue] = null;
+    }
+  }
+
+  return pairs;
 };
