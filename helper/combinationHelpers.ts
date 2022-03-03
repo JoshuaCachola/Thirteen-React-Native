@@ -282,3 +282,58 @@ export const getMultiples = (cards: CardInterface[], type: string) => {
 
   return pairs;
 };
+
+const createHandMap = (hand: CardInterface[]) => {
+  const map: combination = {};
+  for (let i = 0; i < hand.length; i++) {
+    if (hand[i].value in map) {
+      map[hand[i].value].push(i);
+    } else {
+      map[hand[i].value] = [i];
+    }
+  }
+
+  return map;
+};
+
+const createStraight = (
+  handMap: combination,
+  startingValue: number,
+  length: number
+) => {
+  const straight = [];
+  for (let i = startingValue; i < startingValue + length; i++) {
+    const popped = handMap[i].pop();
+    straight.push(popped);
+  }
+  return straight;
+};
+
+export const getStraights = (
+  hand: CardInterface[], // comes in sorted by value and suit
+  straightLength: number
+) => {
+  const handMap = createHandMap(hand);
+  const straights = [];
+
+  let start = 3;
+  let i = 1;
+  while (start + i <= 15) {
+    if (start in handMap && handMap[start].length > 0) {
+      i += 1;
+    } else {
+      start += 1;
+      i = 1;
+      continue;
+    }
+    if (i === straightLength) {
+      straights.push(createStraight(handMap, start, straightLength));
+      i = 1;
+    }
+  }
+  return straights;
+};
+
+const getSingles = (hand: CardInterface[]) => {
+  const handMap = createHandMap(hand);
+};
