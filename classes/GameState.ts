@@ -1,4 +1,5 @@
 import { CardInterface } from './Card';
+import { Computer } from './Computer';
 import { Deck } from './Deck';
 
 type combination = 'SINGLE' | 'DOUBLE' | 'TRIPLE' | 'STRAIGHT' | null;
@@ -19,13 +20,14 @@ export class GameState {
   hands: CardInterface[][];
   combinationType: string | null;
   highestCard: CardInterface | null;
+  lastWinner: number | null;
 
   constructor(roomId: string) {
     this.combination = {
       type: null,
       length: 0,
     };
-    this.players = ['player 1', 'player 2', 'player 3', 'player 4'];
+    this.players = ['Player 1', 'Computer 2', 'Computer 3', 'Computer 4'];
     this.roomId = roomId;
     this.isGameWon = false;
     this.ableToStartGame = false;
@@ -34,6 +36,7 @@ export class GameState {
     this.hands = [];
     this.combinationType = null;
     this.highestCard = null;
+    this.lastWinner = null;
   }
 
   // change to player object
@@ -57,9 +60,9 @@ export class GameState {
       i % this.players.length !== startingPlayerIdx;
       i++
     ) {
-      rotation.push(this.players[i]);
+      rotation.unshift(this.players[i]);
     }
-    return rotation.reverse();
+    return rotation;
   }
 
   // deals four hands from a newly created and shuffled deck
@@ -69,7 +72,18 @@ export class GameState {
     deck.forEach((card: CardInterface, idx) => {
       hands[idx % 4].push(card);
     });
-    return hands;
+
+    this.hands = hands;
+  }
+
+  findLowestThree() {
+    this.hands.forEach((hand, idx) => {
+      hand.forEach((cards) => {
+        if (cards.value === 3 && cards.suit === 0) {
+          return idx;
+        }
+      });
+    });
   }
 
   // starts the game and sets
@@ -78,8 +92,31 @@ export class GameState {
       return false;
     }
 
-    const startingIdx = Math.random() * this.players.length;
-    this.playerRotation = this.createPlayerRotation(startingIdx);
-    this.currentPlayer = this.playerRotation[this.playerRotation.length - 1];
+    // deals cards and find either the player with the 3 of clubs
+    // or the last winner and creates a player rotation
+    this.deal();
+    let playerIdx: number;
+    if (!this.lastWinner) {
+      playerIdx = this.findLowestThree()!;
+    } else {
+      playerIdx = this.lastWinner;
+    }
+    this.playerRotation = this.createPlayerRotation(playerIdx);
+
+    // game loop
+    while (!this.isGameWon) {
+      const currentPlayer = this.playerRotation.pop();
+
+      // if playerRotation length === 0
+      //    - set combinationType to null, player can play any sequence
+      //    - recreate playerRotation with all players
+      if (this.playerRotation.length === 0) {
+        this.combinationType = null;
+        this.createPlayerRotation(this.players.indexOf(currentPlayer!));
+      }
+
+      if (currentPlayer?.includes('Computer')) {
+      }
+    }
   }
 }
