@@ -1,5 +1,3 @@
-import { createObj } from '../helper/combinationHelpers';
-import { CardInterface } from './Card';
 import { Player } from './Player';
 
 export class Computer extends Player {
