@@ -25,10 +25,7 @@ export default function Game() {
   // state => PlayFromHandContext
   const [playedCards, setPlayedCards] = useState<string[][]>([]);
 
-  useEffect(() => {
-    // const hands = game.deal();
-    // setHand(sortCards(hands![0]));
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <PlayFromHandContext.Provider value={{ playedCards, setPlayedCards }}>
