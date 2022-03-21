@@ -1,5 +1,6 @@
 import { CardInterface } from './Card';
 import { Computer } from './Computer';
+import { Player } from './Player';
 import { Deck } from './Deck';
 
 type combination = 'SINGLE' | 'DOUBLE' | 'TRIPLE' | 'STRAIGHT' | null;
@@ -11,12 +12,12 @@ export class GameState {
     type: combination;
     length: number;
   };
-  players: string[];
-  playerRotation: string[];
+  players: typeof Player[];
+  playerRotation: typeof Player[];
   roomId: string;
   isGameWon: boolean;
   ableToStartGame: boolean;
-  currentPlayer: string | null;
+  currentPlayer: typeof Player | null;
   hands: CardInterface[][];
   combinationType: string | null;
   highestCard: CardInterface | null;
@@ -27,7 +28,7 @@ export class GameState {
       type: null,
       length: 0,
     };
-    this.players = ['Player 1', 'Computer 2', 'Computer 3', 'Computer 4'];
+    this.players = [];
     this.roomId = roomId;
     this.isGameWon = false;
     this.ableToStartGame = false;
@@ -40,7 +41,7 @@ export class GameState {
   }
 
   // change to player object
-  addPlayer(player: string) {
+  addPlayer(player: typeof Player) {
     this.players.push(player);
   }
 
@@ -54,7 +55,7 @@ export class GameState {
 
   // creates the rotation of players
   createPlayerRotation(startingPlayerIdx: number) {
-    const rotation: string[] = [this.players[startingPlayerIdx]];
+    const rotation: typeof Player[] = [this.players[startingPlayerIdx]];
     for (
       let i = startingPlayerIdx + 1;
       i % this.players.length !== startingPlayerIdx;
@@ -115,7 +116,7 @@ export class GameState {
         this.createPlayerRotation(this.players.indexOf(currentPlayer!));
       }
 
-      if (currentPlayer?.includes('Computer')) {
+      if (currentPlayer?.name.includes('Computer')) {
       }
     }
   }
