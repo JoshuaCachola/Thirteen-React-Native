@@ -27,5 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100vh',
+    // backgroundColor: 'black',
+    // opacity: 20,
   },
 });

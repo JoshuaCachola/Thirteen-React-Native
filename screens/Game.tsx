@@ -1,7 +1,7 @@
 import { Modal, StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Deck } from '../classes/Deck';
 import { CardInterface } from '../classes/Card';
 import PlayArea from '../components/PlayArea';
@@ -14,18 +14,31 @@ import { GameState } from '../classes/GameState';
 import uuid from 'react-native-uuid';
 import { sortCards } from '../helper/combinationHelpers';
 import ReadyModal from '../components/ReadyModal';
+import { Player, PlayerActions } from '../classes/Player';
+import { Computer } from '../classes/Computer';
 
 export default function Game() {
   const [game, setGame] = useState(new GameState(uuid.v4().toString()));
+  const [player, setPlayer] = useState<PlayerActions>(new Player('Joshua'));
   const [isReady, setIsReady] = useState(false);
   // state => HandContext
-  const [hand, setHand] = useState<CardInterface[]>([]);
+  const [hand, setHand] = useState<CardInterface[] | null>([]);
   const [selectedCards, setSelectedCards] = useState<CardInterface[]>([]);
 
   // state => PlayFromHandContext
   const [playedCards, setPlayedCards] = useState<string[][]>([]);
 
-  useEffect(() => {}, []);
+  useMemo(() => {
+    if (isReady) {
+      game.addPlayer(player);
+      game.addPlayer(new Computer('Computer 1'));
+      game.addPlayer(new Computer('Computer 2'));
+      game.addPlayer(new Computer('Computer 3'));
+      game.deal();
+    }
+    console.log('here');
+    setHand(player.getHand());
+  }, [isReady]);
 
   return (
     <PlayFromHandContext.Provider value={{ playedCards, setPlayedCards }}>
@@ -44,13 +57,15 @@ export default function Game() {
           </View>
         </View>
         {/* Bottom */}
-        <HandContext.Provider
-          value={{ hand, setHand, selectedCards, setSelectedCards }}
-        >
-          <View style={styles.bottomContainer}>
-            <Hand />
-          </View>
-        </HandContext.Provider>
+        {hand !== null && (
+          <HandContext.Provider
+            value={{ hand, setHand, selectedCards, setSelectedCards }}
+          >
+            <View style={styles.bottomContainer}>
+              <Hand />
+            </View>
+          </HandContext.Provider>
+        )}
       </View>
       {!isReady && <ReadyModal isReady={isReady} setIsReady={setIsReady} />}
     </PlayFromHandContext.Provider>

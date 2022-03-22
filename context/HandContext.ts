@@ -6,7 +6,7 @@ import { CardInterface } from '../classes/Card';
 // selectedCards: cards that are touched that the player is deciding to play
 export interface Hand {
   selectedCards: CardInterface[];
-  hand: CardInterface[];
+  hand: CardInterface[] | null;
   setHand: (cards: CardInterface[]) => void;
   setSelectedCards: (cards: CardInterface[]) => void;
 }

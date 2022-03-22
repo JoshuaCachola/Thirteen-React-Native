@@ -1,9 +1,13 @@
 import { CardInterface } from './Card';
 import { Computer } from './Computer';
-import { Player } from './Player';
+import { Player, PlayerActions } from './Player';
 import { Deck } from './Deck';
 
 type combination = 'SINGLE' | 'DOUBLE' | 'TRIPLE' | 'STRAIGHT' | null;
+
+export interface GameActions {
+  addPlayer: (p: PlayerActions) => void;
+}
 
 // Game object
 // holds the state of the game
@@ -12,12 +16,12 @@ export class GameState {
     type: combination;
     length: number;
   };
-  players: typeof Player[];
-  playerRotation: typeof Player[];
+  players: PlayerActions[];
+  playerRotation: PlayerActions[];
   roomId: string;
   isGameWon: boolean;
   ableToStartGame: boolean;
-  currentPlayer: typeof Player | null;
+  currentPlayer: PlayerActions | null;
   hands: CardInterface[][];
   combinationType: string | null;
   highestCard: CardInterface | null;
@@ -41,7 +45,7 @@ export class GameState {
   }
 
   // change to player object
-  addPlayer(player: typeof Player) {
+  addPlayer(player: PlayerActions) {
     this.players.push(player);
   }
 
@@ -55,7 +59,7 @@ export class GameState {
 
   // creates the rotation of players
   createPlayerRotation(startingPlayerIdx: number) {
-    const rotation: typeof Player[] = [this.players[startingPlayerIdx]];
+    const rotation: PlayerActions[] = [this.players[startingPlayerIdx]];
     for (
       let i = startingPlayerIdx + 1;
       i % this.players.length !== startingPlayerIdx;
@@ -66,7 +70,7 @@ export class GameState {
     return rotation;
   }
 
-  // deals four hands from a newly created and shuffled deck
+  // deals hands from a newly created and shuffled deck
   deal() {
     const hands: CardInterface[][] = [[], [], [], []];
     const { deck } = new Deck();
@@ -74,7 +78,7 @@ export class GameState {
       hands[idx % 4].push(card);
     });
 
-    this.hands = hands;
+    hands.forEach((hand, idx) => this.players[idx].setHand(hand));
   }
 
   findLowestThree() {
@@ -87,11 +91,15 @@ export class GameState {
     });
   }
 
+  getPlayers() {
+    return this.players;
+  }
+
   // starts the game and sets
   start() {
-    if (!this.ableToStartGame) {
-      return false;
-    }
+    // if (!this.ableToStartGame) {
+    //   return false;
+    // }
 
     // deals cards and find either the player with the 3 of clubs
     // or the last winner and creates a player rotation
@@ -116,7 +124,7 @@ export class GameState {
         this.createPlayerRotation(this.players.indexOf(currentPlayer!));
       }
 
-      if (currentPlayer?.name.includes('Computer')) {
+      if (currentPlayer?.getName().includes('Computer')) {
       }
     }
   }
