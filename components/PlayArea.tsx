@@ -13,15 +13,14 @@ export default function PlayArea() {
       <Text style={styles.text}>Play Area</Text>
       <View style={styles.cards}>
         {playedCards.length &&
-          playedCards[playedCards.length - 1].map((string, idx) => {
-            const cards = string.split(',');
+          playedCards[playedCards.length - 1].map((card, idx) => {
             return (
-              <View key={`played-${cards[0]}-${cards[1]}`}>
+              <View key={`played-${card.value}-${card.suit}`}>
                 <PlayingCard
                   idx={idx}
                   // key={card.value.toString() + card.suit.toString()}
-                  value={parseInt(cards[0])}
-                  suit={parseInt(cards[1])}
+                  value={card.value}
+                  suit={card.suit}
                   selected={false}
                 />
               </View>

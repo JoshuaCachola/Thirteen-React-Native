@@ -12,7 +12,7 @@ interface PlayingCardProp {
   value: number;
   suit: CardSuits;
   selected: boolean;
-  isValid: boolean;
+  isValid?: boolean;
 }
 
 // Card Component

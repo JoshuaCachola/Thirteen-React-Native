@@ -25,7 +25,7 @@ export default function Game() {
   const [selectedCards, setSelectedCards] = useState<CardInterface[]>([]);
 
   // state => PlayFromHandContext
-  const [playedCards, setPlayedCards] = useState<string[][]>([]);
+  const [playedCards, setPlayedCards] = useState<CardInterface[][]>([]);
 
   useEffect(() => {
     if (isReady) {

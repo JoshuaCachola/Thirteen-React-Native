@@ -181,7 +181,7 @@ export const getHighestCard = (cards: CardInterface[]) => {
 // from the players hand
 export const isValidCombination = (
   incoming: CardInterface[],
-  current?: CardInterface,
+  current?: CardInterface | null,
   type?: string
 ): boolean => {
   if (!type) {

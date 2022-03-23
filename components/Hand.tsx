@@ -35,12 +35,11 @@ export default function Hand() {
   // handles playing cards when cards are selected
   // and play button is pressed
   const handlePlayCards = () => {
-    const acceptedSequence: string[] = [];
+    const acceptedSequence: CardInterface[] = [];
     const newHand: CardInterface[] = [];
     hand!.forEach((card) => {
       if (card.selected) {
-        card.played === true;
-        acceptedSequence.push(`${card.value},${card.suit}`);
+        acceptedSequence.push(card);
       } else {
         newHand.push(card);
       }
