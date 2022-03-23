@@ -4,16 +4,31 @@ import { Player, PlayerInterface } from './Player';
 import { Deck } from './Deck';
 import { Game } from './Game';
 
-type combination = 'SINGLE' | 'DOUBLE' | 'TRIPLE' | 'STRAIGHT' | null;
+export type Combination =
+  | 'SINGLE'
+  | 'DOUBLE'
+  | 'TRIPLE'
+  | 'STRAIGHT'
+  | 'BOMB'
+  | 'DOUBLE_BOMB'
+  | 'TRIPLE_BOMB'
+  | null;
+
+export interface GameStateInterface {
+  getCombinationType: () => Combination;
+  setCombinationType: (c: Combination) => void;
+  deal: () => void;
+  addPlayer: (p: PlayerInterface) => void;
+}
 
 // Game object
 // holds the state of the game
-export class GameState extends Game {
+export class GameState extends Game implements GameStateInterface {
   players: PlayerInterface[];
   playerRotation: PlayerInterface[];
   currentPlayer: PlayerInterface | null;
   hands: CardInterface[][];
-  combinationType: string | null;
+  combinationType: Combination;
   highestCard: CardInterface | null;
 
   constructor(roomId: string) {
@@ -38,6 +53,14 @@ export class GameState extends Game {
   //   }
   //   return false;
   // }
+
+  public setCombinationType(type: Combination) {
+    this.combinationType = type;
+  }
+
+  public getCombinationType() {
+    return this.combinationType;
+  }
 
   // creates the rotation of players
   createPlayerRotation(startingPlayerIdx: number) {

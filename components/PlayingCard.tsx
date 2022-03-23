@@ -46,12 +46,6 @@ export default function PlayingCard({
     setHand(newHand);
   };
 
-  // useMemo(() => {
-  //   const selected = hand!.filter((card) => card.selected);
-  //   const isCombinationValid = isValidCombination(selected);
-  //   setIsValid(isCombinationValid);
-  // }, [hand]);
-
   return (
     <TouchableHighlight
       style={[

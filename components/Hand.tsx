@@ -9,9 +9,14 @@ import { isValidCombination, sortCards } from '../helper/combinationHelpers';
 import Button from './Button';
 import { FlingGestureHandler } from 'react-native-gesture-handler';
 import PlayingCard from './PlayingCard';
+import { GameStateInterface } from '../classes/GameState';
+
+interface HandProps {
+  game: GameStateInterface;
+}
 
 // This component displays holding a hand of cards
-export default function Hand() {
+export default function Hand({ game }: HandProps) {
   const [isValid, setIsValid] = useState(false);
   const { hand, setHand } = useContext(HandContext);
   const { playedCards, setPlayedCards } = useContext(PlayFromHandContext);
@@ -28,7 +33,10 @@ export default function Hand() {
 
   useMemo(() => {
     const selected = hand!.filter((card) => card.selected);
-    const isCombinationValid = isValidCombination(selected);
+    const isCombinationValid = isValidCombination(
+      selected,
+      game.getCombinationType()
+    );
     setIsValid(isCombinationValid);
   }, [hand]);
 

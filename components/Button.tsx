@@ -15,8 +15,8 @@ export default function Button({ title, onPress }: ButtonProps) {
 
 const styles = StyleSheet.create({
   button: {
-    width: '40px',
-    height: '20px',
+    width: 40,
+    height: 20,
     backgroundColor: 'white',
   },
   buttonText: {

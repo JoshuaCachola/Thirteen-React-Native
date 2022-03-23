@@ -1,4 +1,5 @@
 import { CardInterface } from '../classes/Card';
+import { Combination } from '../classes/GameState';
 import { combinationConstants } from '../constants/CombinationConstants';
 
 export const CardValues = {
@@ -181,8 +182,8 @@ export const getHighestCard = (cards: CardInterface[]) => {
 // from the players hand
 export const isValidCombination = (
   incoming: CardInterface[],
-  current?: CardInterface | null,
-  type?: string
+  type: Combination,
+  current?: CardInterface | null
 ): boolean => {
   if (!type) {
     return checkCombinationByCardLength(incoming);

@@ -10,14 +10,14 @@ import PlayedCardsStack from '../components/PlayedCardsStack';
 import { HandContext } from '../context/HandContext';
 import { PlayFromHandContext } from '../context/PlayFromHandContext';
 import StageCards from '../components/StageCards';
-import { GameState } from '../classes/GameState';
+import { GameState, GameStateInterface } from '../classes/GameState';
 import uuid from 'react-native-uuid';
 import ReadyModal from '../components/ReadyModal';
 import { Player } from '../classes/Player';
 import { Computer } from '../classes/Computer';
 
 export default function Game() {
-  const game = new GameState(uuid.v4().toString());
+  const game: GameStateInterface = new GameState(uuid.v4().toString());
   const player = new Player('Joshua');
   const [isReady, setIsReady] = useState(false);
 
@@ -45,9 +45,9 @@ export default function Game() {
       <View style={styles.container}>
         {/* Top */}
         <Text>
-          {game.combinationType === null
+          {game.getCombinationType() === null
             ? 'Play anything'
-            : game.combinationType}
+            : game.getCombinationType()}
         </Text>
         <View style={styles.topContainer}>
           <View style={styles.playerStack}>
@@ -67,7 +67,7 @@ export default function Game() {
             value={{ hand, setHand, selectedCards, setSelectedCards }}
           >
             <View style={styles.bottomContainer}>
-              <Hand />
+              <Hand game={game} />
             </View>
           </HandContext.Provider>
         )}
