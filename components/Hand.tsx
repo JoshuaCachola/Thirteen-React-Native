@@ -1,33 +1,34 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { CardInterface } from '../classes/Card';
 import InteractiveView from './InteractiveView';
 import { HandContext } from '../context/HandContext';
 import { calculatePositions, Position } from '../helper/calculatePositions';
 import { PlayFromHandContext } from '../context/PlayFromHandContext';
 import { sortCards } from '../helper/combinationHelpers';
+import Button from './Button';
 
 // This component displays holding a hand of cards
 export default function Hand() {
   const { hand, setHand } = useContext(HandContext);
   const { playedCards, setPlayedCards } = useContext(PlayFromHandContext);
   const [positions, setPositions] = useState<Position[]>(() => {
-    return calculatePositions(hand.length);
+    return calculatePositions(hand!.length);
   });
 
   // recalculates position of cards whenever a player plays a sequence
   // allows hand to be centered
   useMemo(() => {
-    const newPositions = calculatePositions(hand.length);
+    const newPositions = calculatePositions(hand!.length);
     setPositions(newPositions);
-  }, [hand.length]);
+  }, [hand!.length]);
 
   // handles playing cards when cards are selected
   // and play button is pressed
   const handlePlayCards = () => {
     const acceptedSequence: string[] = [];
     const newHand: CardInterface[] = [];
-    hand.forEach((card) => {
+    hand!.forEach((card) => {
       if (card.selected) {
         card.played === true;
         acceptedSequence.push(`${card.value},${card.suit}`);
@@ -40,9 +41,10 @@ export default function Hand() {
     setHand(newHand);
   };
 
-  useMemo(() => {
-    const selectedCards: CardInterface[] = hand.filter((card) => card.selected);
-  }, []);
+  const handleSortCards = () => {
+    const sorted = sortCards(hand!);
+    setHand([...sorted]);
+  };
 
   return (
     <View style={styles.container}>
@@ -51,11 +53,11 @@ export default function Hand() {
         style={[
           styles.hand,
           {
-            transform: [{ translateX: -20 * hand.length }, { translateY: 0 }],
+            transform: [{ translateX: -20 * hand!.length }, { translateY: 0 }],
           },
         ]}
       >
-        {hand.map((card: CardInterface, idx: number) => {
+        {hand!.map((card: CardInterface, idx: number) => {
           if (!card.played)
             return (
               <InteractiveView
@@ -67,7 +69,8 @@ export default function Hand() {
             );
         })}
       </View>
-      <Button title='Play' onPress={() => handlePlayCards()}></Button>
+      <Button title='Play' onPress={handlePlayCards} />
+      <Button title='Sort Cards' onPress={handleSortCards} />
     </View>
   );
 }

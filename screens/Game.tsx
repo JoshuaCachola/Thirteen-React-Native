@@ -1,7 +1,7 @@
 import { Modal, StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Deck } from '../classes/Deck';
 import { CardInterface } from '../classes/Card';
 import PlayArea from '../components/PlayArea';
@@ -12,7 +12,6 @@ import { PlayFromHandContext } from '../context/PlayFromHandContext';
 import StageCards from '../components/StageCards';
 import { GameState } from '../classes/GameState';
 import uuid from 'react-native-uuid';
-import { sortCards } from '../helper/combinationHelpers';
 import ReadyModal from '../components/ReadyModal';
 import { Player, PlayerActions } from '../classes/Player';
 import { Computer } from '../classes/Computer';
@@ -28,7 +27,7 @@ export default function Game() {
   // state => PlayFromHandContext
   const [playedCards, setPlayedCards] = useState<string[][]>([]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (isReady) {
       game.addPlayer(player);
       game.addPlayer(new Computer('Computer 1'));
@@ -36,7 +35,7 @@ export default function Game() {
       game.addPlayer(new Computer('Computer 3'));
       game.deal();
     }
-    console.log('here');
+
     setHand(player.getHand());
   }, [isReady]);
 
