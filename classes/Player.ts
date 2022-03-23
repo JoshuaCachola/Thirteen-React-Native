@@ -1,13 +1,13 @@
 import { CardInterface } from './Card';
 
-export interface PlayerActions {
+export interface PlayerInterface {
   setHand: (h: CardInterface[]) => void;
   setReady: (r: boolean) => void;
   getName: () => string;
   getHand: () => CardInterface[] | null;
 }
 
-export class Player implements PlayerActions {
+export class Player implements PlayerInterface {
   name: string;
   hand: CardInterface[] | null;
   ready: boolean;

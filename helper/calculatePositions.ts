@@ -1,5 +1,5 @@
 export interface Position {
-  transform: [{ rotate: string }];
+  transform: [{ rotate: string }, { perspective: number }];
   bottom: number;
   left: number;
   zIndex: number;
@@ -14,6 +14,10 @@ export function calculatePositions(handLength: number): Position[] {
       transform: [
         {
           rotate: `${(i - mid) * 3}deg`,
+          // rotate: '30deg',
+        },
+        {
+          perspective: 1000,
         },
       ],
       bottom: i <= mid ? -4 * (mid - i) : handLength - i - 1,

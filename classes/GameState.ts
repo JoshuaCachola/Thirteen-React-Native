@@ -1,65 +1,47 @@
 import { CardInterface } from './Card';
 import { Computer } from './Computer';
-import { Player, PlayerActions } from './Player';
+import { Player, PlayerInterface } from './Player';
 import { Deck } from './Deck';
+import { Game } from './Game';
 
 type combination = 'SINGLE' | 'DOUBLE' | 'TRIPLE' | 'STRAIGHT' | null;
 
-export interface GameActions {
-  addPlayer: (p: PlayerActions) => void;
-}
-
 // Game object
 // holds the state of the game
-export class GameState {
-  combination: {
-    type: combination;
-    length: number;
-  };
-  players: PlayerActions[];
-  playerRotation: PlayerActions[];
-  roomId: string;
-  isGameWon: boolean;
-  ableToStartGame: boolean;
-  currentPlayer: PlayerActions | null;
+export class GameState extends Game {
+  players: PlayerInterface[];
+  playerRotation: PlayerInterface[];
+  currentPlayer: PlayerInterface | null;
   hands: CardInterface[][];
   combinationType: string | null;
   highestCard: CardInterface | null;
-  lastWinner: number | null;
 
   constructor(roomId: string) {
-    this.combination = {
-      type: null,
-      length: 0,
-    };
+    super(roomId);
     this.players = [];
-    this.roomId = roomId;
-    this.isGameWon = false;
-    this.ableToStartGame = false;
     this.currentPlayer = null;
     this.playerRotation = [];
     this.hands = [];
     this.combinationType = null;
     this.highestCard = null;
-    this.lastWinner = null;
   }
 
   // change to player object
-  addPlayer(player: PlayerActions) {
-    this.players.push(player);
-  }
+  // addPlayer(player: PlayerInterface) {
+  //   this.players.push(player);
+  // }
 
   // checks to see if there are enough players to start a game
-  setAbleToStartGame() {
-    if (this.players.length > 1) {
-      return true;
-    }
-    return false;
-  }
+  // setAbleToStartGame() {
+  //   if (this.players.length > 1) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   // creates the rotation of players
   createPlayerRotation(startingPlayerIdx: number) {
-    const rotation: PlayerActions[] = [this.players[startingPlayerIdx]];
+    const rotation: PlayerInterface[] = [this.players[startingPlayerIdx]];
     for (
       let i = startingPlayerIdx + 1;
       i % this.players.length !== startingPlayerIdx;

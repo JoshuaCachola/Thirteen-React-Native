@@ -1,4 +1,4 @@
-import { Modal, StyleSheet } from 'react-native';
+import { Modal, StyleSheet, Text } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -13,13 +13,14 @@ import StageCards from '../components/StageCards';
 import { GameState } from '../classes/GameState';
 import uuid from 'react-native-uuid';
 import ReadyModal from '../components/ReadyModal';
-import { Player, PlayerActions } from '../classes/Player';
+import { Player } from '../classes/Player';
 import { Computer } from '../classes/Computer';
 
 export default function Game() {
-  const [game, setGame] = useState(new GameState(uuid.v4().toString()));
-  const [player, setPlayer] = useState<PlayerActions>(new Player('Joshua'));
+  const game = new GameState(uuid.v4().toString());
+  const player = new Player('Joshua');
   const [isReady, setIsReady] = useState(false);
+
   // state => HandContext
   const [hand, setHand] = useState<CardInterface[] | null>([]);
   const [selectedCards, setSelectedCards] = useState<CardInterface[]>([]);
@@ -43,6 +44,11 @@ export default function Game() {
     <PlayFromHandContext.Provider value={{ playedCards, setPlayedCards }}>
       <View style={styles.container}>
         {/* Top */}
+        <Text>
+          {game.combinationType === null
+            ? 'Play anything'
+            : game.combinationType}
+        </Text>
         <View style={styles.topContainer}>
           <View style={styles.playerStack}>
             <PlayerStack />
