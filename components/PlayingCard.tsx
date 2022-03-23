@@ -12,6 +12,7 @@ interface PlayingCardProp {
   value: number;
   suit: CardSuits;
   selected: boolean;
+  isValid: boolean;
 }
 
 // Card Component
@@ -20,10 +21,11 @@ export default function PlayingCard({
   value,
   suit,
   selected,
+  isValid,
 }: PlayingCardProp) {
   // Handles state of pressing card
   const [isCardSelected, setIsCardSelected] = useState(false);
-  const [isValid, setIsValid] = useState(false);
+  // const [isValid, setIsValid] = useState(false);
 
   const { hand, setHand, selectedCards, setSelectedCards } =
     useContext(HandContext);
@@ -35,7 +37,7 @@ export default function PlayingCard({
   const handleOnPress = () => {
     const newHand: CardInterface[] = [];
 
-    hand.forEach((card) => {
+    hand!.forEach((card) => {
       if (card.value === value && card.suit === suit) {
         card.selected = !card.selected;
       }
@@ -44,11 +46,11 @@ export default function PlayingCard({
     setHand(newHand);
   };
 
-  useMemo(() => {
-    const selected = hand.filter((card) => card.selected);
-    const isCombinationValid = isValidCombination(selected);
-    setIsValid(isCombinationValid);
-  }, [hand]);
+  // useMemo(() => {
+  //   const selected = hand!.filter((card) => card.selected);
+  //   const isCombinationValid = isValidCombination(selected);
+  //   setIsValid(isCombinationValid);
+  // }, [hand]);
 
   return (
     <TouchableHighlight
@@ -119,6 +121,7 @@ const styles = StyleSheet.create({
   selectCard: {
     bottom: 30,
     borderWidth: 2,
+    transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
   },
   invalidSelect: {
     borderColor: 'red',
