@@ -1,27 +1,24 @@
 export enum CardSuits {
-  'HEART',
-  'DIAMOND',
   'SPADE',
   'CLUB',
+  'DIAMOND',
+  'HEART',
 }
 
-export interface CardInterface {
-  value: number;
-  suit: CardSuits;
-  selected: boolean;
-  played: boolean;
-}
-
-export class Card implements CardInterface {
+export type CardType = {
   suit: CardSuits;
   value: number;
   selected: boolean;
-  played: boolean;
+};
+
+export class Card {
+  suit: CardSuits;
+  value: number;
+  selected: boolean;
 
   constructor(suit: CardSuits, value: number) {
     this.suit = suit;
     this.value = value;
     this.selected = false;
-    this.played = false;
   }
 }

@@ -1,4 +1,4 @@
-import { CardInterface } from './Card';
+import { CardType } from './Card';
 import { Combination } from './GameState';
 import { PlayerInterface } from './Player';
 
@@ -14,7 +14,7 @@ export type Action = {
   action: ActionType;
   type?: Combination;
   length?: number;
-  high?: CardInterface;
+  high?: CardType;
 };
 
 export class Actions implements ActionsInterface {

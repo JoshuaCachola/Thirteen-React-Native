@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { CardInterface } from '../classes/Card';
+import { CardType } from '../classes/Card';
 import InteractiveView from './InteractiveView';
 import { HandContext } from '../context/HandContext';
 import { calculatePositions, Position } from '../helper/calculatePositions';
@@ -18,7 +18,9 @@ interface HandProps {
 // This component displays holding a hand of cards
 export default function Hand({ game, player }: HandProps) {
   const [isValid, setIsValid] = useState(false);
-  const [ableToPlay, setIsAbleToPlay] = useState(false);
+  const [ableToPlay, setIsAbleToPlay] = useState(
+    game.getCurrentPlayer()?.getName() === player.getName()
+  );
   const { hand, setHand } = useContext(HandContext);
   const [positions, setPositions] = useState<Position[]>(() => {
     return calculatePositions(hand!.length);
@@ -26,10 +28,11 @@ export default function Hand({ game, player }: HandProps) {
   const { playedCards, setPlayedCards } = useContext(PlayFromHandContext);
 
   useEffect(() => {
-    if (game.getCurrentPlayer() === player) {
+    if (game.getCurrentPlayer()?.getName() === player.getName()) {
       setIsAbleToPlay(true);
     }
-  }, [game.getCurrentPlayer()]);
+    console.log(ableToPlay, game.getCurrentPlayer());
+  }, [game]);
 
   // recalculates position of cards whenever a player plays a sequence
   // allows hand to be centered
@@ -48,8 +51,8 @@ export default function Hand({ game, player }: HandProps) {
   // handles playing cards when cards are selected
   // and play button is pressed
   const handlePlayCards = () => {
-    const acceptedSequence: CardInterface[] = [];
-    const newHand: CardInterface[] = [];
+    const acceptedSequence: CardType[] = [];
+    const newHand: CardType[] = [];
     hand!.forEach((card) => {
       if (card.selected) {
         acceptedSequence.push(card);
@@ -80,30 +83,28 @@ export default function Hand({ game, player }: HandProps) {
           },
         ]}
       >
-        {hand!.map((card: CardInterface, idx: number) => {
-          if (!card.played)
-            return (
-              <InteractiveView
-                key={`hand-${card.value}-${card.suit}`}
-                idx={idx}
-                card={card}
-                cardPosition={positions[idx]}
-                handlePlayCards={handlePlayCards}
-                isValid={isValid}
-                ableToPlay={ableToPlay}
-              />
-              // <View style={[styles.card, positions[idx]]}>
-              //   <PlayingCard
-              //     idx={idx}
-              //     value={card.value}
-              //     suit={card.suit}
-              //     selected={card.selected}
-              //   />
-              // </View>
-            );
+        {hand!.map((card: CardType, idx: number) => {
+          return (
+            <InteractiveView
+              key={`hand-${card.value}-${card.suit}`}
+              idx={idx}
+              card={card}
+              cardPosition={positions[idx]}
+              handlePlayCards={handlePlayCards}
+              isValid={isValid}
+              ableToPlay={ableToPlay}
+            />
+            // <View style={[styles.card, positions[idx]]}>
+            //   <PlayingCard
+            //     idx={idx}
+            //     value={card.value}
+            //     suit={card.suit}
+            //     selected={card.selected}
+            //   />
+            // </View>
+          );
         })}
       </View>
-      <Button title='Play' onPress={handlePlayCards} />
       <Button title='Sort Cards' onPress={handleSortCards} />
     </View>
   );

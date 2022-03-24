@@ -1,11 +1,11 @@
 import { describe, test, expect } from '@jest/globals';
-import { CardInterface } from '../../classes/Card';
+import { CardType } from '../../classes/Card';
 import { getMultiples } from '../../helper/combinationHelpers';
 
 describe('get multiples', () => {
   describe('get an object of doubles card', () => {
     test('return object with a key of 3 and an array of [0, 1]', () => {
-      const hand: CardInterface[] = [
+      const hand: CardType[] = [
         { value: 3, suit: 0, selected: false, played: false },
         { value: 3, suit: 1, selected: false, played: false },
         { value: 4, suit: 0, selected: false, played: false },
@@ -18,7 +18,7 @@ describe('get multiples', () => {
 
   describe('get an object of triples', () => {
     test('return object with a key of 3 and an array of [0, 1, 3]', () => {
-      const hand: CardInterface[] = [
+      const hand: CardType[] = [
         { value: 3, suit: 0, selected: false, played: false },
         { value: 3, suit: 1, selected: false, played: false },
         { value: 4, suit: 0, selected: false, played: false },
@@ -31,7 +31,7 @@ describe('get multiples', () => {
 
   describe('get an object of quads', () => {
     test('return object with a key of 3 and an array of [0, 1, 2, 3]', () => {
-      const hand: CardInterface[] = [
+      const hand: CardType[] = [
         { value: 3, suit: 0, selected: false, played: false },
         { value: 3, suit: 1, selected: false, played: false },
         { value: 3, suit: 2, selected: false, played: false },

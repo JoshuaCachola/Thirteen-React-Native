@@ -1,21 +1,33 @@
-import { useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import { GameStateInterface } from '../classes/GameState';
+import { PlayerInterface } from '../classes/Player';
+import { GameContext } from '../context/GameContext';
 
-export default function PlayerStack() {
-  const [playerRotation, setPlayerRotation] = useState([
-    'playerOne',
-    'playerTwo',
-    'playerThree',
-    'playerFour',
-  ]);
+interface Props {
+  // game: GameStateInterface;
+}
+
+export default function PlayerStack({}: Props) {
+  const { game } = useContext(GameContext);
+  const [playerRotation, setPlayerRotation] = useState<PlayerInterface[]>(
+    game.getPlayerRotation()
+  );
+
+  useEffect(() => {
+    if (game.getPlayerRotation().length !== playerRotation.length) {
+      setPlayerRotation(game.getPlayerRotation());
+    }
+    console.log(game.getPlayerRotation());
+  }, [game.getPlayerRotation()]);
 
   return (
     <View style={styles.container}>
-      {playerRotation &&
+      {playerRotation.length !== 0 &&
         playerRotation.map((player) => {
           return (
-            <View key={player}>
-              <Text style={[{ color: 'grey' }]}>{player}</Text>
+            <View key={player.getName()}>
+              <Text style={[{ color: 'black' }]}>{player.getName()}</Text>
             </View>
           );
         })}

@@ -1,15 +1,15 @@
-import { CardInterface } from './Card';
+import { CardType } from './Card';
 
 export interface PlayerInterface {
-  setHand: (h: CardInterface[]) => void;
+  setHand: (h: CardType[]) => void;
   setReady: (r: boolean) => void;
   getName: () => string;
-  getHand: () => CardInterface[] | null;
+  getHand: () => CardType[] | null;
 }
 
 export class Player implements PlayerInterface {
   name: string;
-  hand: CardInterface[] | null;
+  hand: CardType[] | null;
   ready: boolean;
 
   constructor(name: string, ready: boolean = false) {
@@ -18,7 +18,7 @@ export class Player implements PlayerInterface {
     this.ready = ready;
   }
 
-  setHand(hand: CardInterface[]) {
+  setHand(hand: CardType[]) {
     this.hand = hand;
   }
 

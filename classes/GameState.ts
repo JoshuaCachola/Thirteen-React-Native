@@ -1,4 +1,4 @@
-import { CardInterface } from './Card';
+import { CardType } from './Card';
 import { PlayerInterface } from './Player';
 import { Deck } from './Deck';
 import { Game } from './Game';
@@ -21,14 +21,15 @@ export type Combination =
 export interface GameStateInterface {
   getCombinationType: () => Combination;
   setCombinationType: (t: Combination) => void;
-  getHighestCard: () => CardInterface | null;
+  getHighestCard: () => CardType | null;
   deal: () => void;
   addPlayer: (p: PlayerInterface) => void;
-  canPlayCombination: (c: CardInterface[]) => [boolean, Combination];
-  playCards: (s: CardInterface[]) => void;
+  canPlayCombination: (c: CardType[]) => [boolean, Combination];
+  playCards: (s: CardType[]) => void;
   setLength: (l: number) => void;
   getLength: () => number;
   getCurrentPlayer: () => PlayerInterface | null;
+  getPlayerRotation: () => PlayerInterface[];
 }
 
 // Game object
@@ -36,9 +37,9 @@ export interface GameStateInterface {
 export class GameState extends Game implements GameStateInterface {
   playerRotation: PlayerInterface[];
   currentPlayer: PlayerInterface | null;
-  hands: CardInterface[][];
+  hands: CardType[][];
   combinationType: Combination;
-  highestCard: CardInterface | null;
+  highestCard: CardType | null;
   actions: ActionsInterface;
   length: number;
 
@@ -53,6 +54,10 @@ export class GameState extends Game implements GameStateInterface {
     this.length = 0;
   }
 
+  public getPlayerRotation() {
+    return this.playerRotation;
+  }
+
   public getCurrentPlayer() {
     return this.currentPlayer;
   }
@@ -65,7 +70,7 @@ export class GameState extends Game implements GameStateInterface {
     return this.length;
   }
 
-  public playCards(s: CardInterface[]) {
+  public playCards(s: CardType[]) {
     const [_, type] = this.canPlayCombination(s);
     if (type !== this.combinationType) {
       this.combinationType = type;
@@ -85,6 +90,8 @@ export class GameState extends Game implements GameStateInterface {
     this.actions.pushAction(action);
   }
 
+  private updateRotation() {}
+
   public getCombinationType() {
     return this.combinationType;
   }
@@ -98,23 +105,23 @@ export class GameState extends Game implements GameStateInterface {
   }
 
   // creates the rotation of players
-  createPlayerRotation(startingPlayerIdx: number) {
+  private createPlayerRotation(startingPlayerIdx: number) {
     const rotation: PlayerInterface[] = [this.players[startingPlayerIdx]];
     for (
       let i = startingPlayerIdx + 1;
       i % this.players.length !== startingPlayerIdx;
       i++
     ) {
-      rotation.push(this.players[i]);
+      rotation.unshift(this.players[i % 4]);
     }
-    return rotation;
+    this.playerRotation = rotation;
   }
 
   // deals hands from a newly created and shuffled deck
   deal() {
-    const hands: CardInterface[][] = [[], [], [], []];
+    const hands: CardType[][] = [[], [], [], []];
     const { deck } = new Deck();
-    deck.forEach((card: CardInterface, idx) => {
+    deck.forEach((card: CardType, idx) => {
       hands[idx % 4].push(card);
     });
 
@@ -122,7 +129,7 @@ export class GameState extends Game implements GameStateInterface {
     hands.forEach((hand, idx) => this.players[idx].setHand(hand));
   }
 
-  findLowestThree() {
+  private findLowestThree() {
     let idx;
     for (let i = 0; i < this.hands.length; i++) {
       for (let j = 0; j < this.hands[i].length; j++) {
@@ -136,7 +143,7 @@ export class GameState extends Game implements GameStateInterface {
     return idx;
   }
 
-  public canPlayCombination(selected: CardInterface[]): [boolean, Combination] {
+  public canPlayCombination(selected: CardType[]): [boolean, Combination] {
     const [isValid, combination] = isValidCombination(selected, this);
     return [isValid, combination];
   }
@@ -152,5 +159,8 @@ export class GameState extends Game implements GameStateInterface {
     } else {
       playerIdx = this.players.indexOf(this.lastWinner);
     }
+
+    this.createPlayerRotation(playerIdx);
+    this.currentPlayer = this.playerRotation[0];
   }
 }

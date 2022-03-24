@@ -1,5 +1,5 @@
 import { describe, test, expect } from '@jest/globals';
-import { CardInterface } from '../../classes/Card';
+import { CardType } from '../../classes/Card';
 import { combinationConstants } from '../../constants/CombinationConstants';
 import { isValidCombination } from '../../helper/combinationHelpers';
 
@@ -7,13 +7,13 @@ import { isValidCombination } from '../../helper/combinationHelpers';
 describe('triple combinations', () => {
   describe('checks for valid triple combination by value of card', () => {
     test('triple fives beat triple fours', () => {
-      const current: CardInterface = {
+      const current: CardType = {
         value: 4,
         suit: 0,
         selected: true,
         played: false,
       };
-      const incoming: CardInterface[] = [
+      const incoming: CardType[] = [
         { value: 5, suit: 0, selected: true, played: false },
         { value: 5, suit: 1, selected: true, played: false },
         { value: 5, suit: 2, selected: true, played: false },
@@ -26,12 +26,12 @@ describe('triple combinations', () => {
 
   describe('checks for invalid triple combinations by value of card', () => {
     test('triple fours does not beat triple fives', () => {
-      const incoming: CardInterface[] = [
+      const incoming: CardType[] = [
         { value: 4, suit: 0, selected: true, played: false },
         { value: 4, suit: 1, selected: true, played: false },
         { value: 4, suit: 2, selected: true, played: false },
       ];
-      const current: CardInterface = {
+      const current: CardType = {
         value: 5,
         suit: 0,
         selected: true,
@@ -45,12 +45,12 @@ describe('triple combinations', () => {
 
   describe('checks for ', () => {
     test('triple fours does not beat triple fives', () => {
-      const incoming: CardInterface[] = [
+      const incoming: CardType[] = [
         { value: 4, suit: 0, selected: true, played: false },
         { value: 4, suit: 1, selected: true, played: false },
         { value: 4, suit: 2, selected: true, played: false },
       ];
-      const current: CardInterface = {
+      const current: CardType = {
         value: 5,
         suit: 0,
         selected: true,
@@ -64,7 +64,7 @@ describe('triple combinations', () => {
 
   describe('checks for triple with invalid triple', () => {
     test('2 fours and 1 five returns false', () => {
-      const incoming: CardInterface[] = [
+      const incoming: CardType[] = [
         { value: 4, suit: 0, selected: true, played: false },
         { value: 4, suit: 1, selected: true, played: false },
         { value: 5, suit: 2, selected: true, played: false },

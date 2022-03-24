@@ -1,6 +1,10 @@
-// import { createContext } from 'react';
-// import { GameState } from '../classes/GameState';
+import { createContext } from 'react';
+import { GameState, GameStateInterface } from '../classes/GameState';
 
-// export const GameContext = createContext<GameState>({
-//   combination: { type: null },
-// });
+interface Game {
+  game: GameStateInterface;
+}
+
+export const GameContext = createContext<Game>({
+  game: new GameState(''),
+});

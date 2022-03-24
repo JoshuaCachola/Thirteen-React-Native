@@ -3,7 +3,7 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
-import { CardInterface, CardSuits } from '../classes/Card';
+import { CardType, CardSuits } from '../classes/Card';
 import { HandContext } from '../context/HandContext';
 import { cardValues } from '../helper/combinationHelpers';
 
@@ -35,7 +35,7 @@ export default function PlayingCard({
   const color = useColor(suit);
 
   const handleOnPress = () => {
-    const newHand: CardInterface[] = [];
+    const newHand: CardType[] = [];
 
     hand!.forEach((card) => {
       if (card.value === value && card.suit === suit) {

@@ -1,4 +1,4 @@
-import { CardInterface } from '../classes/Card';
+import { CardType } from '../classes/Card';
 import { Combination, GameStateInterface } from '../classes/GameState';
 import { combinationConstants } from '../constants/CombinationConstants';
 
@@ -50,7 +50,7 @@ type combination = { [key: number]: number[] };
 // creates an object that organizes the keys as the value
 // of a card and the suits stored in an array as the value of
 // the keys
-export const createObj = (cards: CardInterface[]) => {
+export const createObj = (cards: CardType[]) => {
   const obj: combination = {};
   cards.forEach((card) => {
     if (card.value in obj) {
@@ -66,8 +66,8 @@ export const createObj = (cards: CardInterface[]) => {
 // checks if incoming single value is higher than
 // if current card is a "TWO" a bomb can be played
 export const isValidSingle = (
-  current: CardInterface,
-  incoming: CardInterface[]
+  current: CardType,
+  incoming: CardType[]
 ): [boolean, Combination] => {
   switch (incoming.length) {
     case 1:
@@ -94,8 +94,8 @@ export const isValidSingle = (
 // if values are the same then calls doesCurrentHaveHighSuit to check which has
 // high suit
 export const isIncomingHigherValue = (
-  current: CardInterface,
-  incoming: CardInterface[]
+  current: CardType,
+  incoming: CardType[]
 ) => {
   if (incoming[0].value > current.value) {
     return true;
@@ -107,10 +107,7 @@ export const isIncomingHigherValue = (
 
 // When incoming and current have the same value
 // checks if incoming has higher suit
-const doesCurrentHaveHigherSuit = (
-  current: CardInterface,
-  incoming: CardInterface[]
-) => {
+const doesCurrentHaveHigherSuit = (current: CardType, incoming: CardType[]) => {
   const incomingSuits = incoming.map((card) => card.suit);
   return Math.max(...incomingSuits) > current.suit;
 };
@@ -118,7 +115,7 @@ const doesCurrentHaveHigherSuit = (
 // checks if cards follow a sequential order
 // checks if a cards in the straight is a 'Two'
 // if so return false
-export const isValidStraight = (cards: CardInterface[]) => {
+export const isValidStraight = (cards: CardType[]) => {
   sortCards(cards);
   for (let i = 1; i < cards.length; i++) {
     if (
@@ -133,14 +130,14 @@ export const isValidStraight = (cards: CardInterface[]) => {
 
 // sorts by value in ascending order
 // if value is the same, then sorts by suit in ascending order
-export const sortCards = (cards: CardInterface[]) => {
+export const sortCards = (cards: CardType[]) => {
   return cards.sort((a, b) => {
     return a.value - b.value !== 0 ? a.value - b.value : a.suit - b.suit;
   });
 };
 
 // checks to see if all types of bombs are valid
-export const isValidBomb = (incoming: CardInterface[], type: string) => {
+export const isValidBomb = (incoming: CardType[], type: string) => {
   // checks for four of a kind bombs
   if (incoming.length === 4) {
     return areAllSameValue(incoming);
@@ -182,7 +179,7 @@ export const isValidBomb = (incoming: CardInterface[], type: string) => {
 };
 
 // sets the highest card on the GameState object
-export const getHighestCard = (cards: CardInterface[]) => {
+export const getHighestCard = (cards: CardType[]) => {
   sortCards(cards);
   return cards[cards.length - 1];
 };
@@ -190,7 +187,7 @@ export const getHighestCard = (cards: CardInterface[]) => {
 // checks for valid combination during selecting cards
 // from the players hand
 export const isValidCombination = (
-  incoming: CardInterface[],
+  incoming: CardType[],
   game: GameStateInterface
 ): [boolean, Combination] => {
   // needed when triggering from unselecting cards
@@ -251,7 +248,7 @@ export const isValidCombination = (
 // number of cards can possibly be
 // used only for when there isn't a combination already set
 const checkCombinationByCardLength = (
-  cards: CardInterface[]
+  cards: CardType[]
 ): [boolean, Combination] => {
   switch (cards.length) {
     case 0:
@@ -282,7 +279,7 @@ const checkCombinationByCardLength = (
 
 // checks if all of the values of the cards are the same
 // for doubles, triples, and four of a kind bombs
-const areAllSameValue = (cards: CardInterface[]) => {
+const areAllSameValue = (cards: CardType[]) => {
   let value = cards[0].value;
   for (let i = 1; i < cards.length; i++) {
     if (cards[i].value !== value) {
@@ -297,7 +294,7 @@ type cardCombinations = { [key: string]: number[] };
 
 // creates an array of pairs of cards by index
 // returns the array and length
-export const getMultiples = (cards: CardInterface[], type: string) => {
+export const getMultiples = (cards: CardType[], type: string) => {
   const values = Array(16).fill(null);
   const pairs: cardCombinations = {};
 
@@ -323,7 +320,7 @@ export const getMultiples = (cards: CardInterface[], type: string) => {
   return pairs;
 };
 
-const createHandMap = (hand: CardInterface[]) => {
+const createHandMap = (hand: CardType[]) => {
   const map: combination = {};
   for (let i = 0; i < hand.length; i++) {
     if (hand[i].value in map) {
@@ -349,7 +346,7 @@ const createStraight = (
   return straight;
 };
 
-export const getStraights = (hand: CardInterface[], straightLength: number) => {
+export const getStraights = (hand: CardType[], straightLength: number) => {
   sortCards(hand);
   const handMap = createHandMap(hand);
   const straights = [];
@@ -372,6 +369,6 @@ export const getStraights = (hand: CardInterface[], straightLength: number) => {
   return straights;
 };
 
-const getSingles = (hand: CardInterface[]) => {
+const getSingles = (hand: CardType[]) => {
   const handMap = createHandMap(hand);
 };

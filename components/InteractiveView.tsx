@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { Position } from '../helper/calculatePositions';
-import { CardInterface } from '../classes/Card';
+import { CardType } from '../classes/Card';
 import PlayingCard from './PlayingCard';
 import {
   FlingGestureHandler,
@@ -11,7 +11,7 @@ import {
 } from 'react-native-gesture-handler';
 
 interface InteractiveProps {
-  card: CardInterface;
+  card: CardType;
   idx: number;
   cardPosition: Position;
   handlePlayCards: () => void;
