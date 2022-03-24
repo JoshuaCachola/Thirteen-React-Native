@@ -7,12 +7,7 @@ interface props {
 
 export default function ReadyModal({ isReady, setIsReady }: props) {
   return (
-    <Modal
-      animationType='slide'
-      transparent={true}
-      visible={!isReady}
-      // onRequestClose={() => setIsReady(false)}
-    >
+    <Modal animationType='slide' transparent={true} visible={!isReady}>
       <View style={styles.container}>
         <Button title='Ready up' onPress={() => setIsReady(true)} />
         <Text>Waiting for players to ready up...</Text>
@@ -26,7 +21,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100vh',
+    minHeight: 100,
     // backgroundColor: 'black',
     // opacity: 20,
   },

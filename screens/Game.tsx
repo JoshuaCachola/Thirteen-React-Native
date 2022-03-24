@@ -1,8 +1,7 @@
-import { Modal, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Deck } from '../classes/Deck';
+import { useEffect, useState } from 'react';
 import { CardInterface } from '../classes/Card';
 import PlayArea from '../components/PlayArea';
 import PlayerStack from '../components/PlayerStack';
@@ -10,17 +9,20 @@ import PlayedCardsStack from '../components/PlayedCardsStack';
 import { HandContext } from '../context/HandContext';
 import { PlayFromHandContext } from '../context/PlayFromHandContext';
 import StageCards from '../components/StageCards';
-import { GameState, GameStateInterface } from '../classes/GameState';
+import {
+  Combination,
+  GameState,
+  GameStateInterface,
+} from '../classes/GameState';
 import uuid from 'react-native-uuid';
 import ReadyModal from '../components/ReadyModal';
 import { Player } from '../classes/Player';
 import { Computer } from '../classes/Computer';
 
 export default function Game() {
-  const game: GameStateInterface = new GameState(uuid.v4().toString());
+  const [game, setGame] = useState(new GameState(uuid.v4().toString()));
   const player = new Player('Joshua');
   const [isReady, setIsReady] = useState(false);
-
   // state => HandContext
   const [hand, setHand] = useState<CardInterface[] | null>([]);
   const [selectedCards, setSelectedCards] = useState<CardInterface[]>([]);
@@ -67,7 +69,7 @@ export default function Game() {
             value={{ hand, setHand, selectedCards, setSelectedCards }}
           >
             <View style={styles.bottomContainer}>
-              <Hand game={game} />
+              <Hand game={game} setGame={() => setGame} />
             </View>
           </HandContext.Provider>
         )}
@@ -91,8 +93,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
   },
   bottomContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    // flex: 1,
+    // justifyContent: 'flex-end',
   },
   topContainer: {
     flex: 2,

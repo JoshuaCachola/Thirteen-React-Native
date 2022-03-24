@@ -1,8 +1,12 @@
 import { CardInterface } from './Card';
-import { Computer } from './Computer';
-import { Player, PlayerInterface } from './Player';
+import { PlayerInterface } from './Player';
 import { Deck } from './Deck';
 import { Game } from './Game';
+import {
+  getHighestCard,
+  isValidCombination,
+} from '../helper/combinationHelpers';
+import { Action, Actions, ActionsInterface } from './Actions';
 
 export type Combination =
   | 'SINGLE'
@@ -16,9 +20,13 @@ export type Combination =
 
 export interface GameStateInterface {
   getCombinationType: () => Combination;
-  setCombinationType: (c: Combination) => void;
+  getHighestCard: () => CardInterface | null;
   deal: () => void;
   addPlayer: (p: PlayerInterface) => void;
+  canPlayCombination: (c: CardInterface[]) => [boolean, Combination];
+  playCards: (s: CardInterface[]) => void;
+  setLength: (l: number) => void;
+  getLength: () => number;
 }
 
 // Game object
@@ -30,6 +38,8 @@ export class GameState extends Game implements GameStateInterface {
   hands: CardInterface[][];
   combinationType: Combination;
   highestCard: CardInterface | null;
+  actions: ActionsInterface;
+  length: number;
 
   constructor(roomId: string) {
     super(roomId);
@@ -39,31 +49,52 @@ export class GameState extends Game implements GameStateInterface {
     this.hands = [];
     this.combinationType = null;
     this.highestCard = null;
+    this.actions = new Actions();
+    this.length = 0;
   }
 
-  // change to player object
-  // addPlayer(player: PlayerInterface) {
-  //   this.players.push(player);
-  // }
+  public setLength(l: number) {
+    this.length = l;
+  }
 
-  // checks to see if there are enough players to start a game
-  // setAbleToStartGame() {
-  //   if (this.players.length > 1) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
+  public getLength() {
+    return this.length;
+  }
 
-  public setCombinationType(type: Combination) {
-    this.combinationType = type;
+  public playCards(s: CardInterface[]) {
+    const [_, type] = this.canPlayCombination(s);
+    if (type !== this.combinationType) {
+      this.combinationType = type;
+    }
+
+    this.length = s.length;
+
+    this.highestCard = getHighestCard(s);
+    const action: Action = {
+      player: this.currentPlayer,
+      action: 'PLAY',
+      type: this.combinationType,
+      length: this.length,
+      high: this.highestCard,
+    };
+
+    this.actions.pushAction(action);
   }
 
   public getCombinationType() {
     return this.combinationType;
   }
 
+  public getHighestCard() {
+    return this.highestCard;
+  }
+
+  // public setCombinationType(t: Combination) {
+  //   this.combinationType = t;
+  // }
+
   // creates the rotation of players
-  createPlayerRotation(startingPlayerIdx: number) {
+  private createPlayerRotation(startingPlayerIdx: number) {
     const rotation: PlayerInterface[] = [this.players[startingPlayerIdx]];
     for (
       let i = startingPlayerIdx + 1;
@@ -86,7 +117,7 @@ export class GameState extends Game implements GameStateInterface {
     hands.forEach((hand, idx) => this.players[idx].setHand(hand));
   }
 
-  findLowestThree() {
+  private findLowestThree() {
     this.hands.forEach((hand, idx) => {
       hand.forEach((cards) => {
         if (cards.value === 3 && cards.suit === 0) {
@@ -96,12 +127,18 @@ export class GameState extends Game implements GameStateInterface {
     });
   }
 
-  getPlayers() {
+  public canPlayCombination(selected: CardInterface[]): [boolean, Combination] {
+    const [isValid, combination] = isValidCombination(selected, this);
+    console.log(this.combinationType);
+    return [isValid, combination];
+  }
+
+  private getPlayers() {
     return this.players;
   }
 
   // starts the game and sets
-  start() {
+  public start() {
     // if (!this.ableToStartGame) {
     //   return false;
     // }

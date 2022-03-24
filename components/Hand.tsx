@@ -1,22 +1,21 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CardInterface } from '../classes/Card';
 import InteractiveView from './InteractiveView';
 import { HandContext } from '../context/HandContext';
 import { calculatePositions, Position } from '../helper/calculatePositions';
 import { PlayFromHandContext } from '../context/PlayFromHandContext';
-import { isValidCombination, sortCards } from '../helper/combinationHelpers';
+import { sortCards } from '../helper/combinationHelpers';
 import Button from './Button';
-import { FlingGestureHandler } from 'react-native-gesture-handler';
-import PlayingCard from './PlayingCard';
 import { GameStateInterface } from '../classes/GameState';
 
 interface HandProps {
   game: GameStateInterface;
+  setGame: (g: GameStateInterface) => void;
 }
 
 // This component displays holding a hand of cards
-export default function Hand({ game }: HandProps) {
+export default function Hand({ game, setGame }: HandProps) {
   const [isValid, setIsValid] = useState(false);
   const { hand, setHand } = useContext(HandContext);
   const { playedCards, setPlayedCards } = useContext(PlayFromHandContext);
@@ -33,10 +32,8 @@ export default function Hand({ game }: HandProps) {
 
   useMemo(() => {
     const selected = hand!.filter((card) => card.selected);
-    const isCombinationValid = isValidCombination(
-      selected,
-      game.getCombinationType()
-    );
+    const [isCombinationValid] = game.canPlayCombination(selected);
+
     setIsValid(isCombinationValid);
   }, [hand]);
 
@@ -55,6 +52,7 @@ export default function Hand({ game }: HandProps) {
     });
     setPlayedCards([...playedCards, acceptedSequence]);
     setHand(newHand);
+    game.playCards(acceptedSequence);
   };
 
   const handleSortCards = () => {

@@ -5,7 +5,7 @@ import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
 import { CardInterface, CardSuits } from '../classes/Card';
 import { HandContext } from '../context/HandContext';
-import { cardValues, isValidCombination } from '../helper/combinationHelpers';
+import { cardValues } from '../helper/combinationHelpers';
 
 interface PlayingCardProp {
   idx: number;
