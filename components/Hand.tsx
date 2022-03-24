@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CardInterface } from '../classes/Card';
 import InteractiveView from './InteractiveView';
@@ -8,20 +8,28 @@ import { PlayFromHandContext } from '../context/PlayFromHandContext';
 import { sortCards } from '../helper/combinationHelpers';
 import Button from './Button';
 import { GameStateInterface } from '../classes/GameState';
+import { PlayerInterface } from '../classes/Player';
 
 interface HandProps {
   game: GameStateInterface;
-  setGame: (g: GameStateInterface) => void;
+  player: PlayerInterface;
 }
 
 // This component displays holding a hand of cards
-export default function Hand({ game, setGame }: HandProps) {
+export default function Hand({ game, player }: HandProps) {
   const [isValid, setIsValid] = useState(false);
+  const [ableToPlay, setIsAbleToPlay] = useState(false);
   const { hand, setHand } = useContext(HandContext);
-  const { playedCards, setPlayedCards } = useContext(PlayFromHandContext);
   const [positions, setPositions] = useState<Position[]>(() => {
     return calculatePositions(hand!.length);
   });
+  const { playedCards, setPlayedCards } = useContext(PlayFromHandContext);
+
+  useEffect(() => {
+    if (game.getCurrentPlayer() === player) {
+      setIsAbleToPlay(true);
+    }
+  }, [game.getCurrentPlayer()]);
 
   // recalculates position of cards whenever a player plays a sequence
   // allows hand to be centered
@@ -53,6 +61,7 @@ export default function Hand({ game, setGame }: HandProps) {
     setPlayedCards([...playedCards, acceptedSequence]);
     setHand(newHand);
     game.playCards(acceptedSequence);
+    setIsAbleToPlay(false);
   };
 
   const handleSortCards = () => {
@@ -81,6 +90,7 @@ export default function Hand({ game, setGame }: HandProps) {
                 cardPosition={positions[idx]}
                 handlePlayCards={handlePlayCards}
                 isValid={isValid}
+                ableToPlay={ableToPlay}
               />
               // <View style={[styles.card, positions[idx]]}>
               //   <PlayingCard

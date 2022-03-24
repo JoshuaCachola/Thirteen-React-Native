@@ -20,6 +20,7 @@ export type Combination =
 
 export interface GameStateInterface {
   getCombinationType: () => Combination;
+  setCombinationType: (t: Combination) => void;
   getHighestCard: () => CardInterface | null;
   deal: () => void;
   addPlayer: (p: PlayerInterface) => void;
@@ -27,12 +28,12 @@ export interface GameStateInterface {
   playCards: (s: CardInterface[]) => void;
   setLength: (l: number) => void;
   getLength: () => number;
+  getCurrentPlayer: () => PlayerInterface | null;
 }
 
 // Game object
 // holds the state of the game
 export class GameState extends Game implements GameStateInterface {
-  players: PlayerInterface[];
   playerRotation: PlayerInterface[];
   currentPlayer: PlayerInterface | null;
   hands: CardInterface[][];
@@ -43,7 +44,6 @@ export class GameState extends Game implements GameStateInterface {
 
   constructor(roomId: string) {
     super(roomId);
-    this.players = [];
     this.currentPlayer = null;
     this.playerRotation = [];
     this.hands = [];
@@ -51,6 +51,10 @@ export class GameState extends Game implements GameStateInterface {
     this.highestCard = null;
     this.actions = new Actions();
     this.length = 0;
+  }
+
+  public getCurrentPlayer() {
+    return this.currentPlayer;
   }
 
   public setLength(l: number) {
@@ -85,23 +89,23 @@ export class GameState extends Game implements GameStateInterface {
     return this.combinationType;
   }
 
+  public setCombinationType(t: Combination) {
+    this.combinationType = t;
+  }
+
   public getHighestCard() {
     return this.highestCard;
   }
 
-  // public setCombinationType(t: Combination) {
-  //   this.combinationType = t;
-  // }
-
   // creates the rotation of players
-  private createPlayerRotation(startingPlayerIdx: number) {
+  createPlayerRotation(startingPlayerIdx: number) {
     const rotation: PlayerInterface[] = [this.players[startingPlayerIdx]];
     for (
       let i = startingPlayerIdx + 1;
       i % this.players.length !== startingPlayerIdx;
       i++
     ) {
-      rotation.unshift(this.players[i]);
+      rotation.push(this.players[i]);
     }
     return rotation;
   }
@@ -114,35 +118,31 @@ export class GameState extends Game implements GameStateInterface {
       hands[idx % 4].push(card);
     });
 
+    this.hands = hands;
     hands.forEach((hand, idx) => this.players[idx].setHand(hand));
   }
 
-  private findLowestThree() {
-    this.hands.forEach((hand, idx) => {
-      hand.forEach((cards) => {
-        if (cards.value === 3 && cards.suit === 0) {
-          return idx;
+  findLowestThree() {
+    let idx;
+    for (let i = 0; i < this.hands.length; i++) {
+      for (let j = 0; j < this.hands[i].length; j++) {
+        const card = this.hands[i][j];
+        if (card.value === 3 && card.suit === 0) {
+          idx = i;
+          break;
         }
-      });
-    });
+      }
+    }
+    return idx;
   }
 
   public canPlayCombination(selected: CardInterface[]): [boolean, Combination] {
     const [isValid, combination] = isValidCombination(selected, this);
-    console.log(this.combinationType);
     return [isValid, combination];
-  }
-
-  private getPlayers() {
-    return this.players;
   }
 
   // starts the game and sets
   public start() {
-    // if (!this.ableToStartGame) {
-    //   return false;
-    // }
-
     // deals cards and find either the player with the 3 of clubs
     // or the last winner and creates a player rotation
     this.deal();
@@ -150,24 +150,7 @@ export class GameState extends Game implements GameStateInterface {
     if (!this.lastWinner) {
       playerIdx = this.findLowestThree()!;
     } else {
-      playerIdx = this.lastWinner;
-    }
-    this.playerRotation = this.createPlayerRotation(playerIdx);
-
-    // game loop
-    while (!this.isGameWon) {
-      const currentPlayer = this.playerRotation.pop();
-
-      // if playerRotation length === 0
-      //    - set combinationType to null, player can play any sequence
-      //    - recreate playerRotation with all players
-      if (this.playerRotation.length === 0) {
-        this.combinationType = null;
-        this.createPlayerRotation(this.players.indexOf(currentPlayer!));
-      }
-
-      if (currentPlayer?.getName().includes('Computer')) {
-      }
+      playerIdx = this.players.indexOf(this.lastWinner);
     }
   }
 }

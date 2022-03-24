@@ -5,7 +5,7 @@ export class Game {
   isGameWon: boolean;
   gameNumber: number;
   players: PlayerInterface[];
-  lastWinner: number | null;
+  lastWinner: PlayerInterface | null;
 
   constructor(roomId: string) {
     this.roomId = roomId;

@@ -1,7 +1,15 @@
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect, beforeAll } from '@jest/globals';
 import { CardInterface } from '../../classes/Card';
+import { Game } from '../../classes/Game';
+import { GameState, GameStateInterface } from '../../classes/GameState';
 import { combinationConstants } from '../../constants/CombinationConstants';
 import { isValidCombination } from '../../helper/combinationHelpers';
+
+let game: GameStateInterface;
+
+beforeAll(() => {
+  game = new GameState('test');
+});
 
 describe('straights', () => {
   describe('card combination of 2 cards does not create a straight', () => {
@@ -10,7 +18,7 @@ describe('straights', () => {
         { value: 3, suit: 0, selected: true, played: false },
         { value: 4, suit: 0, selected: true, played: false },
       ];
-      expect(isValidCombination(incoming)).toBeFalsy();
+      expect(isValidCombination(incoming, game)).toBeFalsy();
     });
   });
 
@@ -25,7 +33,7 @@ describe('straights', () => {
         { value: 8, suit: 0, selected: true, played: false },
         { value: 9, suit: 0, selected: true, played: false },
       ];
-      expect(isValidCombination(incoming)).toBeTruthy();
+      expect(isValidCombination(incoming, game)).toBeTruthy();
     });
   });
 
@@ -36,26 +44,20 @@ describe('straights', () => {
         { value: 4, suit: 0, selected: true, played: false },
         { value: 6, suit: 0, selected: true, played: false },
       ];
-      expect(isValidCombination(incoming)).toBeFalsy();
+      expect(isValidCombination(incoming, game)).toBeFalsy();
     });
   });
 
   describe('card combination of triple does not satisfy a straight', () => {
+    game.setCombinationType('STRAIGHT');
+    game.setLength(3);
     test('triple sevens returns false', () => {
       const incoming: CardInterface[] = [
         { value: 7, suit: 0, selected: true, played: false },
         { value: 7, suit: 1, selected: true, played: false },
         { value: 7, suit: 2, selected: true, played: false },
       ];
-      const current: CardInterface = {
-        value: 7,
-        suit: 2,
-        selected: true,
-        played: false,
-      };
-      expect(
-        isValidCombination(incoming, current, combinationConstants.STRAIGHT)
-      ).toBeFalsy();
+      expect(isValidCombination(incoming, game)).toBeFalsy();
     });
   });
 
@@ -66,7 +68,7 @@ describe('straights', () => {
         { value: 14, suit: 1, selected: true, played: false },
         { value: 15, suit: 2, selected: true, played: false },
       ];
-      expect(isValidCombination(incoming)).toBeFalsy();
+      expect(isValidCombination(incoming, game)).toBeFalsy();
     });
   });
 
@@ -77,15 +79,7 @@ describe('straights', () => {
         { value: 8, suit: 1, selected: true, played: false },
         { value: 9, suit: 2, selected: true, played: false },
       ];
-      const current: CardInterface = {
-        value: 6,
-        suit: 2,
-        selected: true,
-        played: false,
-      };
-      expect(
-        isValidCombination(incoming, current, combinationConstants.STRAIGHT)
-      ).toBeTruthy();
+      expect(isValidCombination(incoming, game)).toBeTruthy();
     });
 
     describe('incoming straight does not beat current', () => {
@@ -95,15 +89,7 @@ describe('straights', () => {
           { value: 8, suit: 1, selected: true, played: false },
           { value: 9, suit: 2, selected: true, played: false },
         ];
-        const current: CardInterface = {
-          value: 9,
-          suit: 3,
-          selected: true,
-          played: false,
-        };
-        expect(
-          isValidCombination(incoming, current, combinationConstants.STRAIGHT)
-        ).toBeFalsy();
+        expect(isValidCombination(incoming, game)).toBeFalsy();
       });
     });
   });

@@ -9,18 +9,14 @@ import PlayedCardsStack from '../components/PlayedCardsStack';
 import { HandContext } from '../context/HandContext';
 import { PlayFromHandContext } from '../context/PlayFromHandContext';
 import StageCards from '../components/StageCards';
-import {
-  Combination,
-  GameState,
-  GameStateInterface,
-} from '../classes/GameState';
+import { GameState } from '../classes/GameState';
 import uuid from 'react-native-uuid';
 import ReadyModal from '../components/ReadyModal';
 import { Player } from '../classes/Player';
 import { Computer } from '../classes/Computer';
 
 export default function Game() {
-  const [game, setGame] = useState(new GameState(uuid.v4().toString()));
+  const game = new GameState(uuid.v4().toString());
   const player = new Player('Joshua');
   const [isReady, setIsReady] = useState(false);
   // state => HandContext
@@ -36,11 +32,13 @@ export default function Game() {
       game.addPlayer(new Computer('Computer 1'));
       game.addPlayer(new Computer('Computer 2'));
       game.addPlayer(new Computer('Computer 3'));
-      game.deal();
+      game.start();
     }
 
     setHand(player.getHand());
   }, [isReady]);
+
+  useEffect(() => {}, []);
 
   return (
     <PlayFromHandContext.Provider value={{ playedCards, setPlayedCards }}>
@@ -69,7 +67,7 @@ export default function Game() {
             value={{ hand, setHand, selectedCards, setSelectedCards }}
           >
             <View style={styles.bottomContainer}>
-              <Hand game={game} setGame={() => setGame} />
+              <Hand game={game} player={player} />
             </View>
           </HandContext.Provider>
         )}

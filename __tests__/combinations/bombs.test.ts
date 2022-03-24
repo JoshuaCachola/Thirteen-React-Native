@@ -1,5 +1,5 @@
 import { describe, test, expect } from '@jest/globals';
-import { Card, CardInterface } from '../../classes/Card';
+import { CardInterface } from '../../classes/Card';
 import { combinationConstants } from '../../constants/CombinationConstants';
 import { isValidCombination } from '../../helper/combinationHelpers';
 

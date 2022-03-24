@@ -193,10 +193,15 @@ export const isValidCombination = (
   incoming: CardInterface[],
   game: GameStateInterface
 ): [boolean, Combination] => {
+  // needed when triggering from unselecting cards
   if (incoming.length === 0) return [false, game.getCombinationType()];
+
+  // if there is no combination type then it is the start of a new cycle
   if (!game.getCombinationType()) {
     return checkCombinationByCardLength(incoming);
   }
+
+  // switch by combination type
   switch (game.getCombinationType()) {
     case combinationConstants.SINGLE:
       return isValidSingle(game.getHighestCard()!, incoming);
@@ -344,10 +349,8 @@ const createStraight = (
   return straight;
 };
 
-export const getStraights = (
-  hand: CardInterface[], // comes in sorted by value and suit
-  straightLength: number
-) => {
+export const getStraights = (hand: CardInterface[], straightLength: number) => {
+  sortCards(hand);
   const handMap = createHandMap(hand);
   const straights = [];
 
