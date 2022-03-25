@@ -6,22 +6,23 @@ import FaIcon from '../helper/fontAwsomeHelper';
 import { CardType, CardSuits } from '../classes/Card';
 import { HandContext } from '../context/HandContext';
 import { cardValues } from '../helper/combinationHelpers';
+import { GameContext } from '../context/GameContext';
 
 interface PlayingCardProp {
   idx: number;
   value: number;
   suit: CardSuits;
   selected: boolean;
+  playerIdx: number;
   isValid?: boolean;
 }
 
 // Card Component
 export default function PlayingCard({
-  idx,
   value,
   suit,
-  selected,
   isValid,
+  playerIdx,
 }: PlayingCardProp) {
   // Handles state of pressing card
   const [isCardSelected, setIsCardSelected] = useState(false);
@@ -34,14 +35,13 @@ export default function PlayingCard({
   const color = useColor(suit);
 
   const handleOnPress = () => {
-    const newHand: CardType[] = [];
-
-    hand!.forEach((card) => {
+    const newHand: CardType[] = hand!.map((card) => {
       if (card.value === value && card.suit === suit) {
         card.selected = !card.selected;
       }
-      newHand.push(card);
+      return card;
     });
+
     setHand(newHand);
   };
 

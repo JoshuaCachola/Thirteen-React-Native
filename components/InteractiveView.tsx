@@ -16,6 +16,7 @@ interface InteractiveProps {
   cardPosition: Position;
   handlePlayCards: () => void;
   isValid: boolean;
+  playerIdx: number;
 }
 
 export default function InteractiveView({
@@ -24,6 +25,7 @@ export default function InteractiveView({
   cardPosition,
   handlePlayCards,
   isValid,
+  playerIdx,
 }: InteractiveProps) {
   const handleStateChange = ({ nativeEvent }: HandlerStateChangeEvent) => {
     if (nativeEvent.oldState === State.ACTIVE) {
@@ -45,6 +47,7 @@ export default function InteractiveView({
           suit={card.suit}
           selected={card.selected}
           isValid={isValid}
+          playerIdx={playerIdx}
         />
       </Animated.View>
     </FlingGestureHandler>

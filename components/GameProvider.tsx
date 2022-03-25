@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CardType } from '../classes/Card';
 import { Combination, deal, initGame } from '../classes/GameState';
 import { GameContext } from '../context/GameContext';
@@ -10,9 +10,7 @@ export default function GameProvider(props: any) {
   const [players, setPlayers] = useState<PlayerInterface[]>([]);
   const [roomId, setRoomId] = useState(uuid.v4().toString());
   const [playerRotation, setPlayerRotation] = useState<PlayerInterface[]>([]);
-  const [combinationType, setCombinationType] = useState<Combination | null>(
-    null
-  );
+  const [combinationType, setCombinationType] = useState<Combination>(null);
   const [highestCard, setHighestCard] = useState<CardType | null>(null);
   const [length, setLength] = useState(0);
   const [currentPlayer, setCurrentPlayer] = useState<PlayerInterface | null>(

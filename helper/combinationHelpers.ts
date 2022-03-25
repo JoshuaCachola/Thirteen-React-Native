@@ -92,7 +92,7 @@ export const isValidSingle = (
 // checks if incoming combination has a higher value card that beats
 // the current combinations highest card
 // if values are the same then calls doesCurrentHaveHighSuit to check which has
-// high suit
+// current suit
 export const isIncomingHigherValue = (
   current: CardType,
   incoming: CardType[]
@@ -188,57 +188,59 @@ export const getHighestCard = (cards: CardType[]) => {
 // from the players hand
 export const isValidCombination = (
   incoming: CardType[],
-  game: GameStateInterface
+  type: Combination,
+  current: CardType | null,
+  length: number
 ): [boolean, Combination] => {
   // needed when triggering from unselecting cards
-  if (incoming.length === 0) return [false, game.getCombinationType()];
+  if (incoming.length === 0) return [false, type];
 
   // if there is no combination type then it is the start of a new cycle
-  if (!game.getCombinationType()) {
+  if (!type) {
     return checkCombinationByCardLength(incoming);
   }
 
   // switch by combination type
-  switch (game.getCombinationType()) {
+  switch (type) {
     case combinationConstants.SINGLE:
-      return isValidSingle(game.getHighestCard()!, incoming);
+      return isValidSingle(current!, incoming);
     case combinationConstants.DOUBLE:
       return [
         areAllSameValue(incoming) &&
-          isIncomingHigherValue(game.getHighestCard()!, incoming) &&
-          incoming.length === game.getLength(),
+          isIncomingHigherValue(current!, incoming) &&
+          incoming.length === length,
         combinationConstants.DOUBLE,
       ];
     case combinationConstants.TRIPLE:
       return [
         areAllSameValue(incoming) &&
-          isIncomingHigherValue(game.getHighestCard()!, incoming) &&
-          incoming.length === game.getLength(),
+          isIncomingHigherValue(current!, incoming) &&
+          incoming.length === length,
         combinationConstants.TRIPLE,
       ];
     case combinationConstants.BOMB:
       return [
         isValidBomb(incoming, combinationConstants.BOMB!) &&
-          isIncomingHigherValue(game.getHighestCard()!, incoming),
+          isIncomingHigherValue(current!, incoming),
         combinationConstants.BOMB,
       ];
     case combinationConstants.DOUBLE_BOMB:
       return [
         isValidBomb(incoming, combinationConstants.DOUBLE_BOMB!) &&
-          isIncomingHigherValue(game.getHighestCard()!, incoming),
+          isIncomingHigherValue(current!, incoming),
         combinationConstants.DOUBLE_BOMB,
       ];
     case combinationConstants.TRIPLE_BOMB:
       return [
         isValidBomb(incoming, combinationConstants.TRIPLE_BOMB!) &&
-          isIncomingHigherValue(game.getHighestCard()!, incoming),
+          isIncomingHigherValue(current!, incoming),
         combinationConstants.TRIPLE_BOMB,
       ];
     default:
       return [
         isValidStraight(incoming) &&
-          isIncomingHigherValue(game.getHighestCard()!, incoming) &&
-          incoming.length === game.getLength(),
+          isIncomingHigherValue(current!, incoming) &&
+          incoming.length === length,
         combinationConstants.STRAIGHT,
       ];
   }
