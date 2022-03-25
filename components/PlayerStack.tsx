@@ -1,26 +1,9 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { GameStateInterface } from '../classes/GameState';
-import { PlayerInterface } from '../classes/Player';
 import { GameContext } from '../context/GameContext';
 
-interface Props {
-  // game: GameStateInterface;
-}
-
-export default function PlayerStack({}: Props) {
-  const { game } = useContext(GameContext);
-  const [playerRotation, setPlayerRotation] = useState<PlayerInterface[]>(
-    game.getPlayerRotation()
-  );
-
-  useEffect(() => {
-    if (game.getPlayerRotation().length !== playerRotation.length) {
-      setPlayerRotation(game.getPlayerRotation());
-    }
-    console.log(game.getPlayerRotation());
-  }, [game.getPlayerRotation()]);
-
+export default function PlayerStack() {
+  const { playerRotation } = useContext(GameContext);
   return (
     <View style={styles.container}>
       {playerRotation.length !== 0 &&

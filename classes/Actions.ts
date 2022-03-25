@@ -2,7 +2,7 @@ import { CardType } from './Card';
 import { Combination } from './GameState';
 import { PlayerInterface } from './Player';
 
-type ActionType = 'PASS' | 'PLAY';
+export type ActionType = 'PASS' | 'PLAY';
 
 export interface ActionsInterface {
   pushAction: (a: Action) => void;

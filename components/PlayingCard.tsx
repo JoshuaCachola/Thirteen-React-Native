@@ -27,8 +27,7 @@ export default function PlayingCard({
   const [isCardSelected, setIsCardSelected] = useState(false);
   // const [isValid, setIsValid] = useState(false);
 
-  const { hand, setHand, selectedCards, setSelectedCards } =
-    useContext(HandContext);
+  const { hand, setHand } = useContext(HandContext);
 
   // hooks to get card suit and card color
   const cardSuit = useSuit(suit);

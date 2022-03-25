@@ -1,15 +1,27 @@
+import { useContext } from 'react';
 import { Button, Modal, StyleSheet, Text, View } from 'react-native';
+import { PlayerInterface } from '../classes/Player';
+import { GameContext } from '../context/GameContext';
 
 interface props {
-  isReady: boolean;
-  setIsReady: (r: boolean) => void;
+  player: PlayerInterface;
+  setPlayerIdx: (i: number) => void;
 }
 
-export default function ReadyModal({ isReady, setIsReady }: props) {
+export default function ReadyModal({ player, setPlayerIdx }: props) {
+  const { startGame, setStartGame, setPlayers, players } =
+    useContext(GameContext);
+
+  const onPress = () => {
+    const playerIdx = players.length;
+    setPlayerIdx(playerIdx);
+    setPlayers([...players, player]);
+    setStartGame(true);
+  };
   return (
-    <Modal animationType='slide' transparent={true} visible={!isReady}>
+    <Modal animationType='slide' transparent={true} visible={!startGame}>
       <View style={styles.container}>
-        <Button title='Ready up' onPress={() => setIsReady(true)} />
+        <Button title='Ready up' onPress={onPress} />
         <Text>Waiting for players to ready up...</Text>
       </View>
     </Modal>

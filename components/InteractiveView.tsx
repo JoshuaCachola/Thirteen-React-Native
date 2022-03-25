@@ -16,7 +16,6 @@ interface InteractiveProps {
   cardPosition: Position;
   handlePlayCards: () => void;
   isValid: boolean;
-  ableToPlay: boolean;
 }
 
 export default function InteractiveView({
@@ -25,7 +24,6 @@ export default function InteractiveView({
   cardPosition,
   handlePlayCards,
   isValid,
-  ableToPlay,
 }: InteractiveProps) {
   const handleStateChange = ({ nativeEvent }: HandlerStateChangeEvent) => {
     if (nativeEvent.oldState === State.ACTIVE) {
@@ -37,7 +35,7 @@ export default function InteractiveView({
     <FlingGestureHandler
       direction={Directions.UP}
       numberOfPointers={1}
-      enabled={ableToPlay && card.selected && isValid}
+      enabled={card.selected && isValid}
       onHandlerStateChange={handleStateChange}
     >
       <Animated.View style={[styles.hand, cardPosition]}>

@@ -19,13 +19,13 @@ export default function useSuit(suit: CardSuits) {
   useEffect(() => {
     switch (suit) {
       case 0:
-        return setSuitIcon(faHeart);
-      case 1:
-        return setSuitIcon(faDiamond);
-      case 2:
         return setSuitIcon(faSpa);
-      case 3:
+      case 1:
         return setSuitIcon(faCube);
+      case 2:
+        return setSuitIcon(faDiamond);
+      case 3:
+        return setSuitIcon(faHeart);
     }
   }, []);
 

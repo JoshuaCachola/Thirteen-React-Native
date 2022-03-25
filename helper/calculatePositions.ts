@@ -14,7 +14,6 @@ export function calculatePositions(handLength: number): Position[] {
       transform: [
         {
           rotate: `${(i - mid) * 3}deg`,
-          // rotate: '30deg',
         },
         {
           perspective: 1000,

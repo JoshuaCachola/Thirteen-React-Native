@@ -1,5 +1,5 @@
 import { CardType } from '../classes/Card';
-import { Combination, GameStateInterface } from '../classes/GameState';
+import { Combination } from '../classes/GameState';
 import { combinationConstants } from '../constants/CombinationConstants';
 
 export const CardValues = {
@@ -320,7 +320,8 @@ export const getMultiples = (cards: CardType[], type: string) => {
   return pairs;
 };
 
-const createHandMap = (hand: CardType[]) => {
+export const createHandMap = (hand: CardType[]) => {
+  sortCards(hand);
   const map: combination = {};
   for (let i = 0; i < hand.length; i++) {
     if (hand[i].value in map) {
@@ -367,8 +368,4 @@ export const getStraights = (hand: CardType[], straightLength: number) => {
     }
   }
   return straights;
-};
-
-const getSingles = (hand: CardType[]) => {
-  const handMap = createHandMap(hand);
 };

@@ -5,16 +5,17 @@ export interface PlayerInterface {
   setReady: (r: boolean) => void;
   getName: () => string;
   getHand: () => CardType[] | null;
+  isReady: () => boolean;
 }
 
 export class Player implements PlayerInterface {
   name: string;
-  hand: CardType[] | null;
+  hand: CardType[];
   ready: boolean;
 
   constructor(name: string, ready: boolean = false) {
     this.name = name;
-    this.hand = null;
+    this.hand = [];
     this.ready = ready;
   }
 
@@ -22,8 +23,12 @@ export class Player implements PlayerInterface {
     this.hand = hand;
   }
 
-  setReady(ready: boolean) {
-    this.ready = ready;
+  setReady() {
+    this.ready = !this.ready;
+  }
+
+  isReady() {
+    return this.ready;
   }
 
   getName() {
