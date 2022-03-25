@@ -13,33 +13,50 @@ export type Combination =
   | 'TRIPLE_BOMB'
   | null;
 
-export const playCards = (s: CardType[], type: Combination) => {
-  const [_, combinationType] = isValidCombination(s);
-  if (type !== combinationType) {
-    combinationType = type;
-  }
+export const playCards = (
+  s: CardType[],
+  type: Combination,
+  high: CardType | null,
+  length: number
+) => {
+  const [isValid, combinationType] = isValidCombination(s, type, high, length);
 
   length = s.length;
-
-  updateRotation('PLAY');
 };
 
-export const pass = () => {
-  updateRotation('PASS');
-};
+export enum ActionType {
+  PLAY,
+  PASS,
+}
 
-export const updateRotation = (type: ActionType) => {
+export const updateRotation = (
+  type: ActionType,
+  playerRotation: PlayerInterface[],
+  players: PlayerInterface[]
+): {
+  playerRotation: PlayerInterface[];
+  combinationType?: Combination;
+  currentPlayer?: PlayerInterface;
+} => {
   const shifted = playerRotation.shift();
 
-  if (type === 'PLAY') {
+  if (type === ActionType.PLAY) {
     playerRotation.push(shifted!);
   }
 
   if (playerRotation.length === 1) {
-    createPlayerRotation(players.indexOf(playerRotation[0]));
-    setCombinationType(null);
-    currentPlayer = playerRotation[0];
+    const newRotation = createPlayerRotation(
+      players.indexOf(playerRotation[0]),
+      players
+    );
+    return {
+      playerRotation: newRotation,
+      combinationType: null,
+      currentPlayer: newRotation[0],
+    };
   }
+
+  return { playerRotation, currentPlayer: playerRotation[0] };
 };
 
 // creates the rotation of players

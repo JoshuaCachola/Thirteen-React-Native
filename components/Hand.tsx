@@ -3,10 +3,15 @@ import { View, StyleSheet } from 'react-native';
 import { CardType } from '../classes/Card';
 import InteractiveView from './InteractiveView';
 import { calculatePositions, Position } from '../helper/calculatePositions';
-import { isValidCombination, sortCards } from '../helper/combinationHelpers';
+import {
+  getHighestCard,
+  isValidCombination,
+  sortCards,
+} from '../helper/combinationHelpers';
 import { GameContext } from '../context/GameContext';
 import { HandContext } from '../context/HandContext';
 import Button from './Button';
+import { ActionType, updateRotation } from '../classes/GameState';
 
 interface props {
   playerIdx: number;
@@ -14,8 +19,22 @@ interface props {
 
 // This component displays holding a hand of cards
 export default function Hand({ playerIdx }: props) {
-  const { hands, combinationType, highestCard, length } =
-    useContext(GameContext);
+  const {
+    hands,
+    setHands,
+    combinationType,
+    highestCard,
+    length,
+    setPlayedCards,
+    playedCards,
+    players,
+    playerRotation,
+    setCombinationType,
+    setPlayerRotation,
+    setCurrentPlayer,
+    setHighestCard,
+  } = useContext(GameContext);
+
   const [hand, setHand] = useState(hands[playerIdx]);
   const [isValid, setIsValid] = useState(false);
   const [positions, setPositions] = useState<Position[]>(() => {
@@ -47,6 +66,7 @@ export default function Hand({ playerIdx }: props) {
   const handlePlayCards = () => {
     const acceptedSequence: CardType[] = [];
     const newHand: CardType[] = [];
+
     hands[playerIdx].forEach((card) => {
       if (card.selected) {
         acceptedSequence.push(card);
@@ -55,9 +75,20 @@ export default function Hand({ playerIdx }: props) {
       }
       card.selected = false;
     });
-    // setPlayedCards([...playedCards, acceptedSequence]);
-    // setHand(newHand);
-    // game.playCards(acceptedSequence);
+
+    const newHands = hands;
+    newHands[playerIdx] = newHand;
+    setHands(newHands);
+    setHand(newHand);
+    setPlayedCards([acceptedSequence, ...playedCards]);
+    setHighestCard(getHighestCard(acceptedSequence));
+    const payload = updateRotation(ActionType.PLAY, playerRotation, players);
+    console.log(playedCards);
+    if ('combinationType' in payload) {
+      setCombinationType(payload.combinationType!);
+    }
+    setCurrentPlayer(payload.currentPlayer!);
+    setPlayerRotation(payload.playerRotation);
   };
 
   const handleSortCards = () => {

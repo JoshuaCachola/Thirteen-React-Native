@@ -1,12 +1,17 @@
 import { combinationConstants } from '../constants/CombinationConstants';
 import { createHandMap } from '../helper/combinationHelpers';
 import { CardType } from './Card';
-import { Combination, pass, playCards } from './GameState';
+import { ActionType, Combination } from './GameState';
 
 export interface PlayerInterface {
   setReady: (r: boolean) => void;
   getName: () => string;
-  play: (t: Combination, hi: CardType | null, h: CardType[]) => void;
+  play: (
+    t: Combination,
+    hi: CardType | null,
+    h: CardType[],
+    l: number
+  ) => [ActionType, Set<number>];
 }
 
 // 0 for human
@@ -29,10 +34,6 @@ export class Player implements PlayerInterface {
     this.type = type;
   }
 
-  setHand(hand: CardType[]) {
-    this.hand = hand;
-  }
-
   setReady() {
     this.ready = !this.ready;
   }
@@ -45,48 +46,44 @@ export class Player implements PlayerInterface {
     return this.name;
   }
 
-  getHand() {
-    return this.hand;
-  }
-
-  play(t: Combination, high: CardType | null, hand: CardType[]) {
+  play(
+    t: Combination,
+    high: CardType | null,
+    hand: CardType[],
+    length: number
+  ): [ActionType, Set<number>] {
+    let indicies: Set<number> = new Set();
     switch (t) {
       case null:
       case combinationConstants.SINGLE: {
-        const indicies: Set<number> = this.playLowest(high!);
+        this.playLowest(high, hand, indicies);
         if (!indicies.has(-1)) {
-          this.updateCards(indicies);
-          playCards(hand, t);
+          return [ActionType.PLAY, indicies];
         } else {
-          pass();
+          return [ActionType.PASS, indicies];
         }
       }
+      default:
+        return [ActionType.PASS, indicies];
     }
   }
 
-  playLowest(high: CardType) {
-    const handMap = createHandMap(this.hand);
-    const filterOut: Set<number> = new Set();
+  playLowest(high: CardType | null, hand: CardType[], filterOut: Set<number>) {
+    const handMap = createHandMap(hand);
     for (const [value, indicies] of Object.entries(handMap)) {
       if (high === null || parseInt(value) > high.value) {
         filterOut.add(indicies[0]);
-        return filterOut;
+        return;
       }
-      if (parseInt(value) === high.value) {
+      if (parseInt(value) === high!.value) {
         for (let idx = 0; idx < indicies.length; idx++) {
-          if (this.hand![idx].suit > high.suit) {
+          if (hand[idx].suit > high!.suit) {
             filterOut.add(idx);
-            return filterOut;
+            return;
           }
         }
       }
     }
     filterOut.add(-1);
-    return filterOut;
-  }
-
-  updateCards(indicies: Set<number>) {
-    const filtered = this.hand?.filter((_, idx) => !indicies.has(idx));
-    this.setHand(filtered!);
   }
 }

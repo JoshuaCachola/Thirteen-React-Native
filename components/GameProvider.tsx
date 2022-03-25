@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react';
 import { CardType } from '../classes/Card';
 import {
+  ActionType,
   Combination,
   createPlayerRotation,
   deal,
   findLowestThree,
+  updateRotation,
 } from '../classes/GameState';
 import { GameContext } from '../context/GameContext';
 import { Player, PlayerInterface, PlayerType } from '../classes/Player';
 import uuid from 'react-native-uuid';
+import {
+  getHighestCard,
+  isValidCombination,
+} from '../helper/combinationHelpers';
 
 export default function GameProvider(props: any) {
   const [players, setPlayers] = useState<PlayerInterface[]>([]);
@@ -32,9 +38,68 @@ export default function GameProvider(props: any) {
     }
   }, [startGame, players.length]);
 
+  // useEffect for whenever the current player is a computer
   useEffect(() => {
+    const currentPlayerIdx = players.indexOf(currentPlayer!);
+    console.log(highestCard, combinationType);
     if (currentPlayer?.getName().includes('Computer')) {
-      currentPlayer.play(combinationType, highestCard, hands[turnNumber % 4]);
+      console.log('here');
+      const [type, indicies]: [ActionType, Set<number>] = currentPlayer.play(
+        combinationType,
+        highestCard,
+        hands[currentPlayerIdx],
+        length
+      );
+      let payload;
+      if (type === ActionType.PLAY) {
+        // update cards
+        const removedCards: CardType[] = [];
+        const newHand: CardType[] = [];
+        hands[currentPlayerIdx].forEach((card, idx) => {
+          indicies.has(idx) ? removedCards.push(card) : newHand.push(card);
+        });
+
+        const [isValid, comboType] = isValidCombination(
+          removedCards,
+          combinationType,
+          highestCard,
+          removedCards.length
+        );
+        if (!isValid) {
+          // updateRotation
+          payload = updateRotation(ActionType.PASS, playerRotation, players);
+        }
+
+        // update combinationType
+        setCombinationType(comboType);
+
+        // update length
+        setLength(removedCards.length);
+
+        // update hands
+        const newHands = hands;
+        newHands[currentPlayerIdx] = newHand;
+        setHands(newHands);
+
+        // update playedCards
+        setPlayedCards([removedCards, ...playedCards]);
+
+        // update highestCard
+        setHighestCard(getHighestCard(removedCards));
+
+        // get payload
+        payload = updateRotation(ActionType.PLAY, playerRotation, players);
+      } else {
+        // updateRotation
+        payload = updateRotation(ActionType.PASS, playerRotation, players);
+      }
+
+      // update state from payload
+      if ('combinationType' in payload) {
+        setCombinationType(payload.combinationType!);
+      }
+      setCurrentPlayer(payload.currentPlayer!);
+      setPlayerRotation(payload.playerRotation);
     }
   }, [playerRotation, currentPlayer]);
 
