@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
 import { CardType } from '../classes/Card';
-import { Combination, deal, initGame } from '../classes/GameState';
+import {
+  Combination,
+  createPlayerRotation,
+  deal,
+  findLowestThree,
+} from '../classes/GameState';
 import { GameContext } from '../context/GameContext';
-import { PlayerInterface } from '../classes/Player';
+import { Player, PlayerInterface, PlayerType } from '../classes/Player';
 import uuid from 'react-native-uuid';
-import { Computer } from '../classes/Computer';
 
 export default function GameProvider(props: any) {
   const [players, setPlayers] = useState<PlayerInterface[]>([]);
@@ -20,19 +24,33 @@ export default function GameProvider(props: any) {
   const [playedCards, setPlayedCards] = useState<CardType[][]>([]);
   const [startGame, setStartGame] = useState(false);
   const [lastWinner, setLastWinner] = useState<number | null>(null);
+  const [turnNumber, setTurnNumber] = useState(0);
 
   useEffect(() => {
     if (startGame && players.length > 0) {
-      const p = [...players];
-      for (let i = players.length; i < 4; i++) {
-        p.push(new Computer(`Computer ${i}`));
-      }
-      const { currentPlayer, playerRotation } = initGame(p, hands, lastWinner);
-      setPlayers(p);
-      setCurrentPlayer(currentPlayer);
-      setPlayerRotation(playerRotation);
+      initGame();
     }
   }, [startGame, players.length]);
+
+  useEffect(() => {
+    if (currentPlayer?.getName().includes('Computer')) {
+      currentPlayer.play(combinationType, highestCard, hands[turnNumber % 4]);
+    }
+  }, [playerRotation, currentPlayer]);
+
+  const initGame = () => {
+    const p = [...players];
+    for (let i = players.length; i < 4; i++) {
+      p.push(new Player(`Computer ${i}`, true, PlayerType.COMPUTER));
+    }
+    const startingPlayerIdx =
+      lastWinner !== null ? lastWinner : findLowestThree(hands);
+    const playerRotation = createPlayerRotation(startingPlayerIdx!, p);
+    setTurnNumber(startingPlayerIdx!);
+    setPlayers(p);
+    setCurrentPlayer(p[startingPlayerIdx!]);
+    setPlayerRotation(playerRotation);
+  };
 
   return (
     <GameContext.Provider

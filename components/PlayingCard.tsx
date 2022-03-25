@@ -1,32 +1,24 @@
 import { View, StyleSheet, Text, TouchableHighlight } from 'react-native';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useState } from 'react';
 import useSuit from '../hooks/useSuit';
 import useColor from '../hooks/useColor';
 import FaIcon from '../helper/fontAwsomeHelper';
 import { CardType, CardSuits } from '../classes/Card';
 import { HandContext } from '../context/HandContext';
 import { cardValues } from '../helper/combinationHelpers';
-import { GameContext } from '../context/GameContext';
 
 interface PlayingCardProp {
   idx: number;
   value: number;
   suit: CardSuits;
   selected: boolean;
-  playerIdx: number;
   isValid?: boolean;
 }
 
 // Card Component
-export default function PlayingCard({
-  value,
-  suit,
-  isValid,
-  playerIdx,
-}: PlayingCardProp) {
+export default function PlayingCard({ value, suit, isValid }: PlayingCardProp) {
   // Handles state of pressing card
   const [isCardSelected, setIsCardSelected] = useState(false);
-  // const [isValid, setIsValid] = useState(false);
 
   const { hand, setHand } = useContext(HandContext);
 

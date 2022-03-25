@@ -3,9 +3,10 @@ import { View, StyleSheet } from 'react-native';
 import { CardType } from '../classes/Card';
 import InteractiveView from './InteractiveView';
 import { calculatePositions, Position } from '../helper/calculatePositions';
-import { isValidCombination } from '../helper/combinationHelpers';
+import { isValidCombination, sortCards } from '../helper/combinationHelpers';
 import { GameContext } from '../context/GameContext';
 import { HandContext } from '../context/HandContext';
+import Button from './Button';
 
 interface props {
   playerIdx: number;
@@ -28,6 +29,8 @@ export default function Hand({ playerIdx }: props) {
     setPositions(newPositions);
   }, [hand.length]);
 
+  // filter selected cards from hand and check if
+  // it is a valid combination
   useMemo(() => {
     const selected = hand.filter((card) => card.selected);
     const [isValid, _] = isValidCombination(
@@ -37,7 +40,7 @@ export default function Hand({ playerIdx }: props) {
       length
     );
     setIsValid(isValid);
-  }, hand);
+  }, [hand]);
 
   // handles playing cards when cards are selected
   // and play button is pressed
@@ -57,10 +60,10 @@ export default function Hand({ playerIdx }: props) {
     // game.playCards(acceptedSequence);
   };
 
-  // const handleSortCards = () => {
-  //   const sorted = sortCards(hand!);
-  //   setHand([...sorted]);
-  // };
+  const handleSortCards = () => {
+    const sorted = sortCards(hand!);
+    setHand([...sorted]);
+  };
 
   return (
     <HandContext.Provider value={{ hand, setHand }}>
@@ -91,7 +94,7 @@ export default function Hand({ playerIdx }: props) {
             );
           })}
         </View>
-        {/* <Button title='Sort Cards' onPress={handleSortCards} /> */}
+        <Button title='Sort Cards' onPress={handleSortCards} />
       </View>
     </HandContext.Provider>
   );

@@ -1,3 +1,4 @@
+import { isValidCombination } from '../helper/combinationHelpers';
 import { CardType } from './Card';
 import { Deck } from './Deck';
 import { PlayerInterface } from './Player';
@@ -12,34 +13,34 @@ export type Combination =
   | 'TRIPLE_BOMB'
   | null;
 
-// export const playCards = (s: CardType[], combinationType) => {
-//   const [_, type] = canPlayCombination(s);
-//   if (type !== combinationType) {
-//     combinationType = type;
-//   }
+export const playCards = (s: CardType[], type: Combination) => {
+  const [_, combinationType] = isValidCombination(s);
+  if (type !== combinationType) {
+    combinationType = type;
+  }
 
-//   length = s.length;
+  length = s.length;
 
-//   updateRotation('PLAY');
-// };
+  updateRotation('PLAY');
+};
 
-// export const pass = () => {
-//   updateRotation('PASS');
-// };
+export const pass = () => {
+  updateRotation('PASS');
+};
 
-// export const updateRotation = (type: ActionType) => {
-//   const shifted = playerRotation.shift();
+export const updateRotation = (type: ActionType) => {
+  const shifted = playerRotation.shift();
 
-//   if (type === 'PLAY') {
-//     playerRotation.push(shifted!);
-//   }
+  if (type === 'PLAY') {
+    playerRotation.push(shifted!);
+  }
 
-//   if (playerRotation.length === 1) {
-//     createPlayerRotation(players.indexOf(playerRotation[0]));
-//     setCombinationType(null);
-//     currentPlayer = playerRotation[0];
-//   }
-// };
+  if (playerRotation.length === 1) {
+    createPlayerRotation(players.indexOf(playerRotation[0]));
+    setCombinationType(null);
+    currentPlayer = playerRotation[0];
+  }
+};
 
 // creates the rotation of players
 export const createPlayerRotation = (
@@ -69,7 +70,7 @@ export const deal = () => {
   return hands;
 };
 
-const findLowestThree = (hands: CardType[][]) => {
+export const findLowestThree = (hands: CardType[][]) => {
   for (let h = 0; h < hands.length; h++) {
     const hand = hands[h];
     for (let c = 0; c < hand.length; c++) {
@@ -89,17 +90,16 @@ const findLowestThree = (hands: CardType[][]) => {
 // };
 
 // starts the game and sets
-export const initGame = (
-  players: PlayerInterface[],
-  hands: CardType[][],
-  lastWinner: number | null
-) => {
-  lastWinner = lastWinner !== null ? lastWinner : findLowestThree(hands)!;
-  console.log(players);
-  const playerRotation = createPlayerRotation(lastWinner, players);
+// export const initGame = (
+//   players: PlayerInterface[],
+//   hands: CardType[][],
+//   lastWinner: number | null
+// ) => {
+//   lastWinner = lastWinner !== null ? lastWinner : findLowestThree(hands)!;
+//   const playerRotation = createPlayerRotation(lastWinner, players);
 
-  return {
-    playerRotation,
-    currentPlayer: players[lastWinner],
-  };
-};
+//   return {
+//     playerRotation,
+//     currentPlayer: players[lastWinner],
+//   };
+// };
