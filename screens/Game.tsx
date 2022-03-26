@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import PlayArea from '../components/PlayArea';
 import PlayerStack from '../components/PlayerStack';
 import PlayedCardsStack from '../components/PlayedCardsStack';
@@ -9,28 +9,32 @@ import ReadyModal from '../components/ReadyModal';
 import { Player, PlayerType } from '../classes/Player';
 import GameProvider from '../components/GameProvider';
 import { GameContext } from '../context/GameContext';
-import { CardType } from '../classes/Card';
 
 export default function Game() {
   const player = new Player('Joshua', false, PlayerType.HUMAN);
   const [playerIdx, setPlayerIdx] = useState<number>();
-  const { startGame, hands } = useContext(GameContext);
+  const { startGame } = useContext(GameContext);
 
   return (
     <GameProvider>
       <View style={styles.container}>
-        {/* Top */}
+        {/* Top Left */}
+        <View style={styles.playerStack}>
+          <PlayerStack />
+        </View>
+
+        {/* Top Middle */}
         <View style={styles.topContainer}>
-          <View style={styles.playerStack}>
-            <PlayerStack />
-          </View>
           <View style={styles.playedCardsArea}>
             <PlayArea />
           </View>
-          <View style={styles.playedCardsStack}>
-            <PlayedCardsStack />
-          </View>
         </View>
+
+        {/* Top Right */}
+        <View style={styles.playedCardsStack}>
+          <PlayedCardsStack />
+        </View>
+
         {/* Bottom */}
         {playerIdx !== undefined && (
           <View style={styles.bottomContainer}>
@@ -45,29 +49,43 @@ export default function Game() {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    justifyContent: 'space-between',
-    flexDirection: 'column',
+    position: 'relative',
+    height: '100vh',
   },
   playedCardsArea: {
-    flex: 6,
-    borderWidth: 1,
-    borderStyle: 'dashed',
-    borderColor: 'red',
-    backgroundColor: 'blue',
+    // borderWidth: 1,
+    // borderStyle: 'dashed',
+    // borderColor: 'red',
+    // backgroundColor: 'blue',
+    position: 'absolute',
+    width: '100%',
+    height: '50%',
   },
   bottomContainer: {},
   topContainer: {
-    flex: 2,
+    // flex: 2,
     justifyContent: 'flex-start',
     backgroundColor: 'green',
     flexDirection: 'row',
   },
   playedCardsStack: {
-    flex: 2,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: 'red',
+    width: '25%',
+    height: '50%',
+    opacity: 0.3,
+    zIndex: 10,
   },
   playerStack: {
-    flex: 2,
+    position: 'absolute',
+    top: 0,
+    left: 0,
     backgroundColor: 'white',
+    opacity: 0.3,
+    width: '25%',
+    height: '50%',
+    zIndex: 10,
   },
 });

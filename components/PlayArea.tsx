@@ -33,9 +33,7 @@ const styles = StyleSheet.create({
     borderColor: 'blue',
     borderWidth: 2,
     borderStyle: 'dashed',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    height: '100%',
   },
   text: {
     textAlign: 'center',
@@ -44,5 +42,7 @@ const styles = StyleSheet.create({
   cards: {
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
   },
 });

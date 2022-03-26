@@ -28,6 +28,7 @@ export enum ActionType {
   PASS,
 }
 
+// action: pass - shifts the player out of rotation
 export const updateRotation = (
   type: ActionType,
   playerRotation: PlayerInterface[],
@@ -44,7 +45,7 @@ export const updateRotation = (
     playerRotation.push(shifted!);
   }
 
-  if (playerRotation.length === 1) {
+  if (type === ActionType.PASS && playerRotation.length === 1) {
     const newRotation = createPlayerRotation(
       players.indexOf(playerRotation[0]),
       players

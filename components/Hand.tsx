@@ -35,6 +35,7 @@ export default function Hand({ playerIdx }: props) {
     setHighestCard,
     turnNumber,
     setTurnNumber,
+    setLength,
   } = useContext(GameContext);
 
   const [hand, setHand] = useState(hands[playerIdx]);
@@ -78,9 +79,18 @@ export default function Hand({ playerIdx }: props) {
       card.selected = false;
     });
 
-    const newHands = hands;
-    newHands[playerIdx] = newHand;
-    setHands([...newHands]);
+    const [_, type] = isValidCombination(
+      acceptedSequence,
+      combinationType,
+      highestCard,
+      acceptedSequence.length
+    );
+
+    setCombinationType(type);
+    setLength(acceptedSequence.length);
+
+    hands[playerIdx] = newHand;
+    setHands([...hands]);
     setHand([...newHand]);
     setPlayedCards([acceptedSequence, ...playedCards]);
     setHighestCard(getHighestCard(acceptedSequence));

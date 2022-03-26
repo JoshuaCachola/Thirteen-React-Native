@@ -9,8 +9,8 @@ export default function PlayedCardsStack() {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={[{ color: 'grey' }]}>Pair of 3's</Text> */}
-      <View>
+      <Text style={[{ color: 'grey' }]}>Pair of 3's</Text>
+      <View style={styles.cards}>
         {playedCards &&
           playedCards.map((sequences: CardType[]) => {
             return sequences.map((card: CardType, idx) => {
@@ -33,6 +33,10 @@ export default function PlayedCardsStack() {
 
 const styles = StyleSheet.create({
   container: {
+    position: 'relative',
+  },
+  cards: {
+    position: 'absolute',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

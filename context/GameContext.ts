@@ -26,6 +26,8 @@ interface Game {
   setStartGame: (b: boolean) => void;
   turnNumber: number;
   setTurnNumber: (n: number) => void;
+  isGameWon: boolean;
+  setIsGameWon: (b: boolean) => void;
 }
 
 export const GameContext = createContext<Game>({
@@ -51,4 +53,6 @@ export const GameContext = createContext<Game>({
   setStartGame: () => {},
   turnNumber: 0,
   setTurnNumber: () => {},
+  isGameWon: false,
+  setIsGameWon: () => {},
 });

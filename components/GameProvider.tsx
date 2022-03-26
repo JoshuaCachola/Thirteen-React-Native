@@ -36,6 +36,7 @@ export default function GameProvider(props: any) {
   const [startGame, setStartGame] = useState(false);
   const [lastWinner, setLastWinner] = useState<number | null>(null);
   const [turnNumber, setTurnNumber] = useState(0);
+  const [isGameWon, setIsGameWon] = useState(false);
 
   // useEffect for starting the game
   useEffect(() => {
@@ -75,13 +76,14 @@ export default function GameProvider(props: any) {
         newHands[currentPlayerIdx] = newHand;
         setHands([...newHands]);
 
+        console.log(played, highestCard);
         // update highestCard
         setHighestCard(getHighestCard(played));
 
         // update rotation
-        payload = updateRotation(ActionType.PLAY, playerRotation, players);
+        payload = updateRotation(action, playerRotation, players);
       } else {
-        payload = updateRotation(ActionType.PASS, playerRotation, players);
+        payload = updateRotation(action, playerRotation, players);
       }
 
       // update state from payload
@@ -133,6 +135,8 @@ export default function GameProvider(props: any) {
         setStartGame,
         turnNumber,
         setTurnNumber,
+        isGameWon,
+        setIsGameWon,
       }}
     >
       {props.children}

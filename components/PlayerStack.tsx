@@ -6,6 +6,7 @@ export default function PlayerStack() {
   const { playerRotation } = useContext(GameContext);
   return (
     <View style={styles.container}>
+      <Text>Players Stack</Text>
       {playerRotation.length !== 0 &&
         playerRotation.map((player) => {
           return (
