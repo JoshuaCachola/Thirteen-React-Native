@@ -190,7 +190,7 @@ export const isValidCombination = (
   incoming: CardType[],
   type: Combination,
   current: CardType | null,
-  length: number
+  length?: number
 ): [boolean, Combination] => {
   // needed when triggering from unselecting cards
   if (incoming.length === 0) return [false, type];

@@ -1,18 +1,30 @@
 import { combinationConstants } from '../constants/CombinationConstants';
-import { createHandMap } from '../helper/combinationHelpers';
+import {
+  createHandMap,
+  isValidCombination,
+} from '../helper/combinationHelpers';
+import { Action } from './Actions';
 import { CardType } from './Card';
 import { ActionType, Combination } from './GameState';
 
 export interface PlayerInterface {
   setReady: (r: boolean) => void;
   getName: () => string;
-  play: (
-    t: Combination,
+  getAction: (
+    c: Combination,
     hi: CardType | null,
     h: CardType[],
-    l: number
-  ) => [ActionType, Set<number>];
+    l: number,
+    t: number
+  ) => ActionPayload;
 }
+
+export type ActionPayload = {
+  action: ActionType;
+  type: Combination;
+  played: CardType[];
+  newHand: CardType[];
+};
 
 // 0 for human
 // 1 for computer
@@ -34,56 +46,103 @@ export class Player implements PlayerInterface {
     this.type = type;
   }
 
-  setReady() {
+  public setReady() {
     this.ready = !this.ready;
   }
 
-  isReady() {
+  public isReady() {
     return this.ready;
   }
 
-  getName() {
+  public getName() {
     return this.name;
   }
 
-  play(
-    t: Combination,
-    high: CardType | null,
+  public getAction(
+    combinationType: Combination,
+    highestCard: CardType | null,
     hand: CardType[],
-    length: number
-  ): [ActionType, Set<number>] {
-    let indicies: Set<number> = new Set();
-    switch (t) {
+    length: number,
+    turn: number
+  ): ActionPayload {
+    // play lowest three on first turn
+    if (turn === 0) {
+      const [played, newHand] = this.playLowestThree(hand);
+      const [_, type] = isValidCombination(
+        played,
+        combinationType,
+        highestCard,
+        length
+      );
+      return { action: ActionType.PLAY, type, played, newHand };
+    }
+    switch (combinationType) {
+      // atm computer will always play single when they can play anything
       case null:
-      case combinationConstants.SINGLE: {
-        this.playLowest(high, hand, indicies);
-        if (!indicies.has(-1)) {
-          return [ActionType.PLAY, indicies];
-        } else {
-          return [ActionType.PASS, indicies];
-        }
-      }
+      case combinationConstants.SINGLE:
+        return this.playSingle(hand, highestCard, combinationType);
       default:
-        return [ActionType.PASS, indicies];
+        return {
+          action: ActionType.PASS,
+          type: combinationType,
+          played: [],
+          newHand: hand,
+        };
     }
   }
 
-  playLowest(high: CardType | null, hand: CardType[], filterOut: Set<number>) {
-    const handMap = createHandMap(hand);
-    for (const [value, indicies] of Object.entries(handMap)) {
-      if (high === null || parseInt(value) > high.value) {
-        filterOut.add(indicies[0]);
-        return;
+  private playLowestThree(hand: CardType[]) {
+    const updatedHands: [CardType[], CardType[]] = [[], []];
+    for (let idx = 0; idx < hand.length; idx++) {
+      const card = hand[idx];
+      if (card.value === 3 && card.suit === 0) {
+        updatedHands[0] = [card];
+        updatedHands[1] = [...hand.slice(0, idx), ...hand.slice(idx + 1)];
+        break;
       }
-      if (parseInt(value) === high!.value) {
-        for (let idx = 0; idx < indicies.length; idx++) {
-          if (hand[idx].suit > high!.suit) {
-            filterOut.add(idx);
-            return;
-          }
+    }
+    return updatedHands;
+  }
+
+  private playSingle(
+    hand: CardType[],
+    high: CardType | null,
+    combinationType: Combination
+  ) {
+    const payload: ActionPayload = {
+      action: ActionType.PASS,
+      type: combinationType,
+      played: [],
+      newHand: hand,
+    };
+    for (let idx = 0; idx < hand.length; idx++) {
+      const card = hand[idx];
+      if (high === null) {
+        payload.played.push(card);
+        payload.type = combinationConstants.SINGLE;
+        payload.action = ActionType.PLAY;
+        return payload;
+      }
+      if (
+        card.value > high.value ||
+        (card.value === high.value && card.suit > high.suit)
+      ) {
+        const [isValid, type] = isValidCombination(
+          [card],
+          combinationType,
+          high
+        );
+
+        if (isValid) {
+          payload.played.push(card);
+          payload.newHand = [...hand.slice(0, idx), ...hand.slice(idx + 1)];
+          payload.action = ActionType.PLAY;
+          payload.type = type;
+          break;
         }
       }
     }
-    filterOut.add(-1);
+
+    return payload;
   }
 }

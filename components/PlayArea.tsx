@@ -1,17 +1,17 @@
 import { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PlayingCard from './PlayingCard';
-import { PlayFromHandContext } from '../context/PlayFromHandContext';
+import { GameContext } from '../context/GameContext';
 
 export default function PlayArea() {
-  const { playedCards } = useContext(PlayFromHandContext);
+  const { playedCards } = useContext(GameContext);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Play Area</Text>
       <View style={styles.cards}>
         {playedCards.length !== 0 &&
-          playedCards[playedCards.length - 1].map((card, idx) => {
+          playedCards[0].map((card, idx) => {
             return (
               <View key={`played-${card.value}-${card.suit}`}>
                 <PlayingCard
@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
     borderColor: 'blue',
     borderWidth: 2,
     borderStyle: 'dashed',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     textAlign: 'center',
@@ -40,8 +43,6 @@ const styles = StyleSheet.create({
   },
   cards: {
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
   },
 });

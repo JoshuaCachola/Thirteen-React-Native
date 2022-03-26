@@ -1,20 +1,15 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { CardType } from '../classes/Card';
+import { GameContext } from '../context/GameContext';
 import PlayingCard from './PlayingCard';
 
 export default function PlayedCardsStack() {
-  const [playedCards, setPlayedCards] = useState<CardType[][]>([
-    // [
-    //   { value: 3, suit: 2, selected: true },
-    //   { value: 3, suit: 3, selected: true },
-    // ],
-    [],
-  ]);
+  const { playedCards } = useContext(GameContext);
 
   return (
     <View style={styles.container}>
-      <Text style={[{ color: 'grey' }]}>Pair of 3's</Text>
+      {/* <Text style={[{ color: 'grey' }]}>Pair of 3's</Text> */}
       <View>
         {playedCards &&
           playedCards.map((sequences: CardType[]) => {
@@ -38,7 +33,8 @@ export default function PlayedCardsStack() {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    justifyContent: 'space-between',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

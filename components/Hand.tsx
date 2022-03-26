@@ -33,6 +33,8 @@ export default function Hand({ playerIdx }: props) {
     setPlayerRotation,
     setCurrentPlayer,
     setHighestCard,
+    turnNumber,
+    setTurnNumber,
   } = useContext(GameContext);
 
   const [hand, setHand] = useState(hands[playerIdx]);
@@ -78,22 +80,33 @@ export default function Hand({ playerIdx }: props) {
 
     const newHands = hands;
     newHands[playerIdx] = newHand;
-    setHands(newHands);
-    setHand(newHand);
+    setHands([...newHands]);
+    setHand([...newHand]);
     setPlayedCards([acceptedSequence, ...playedCards]);
     setHighestCard(getHighestCard(acceptedSequence));
     const payload = updateRotation(ActionType.PLAY, playerRotation, players);
-    console.log(playedCards);
+
     if ('combinationType' in payload) {
       setCombinationType(payload.combinationType!);
     }
     setCurrentPlayer(payload.currentPlayer!);
     setPlayerRotation(payload.playerRotation);
+    setTurnNumber(turnNumber + 1);
   };
 
   const handleSortCards = () => {
     const sorted = sortCards(hand!);
     setHand([...sorted]);
+  };
+
+  const handlePass = () => {
+    const payload = updateRotation(ActionType.PASS, playerRotation, players);
+    if ('combinationType' in payload) {
+      setCombinationType(payload.combinationType!);
+    }
+    setCurrentPlayer(payload.currentPlayer!);
+    setPlayerRotation(payload.playerRotation);
+    setTurnNumber(turnNumber + 1);
   };
 
   return (
@@ -126,6 +139,7 @@ export default function Hand({ playerIdx }: props) {
           })}
         </View>
         <Button title='Sort Cards' onPress={handleSortCards} />
+        <Button title='Pass' onPress={handlePass} />
       </View>
     </HandContext.Provider>
   );

@@ -24,6 +24,8 @@ interface Game {
   setPlayedCards: (p: CardType[][]) => void;
   startGame: boolean;
   setStartGame: (b: boolean) => void;
+  turnNumber: number;
+  setTurnNumber: (n: number) => void;
 }
 
 export const GameContext = createContext<Game>({
@@ -47,4 +49,6 @@ export const GameContext = createContext<Game>({
   setPlayedCards: () => {},
   startGame: false,
   setStartGame: () => {},
+  turnNumber: 0,
+  setTurnNumber: () => {},
 });

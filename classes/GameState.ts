@@ -1,4 +1,3 @@
-import { isValidCombination } from '../helper/combinationHelpers';
 import { CardType } from './Card';
 import { Deck } from './Deck';
 import { PlayerInterface } from './Player';
@@ -13,16 +12,16 @@ export type Combination =
   | 'TRIPLE_BOMB'
   | null;
 
-export const playCards = (
-  s: CardType[],
-  type: Combination,
-  high: CardType | null,
-  length: number
-) => {
-  const [isValid, combinationType] = isValidCombination(s, type, high, length);
+// export const playCards = (
+//   s: CardType[],
+//   type: Combination,
+//   high: CardType | null,
+//   length: number
+// ) => {
+//   const [isValid, combinationType] = isValidCombination(s, type, high, length);
 
-  length = s.length;
-};
+//   length = s.length;
+// };
 
 export enum ActionType {
   PLAY,
@@ -35,8 +34,9 @@ export const updateRotation = (
   players: PlayerInterface[]
 ): {
   playerRotation: PlayerInterface[];
+  currentPlayer: PlayerInterface;
   combinationType?: Combination;
-  currentPlayer?: PlayerInterface;
+  highestCard?: CardType | null;
 } => {
   const shifted = playerRotation.shift();
 
@@ -53,6 +53,7 @@ export const updateRotation = (
       playerRotation: newRotation,
       combinationType: null,
       currentPlayer: newRotation[0],
+      highestCard: null,
     };
   }
 

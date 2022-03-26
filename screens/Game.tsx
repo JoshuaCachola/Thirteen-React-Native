@@ -6,20 +6,15 @@ import PlayArea from '../components/PlayArea';
 import PlayerStack from '../components/PlayerStack';
 import PlayedCardsStack from '../components/PlayedCardsStack';
 import ReadyModal from '../components/ReadyModal';
-import { Player } from '../classes/Player';
+import { Player, PlayerType } from '../classes/Player';
 import GameProvider from '../components/GameProvider';
 import { GameContext } from '../context/GameContext';
 import { CardType } from '../classes/Card';
 
 export default function Game() {
-  const player = new Player('Joshua');
+  const player = new Player('Joshua', false, PlayerType.HUMAN);
   const [playerIdx, setPlayerIdx] = useState<number>();
-  const { players, setPlayers, startGame } = useContext(GameContext);
-  // const [hand, setHand] = useState<CardType[]>([]);
-
-  // useEffect(() => {
-  //   setHand(hands[playerIdx!]);
-  // }, [hands, playerIdx]);
+  const { startGame, hands } = useContext(GameContext);
 
   return (
     <GameProvider>
