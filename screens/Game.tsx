@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
 import { useContext, useState } from 'react';
@@ -6,12 +6,12 @@ import PlayArea from '../components/PlayArea';
 import PlayerStack from '../components/PlayerStack';
 import PlayedCardsStack from '../components/PlayedCardsStack';
 import ReadyModal from '../components/ReadyModal';
-import { Player, PlayerType } from '../classes/Player';
+import { Player } from '../classes/Player';
 import GameProvider from '../components/GameProvider';
 import { GameContext } from '../context/GameContext';
 
 export default function Game() {
-  const player = new Player('Joshua', false, PlayerType.HUMAN);
+  const player = new Player('Joshua', false);
   const [playerIdx, setPlayerIdx] = useState<number>();
   const { startGame } = useContext(GameContext);
 
@@ -50,18 +50,36 @@ export default function Game() {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    height: '100vh',
+    height: Dimensions.get('window').height,
+    backgroundColor: 'rgb(194,192,226)',
   },
   playedCardsArea: {
-    // borderWidth: 1,
-    // borderStyle: 'dashed',
+    borderWidth: 1,
+    borderStyle: 'dashed',
     // borderColor: 'red',
-    // backgroundColor: 'blue',
+    backgroundColor: 'blue',
     position: 'absolute',
-    width: '100%',
-    height: '50%',
+    width: '60%',
+    height: Dimensions.get('window').height,
+    transform: [
+      {
+        translateX: Dimensions.get('window').width / 5,
+      },
+    ],
   },
-  bottomContainer: {},
+  bottomContainer: {
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    transform: [
+      {
+        translateX: Dimensions.get('window').width / 2,
+      },
+      {
+        translateY: -Dimensions.get('window').height / 8,
+      },
+    ],
+  },
   topContainer: {
     // flex: 2,
     justifyContent: 'flex-start',
@@ -72,19 +90,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
-    backgroundColor: 'red',
-    width: '25%',
+    width: '20%',
     height: '50%',
-    opacity: 0.3,
     zIndex: 10,
+    backgroundColor: 'white',
   },
   playerStack: {
     position: 'absolute',
     top: 0,
     left: 0,
     backgroundColor: 'white',
-    opacity: 0.3,
-    width: '25%',
+    // opacity: 0.3,
+    width: '20%',
     height: '50%',
     zIndex: 10,
   },

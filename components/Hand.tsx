@@ -51,6 +51,7 @@ export default function Hand({ playerIdx }: props) {
     setPositions(newPositions);
   }, [hand.length]);
 
+  console.log(highestCard);
   // filter selected cards from hand and check if
   // it is a valid combination
   useMemo(() => {
@@ -98,6 +99,7 @@ export default function Hand({ playerIdx }: props) {
 
     if ('combinationType' in payload) {
       setCombinationType(payload.combinationType!);
+      setHighestCard(payload.highestCard!);
     }
     setCurrentPlayer(payload.currentPlayer!);
     setPlayerRotation(payload.playerRotation);
@@ -113,6 +115,7 @@ export default function Hand({ playerIdx }: props) {
     const payload = updateRotation(ActionType.PASS, playerRotation, players);
     if ('combinationType' in payload) {
       setCombinationType(payload.combinationType!);
+      setHighestCard(payload.highestCard!);
     }
     setCurrentPlayer(payload.currentPlayer!);
     setPlayerRotation(payload.playerRotation);

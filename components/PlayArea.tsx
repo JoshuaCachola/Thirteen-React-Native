@@ -30,9 +30,6 @@ export default function PlayArea() {
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: 'blue',
-    borderWidth: 2,
-    borderStyle: 'dashed',
     height: '100%',
   },
   text: {

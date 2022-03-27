@@ -196,50 +196,50 @@ export const isValidCombination = (
   if (incoming.length === 0) return [false, type];
 
   // if there is no combination type then it is the start of a new cycle
-  if (!type) {
+  if (type === null || current === null) {
     return checkCombinationByCardLength(incoming);
   }
 
   // switch by combination type
   switch (type) {
     case combinationConstants.SINGLE:
-      return isValidSingle(current!, incoming);
+      return isValidSingle(current, incoming);
     case combinationConstants.DOUBLE:
       return [
         areAllSameValue(incoming) &&
-          isIncomingHigherValue(current!, incoming) &&
+          isIncomingHigherValue(current, incoming) &&
           incoming.length === length,
         combinationConstants.DOUBLE,
       ];
     case combinationConstants.TRIPLE:
       return [
         areAllSameValue(incoming) &&
-          isIncomingHigherValue(current!, incoming) &&
+          isIncomingHigherValue(current, incoming) &&
           incoming.length === length,
         combinationConstants.TRIPLE,
       ];
     case combinationConstants.BOMB:
       return [
         isValidBomb(incoming, combinationConstants.BOMB!) &&
-          isIncomingHigherValue(current!, incoming),
+          isIncomingHigherValue(current, incoming),
         combinationConstants.BOMB,
       ];
     case combinationConstants.DOUBLE_BOMB:
       return [
         isValidBomb(incoming, combinationConstants.DOUBLE_BOMB!) &&
-          isIncomingHigherValue(current!, incoming),
+          isIncomingHigherValue(current, incoming),
         combinationConstants.DOUBLE_BOMB,
       ];
     case combinationConstants.TRIPLE_BOMB:
       return [
         isValidBomb(incoming, combinationConstants.TRIPLE_BOMB!) &&
-          isIncomingHigherValue(current!, incoming),
+          isIncomingHigherValue(current, incoming),
         combinationConstants.TRIPLE_BOMB,
       ];
     default:
       return [
         isValidStraight(incoming) &&
-          isIncomingHigherValue(current!, incoming) &&
+          isIncomingHigherValue(current, incoming) &&
           incoming.length === length,
         combinationConstants.STRAIGHT,
       ];

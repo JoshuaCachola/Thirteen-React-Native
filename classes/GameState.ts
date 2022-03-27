@@ -89,7 +89,12 @@ export const deal = () => {
   return hands;
 };
 
-export const findLowestThree = (hands: CardType[][]) => {
+// Starting player is the player with the lowest card
+// This is when there is no previous winner and is the first game player
+// finds the player with the lowest card
+// if there are four players return when the three of spades - suit: 0 - is found
+export const findStartingPlayer = (hands: CardType[][]) => {
+  let lowestCard = { value: Number.MAX_VALUE, suit: Number.MAX_VALUE, hand: 0 };
   for (let h = 0; h < hands.length; h++) {
     const hand = hands[h];
     for (let c = 0; c < hand.length; c++) {
@@ -97,8 +102,17 @@ export const findLowestThree = (hands: CardType[][]) => {
       if (card.value === 3 && card.suit === 0) {
         return h;
       }
+
+      if (
+        card.value < lowestCard.value ||
+        (card.value === lowestCard.value && card.suit < lowestCard.suit)
+      ) {
+        lowestCard = { value: card.value, suit: card.suit, hand: h };
+      }
     }
   }
+
+  return lowestCard.hand;
 };
 
 // export const canPlayCombination = (

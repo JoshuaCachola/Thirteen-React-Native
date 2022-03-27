@@ -9,7 +9,6 @@ export default function PlayedCardsStack() {
 
   return (
     <View style={styles.container}>
-      <Text style={[{ color: 'grey' }]}>Pair of 3's</Text>
       <View style={styles.cards}>
         {playedCards &&
           playedCards.map((sequences: CardType[]) => {
@@ -34,6 +33,14 @@ export default function PlayedCardsStack() {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
+    borderColor: 'black',
+    borderWidth: 1,
+    width: '75%',
+    height: '75%',
+    borderRadius: 8,
+    backgroundColor: 'red',
+    margin: 'auto',
+    opacity: 0.5,
   },
   cards: {
     position: 'absolute',

@@ -5,18 +5,14 @@ import {
   Combination,
   createPlayerRotation,
   deal,
-  findLowestThree,
+  findStartingPlayer,
   updateRotation,
 } from '../classes/GameState';
 import { GameContext } from '../context/GameContext';
-import {
-  ActionPayload,
-  Player,
-  PlayerInterface,
-  PlayerType,
-} from '../classes/Player';
+import { ActionPayload, PlayerInterface } from '../classes/Player';
 import uuid from 'react-native-uuid';
-import { getHighestCard, sortCards } from '../helper/combinationHelpers';
+import { getHighestCard } from '../helper/combinationHelpers';
+import { Computer } from '../classes/Computer';
 
 export default function GameProvider(props: any) {
   const [players, setPlayers] = useState<PlayerInterface[]>([]);
@@ -28,10 +24,7 @@ export default function GameProvider(props: any) {
   const [currentPlayer, setCurrentPlayer] = useState<PlayerInterface | null>(
     null
   );
-  const [hands, setHands] = useState<CardType[][]>(() => {
-    const shuffled = deal();
-    return shuffled.map((hand) => sortCards(hand));
-  });
+  const [hands, setHands] = useState<CardType[][]>(deal());
   const [playedCards, setPlayedCards] = useState<CardType[][]>([]);
   const [startGame, setStartGame] = useState(false);
   const [lastWinner, setLastWinner] = useState<number | null>(null);
@@ -47,9 +40,9 @@ export default function GameProvider(props: any) {
 
   // useEffect for whenever the current player is a computer
   useEffect(() => {
-    console.log(hands);
+    console.log(highestCard);
     const currentPlayerIdx = players.indexOf(currentPlayer!);
-    if (currentPlayer?.getName().includes('Computer')) {
+    if (currentPlayer instanceof Computer) {
       const { action, type, played, newHand }: ActionPayload =
         currentPlayer.getAction(
           combinationType,
@@ -89,8 +82,12 @@ export default function GameProvider(props: any) {
       // update state from payload
       if ('combinationType' in payload) {
         setCombinationType(payload.combinationType!);
+      }
+
+      if ('highestCard' in payload) {
         setHighestCard(payload.highestCard!);
       }
+
       setCurrentPlayer(payload.currentPlayer!);
       setPlayerRotation(payload.playerRotation);
       setTurnNumber(turnNumber + 1);
@@ -100,10 +97,10 @@ export default function GameProvider(props: any) {
   const initGame = () => {
     const p = [...players];
     for (let i = players.length; i < 4; i++) {
-      p.push(new Player(`Computer ${i}`, true, PlayerType.COMPUTER));
+      p.push(new Computer(`Computer ${i}`));
     }
     const startingPlayerIdx =
-      lastWinner !== null ? lastWinner : findLowestThree(hands);
+      lastWinner !== null ? lastWinner : findStartingPlayer(hands);
     const playerRotation = createPlayerRotation(startingPlayerIdx!, p);
     setPlayers(p);
     setCurrentPlayer(p[startingPlayerIdx!]);
