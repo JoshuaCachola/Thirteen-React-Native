@@ -7,8 +7,9 @@ import uuid from 'react-native-uuid';
 import { getHighestCard } from '../helper/combinationHelpers';
 import { Computer } from '../classes/Computer';
 import { reaction } from 'mobx';
+import { observer } from 'mobx-react-lite';
 
-export default function GameProvider(props: any) {
+export default observer(function GameProvider(props: any) {
   const { game } = useContext(GameContext);
   const [startGame, setStartGame] = useState(false);
   const [turnNumber, setTurnNumber] = useState(0);
@@ -18,10 +19,8 @@ export default function GameProvider(props: any) {
   useEffect(() => {
     if (startGame) {
       game.initGame();
-      console.log(game);
-      console.log(game.players);
     }
-  }, [startGame, game.players.length]);
+  }, [startGame]);
 
   // useEffect for whenever the current player is a computer
   // useEffect(() => {
@@ -93,8 +92,9 @@ export default function GameProvider(props: any) {
 
   // reaction(
   //   () => game.arePlayersReady(),
-  //   (ready) => {
-  //     setStartGame(ready);
+  //   (ready,) => {
+  //     console.log(ready);
+  //     setStartGame(true);
   //     if (ready) game.initGame();
   //   }
   // );
@@ -114,4 +114,4 @@ export default function GameProvider(props: any) {
       {props.children}
     </GameContext.Provider>
   );
-}
+});

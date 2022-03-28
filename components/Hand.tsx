@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CardType } from '../classes/Card';
 import InteractiveView from './InteractiveView';
@@ -13,20 +13,23 @@ import { HandContext } from '../context/HandContext';
 import Button from './Button';
 import { ActionType } from '../classes/GameState';
 import { PlayerInterface } from '../classes/Player';
+import { observer } from 'mobx-react-lite';
+import { action } from 'mobx';
 
 interface props {
   player: PlayerInterface;
 }
 
 // This component displays holding a hand of cards
-export default function Hand({ player }: props) {
-  // const { turnNumber, setTurnNumber } = useContext(GameContext);
-
-  const [hand, setHand] = useState(player.hand);
+export default observer(function Hand({ player }: props) {
+  const [hand, setHand] = useState<CardType[]>([]);
   const [isValid, setIsValid] = useState(false);
-  const [positions, setPositions] = useState<Position[]>(() => {
-    return calculatePositions(hand.length);
-  });
+  const [positions, setPositions] = useState<Position[]>([]);
+
+  useEffect(() => {
+    setHand(player.hand);
+    setPositions(calculatePositions(player.hand.length));
+  }, [player.hand]);
 
   // recalculates position of cards whenever a player plays a sequence
   // allows hand to be centered
@@ -84,10 +87,10 @@ export default function Hand({ player }: props) {
     //   setTurnNumber(turnNumber + 1);
   };
 
-  const handleSortCards = () => {
-    const sorted = sortCards(hand!);
-    setHand([...sorted]);
-  };
+  // const handleSortCards = () => {
+  //   const sorted = sortCards(hand!);
+  //   setHand([...sorted]);
+  // };
 
   const handlePass = () => {
     //   const payload = updateRotation(ActionType.PASS, playerRotation, players);
@@ -125,12 +128,12 @@ export default function Hand({ player }: props) {
             );
           })}
         </View>
-        <Button title='Sort Cards' onPress={handleSortCards} />
+        <Button title='Sort Cards' onPress={() => player.sort()} />
         <Button title='Pass' onPress={handlePass} />
       </View>
     </HandContext.Provider>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

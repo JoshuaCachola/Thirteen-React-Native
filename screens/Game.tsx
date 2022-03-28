@@ -36,11 +36,9 @@ export default function Game() {
         </View>
 
         {/* Bottom */}
-        {startGame && (
-          <View style={styles.bottomContainer}>
-            <Hand player={player} />
-          </View>
-        )}
+        <View style={styles.bottomContainer}>
+          <Hand player={player} />
+        </View>
       </View>
       {!startGame && <ReadyModal player={player} />}
     </GameProvider>
@@ -56,7 +54,6 @@ const styles = StyleSheet.create({
   playedCardsArea: {
     borderWidth: 1,
     borderStyle: 'dashed',
-    // borderColor: 'red',
     backgroundColor: 'blue',
     position: 'absolute',
     width: '60%',

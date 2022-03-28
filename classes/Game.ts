@@ -3,8 +3,8 @@ import { PlayerInterface } from './Player';
 
 export interface GameInterface {
   addPlayer: (p: PlayerInterface) => void;
-  arePlayersReady: () => boolean;
   players: PlayerInterface[];
+  arePlayersReady: () => boolean;
 }
 
 export class Game implements GameInterface {
@@ -20,9 +20,11 @@ export class Game implements GameInterface {
     this._gameNumber = 1;
     this._players = [];
     this._lastWinner = null;
+
     makeObservable(this, {
       players: computed,
       addPlayer: action,
+      arePlayersReady: action,
     });
   }
 
@@ -38,9 +40,12 @@ export class Game implements GameInterface {
     this._players.push(player);
   }
 
-  public arePlayersReady = () => {
+  public arePlayersReady() {
     let ready = true;
-    this._players.forEach((player) => (ready = ready && player.ready));
+    this._players.forEach((player) => {
+      ready = ready && player.ready;
+    });
+    console.log(ready);
     return ready;
-  };
+  }
 }

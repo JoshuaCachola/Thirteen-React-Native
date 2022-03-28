@@ -1,4 +1,5 @@
-import { computed, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
+import { sortCards } from '../helper/combinationHelpers';
 import { CardType } from './Card';
 import { ActionType, Combination } from './GameState';
 
@@ -14,6 +15,7 @@ export interface PlayerInterface {
   ready: boolean;
   hand: CardType[];
   play: () => void;
+  sort: () => void;
 }
 
 export class Player implements PlayerInterface {
@@ -30,6 +32,7 @@ export class Player implements PlayerInterface {
       _ready: observable,
       hand: computed,
       ready: computed,
+      sort: action,
     });
   }
 
@@ -47,6 +50,10 @@ export class Player implements PlayerInterface {
 
   public set hand(hand: CardType[]) {
     this._hand = hand;
+  }
+
+  public sort() {
+    this._hand = sortCards(this._hand);
   }
 
   public play() {}

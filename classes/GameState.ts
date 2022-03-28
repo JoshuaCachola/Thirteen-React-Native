@@ -2,7 +2,7 @@ import { Game } from './Game';
 import { CardType } from './Card';
 import { Deck } from './Deck';
 import { PlayerInterface } from './Player';
-import { computed, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import { Computer } from './Computer';
 
 export type Combination =
@@ -173,20 +173,21 @@ export class GameState extends Game implements GameStateInterface {
       this._lastWinner !== null ? this._lastWinner : this.findStartingPlayer();
     this.playerRotation = this.createPlayerRotation(startingPlayerIdx);
     this.currentPlayer = this.playerRotation[0];
+    this.deal();
   };
+
+  // deals hands from a newly created and shuffled deck
+  private deal() {
+    const hands: CardType[][] = [[], [], [], []];
+    const { deck } = new Deck();
+
+    deck.forEach((card: CardType, idx) => {
+      hands[idx % 4].push(card);
+    });
+
+    this._players.forEach((player, idx) => (player.hand = hands[idx]));
+  }
 }
-
-// // deals hands from a newly created and shuffled deck
-// export const deal = () => {
-//   const hands: CardType[][] = [[], [], [], []];
-//   const { deck } = new Deck();
-
-//   deck.forEach((card: CardType, idx) => {
-//     hands[idx % 4].push(card);
-//   });
-
-//   return hands;
-// };
 
 // Starting player is the player with the lowest card
 // This is when there is no previous winner and is the first game player

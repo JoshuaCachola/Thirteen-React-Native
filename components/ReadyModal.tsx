@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
 import { Button, Modal, StyleSheet, Text, View } from 'react-native';
 import { PlayerInterface } from '../classes/Player';
@@ -7,12 +8,12 @@ interface props {
   player: PlayerInterface;
 }
 
-export default function ReadyModal({ player }: props) {
+export default observer(function ReadyModal({ player }: props) {
   const { startGame, game, setStartGame } = useContext(GameContext);
   const onPress = () => {
-    player.ready = true;
     game.addPlayer(player);
-    // setStartGame(true);
+    player.ready = true;
+    setStartGame(true);
   };
 
   return (
@@ -23,7 +24,7 @@ export default function ReadyModal({ player }: props) {
       </View>
     </Modal>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
