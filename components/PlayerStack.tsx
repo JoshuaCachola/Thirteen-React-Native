@@ -3,27 +3,28 @@ import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import { GameContext } from '../context/GameContext';
 import FaIcon from '../helper/fontAwsomeHelper';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { PlayerInterface } from '../classes/Player';
 
 export default function PlayerStack() {
-  const { playerRotation } = useContext(GameContext);
+  // const { playerRotation } = useContext(GameContext);
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.text}>Players Stack</Text>
       </View>
-      {playerRotation.length !== 0 &&
-        playerRotation.map((player) => {
+      {/* {playerRotation.length !== 0 &&
+        playerRotation.map((player: PlayerInterface) => {
           return (
-            <View style={styles.userRow} key={player.getName()}>
+            <View style={styles.userRow} key={player._name}>
               <View style={styles.iconContainer}>
                 <FaIcon size={20} icon={faUser} color='black' />
               </View>
               <View style={styles.userText}>
-                <Text style={styles.text}>{player.getName()}</Text>
+                <Text style={styles.text}>{player._name}</Text>
               </View>
             </View>
           );
-        })}
+        })} */}
     </View>
   );
 }

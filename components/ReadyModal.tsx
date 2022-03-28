@@ -5,19 +5,16 @@ import { GameContext } from '../context/GameContext';
 
 interface props {
   player: PlayerInterface;
-  setPlayerIdx: (i: number) => void;
 }
 
-export default function ReadyModal({ player, setPlayerIdx }: props) {
-  const { startGame, setStartGame, setPlayers, players } =
-    useContext(GameContext);
-
+export default function ReadyModal({ player }: props) {
+  const { startGame, game, setStartGame } = useContext(GameContext);
   const onPress = () => {
-    const playerIdx = players.length;
-    setPlayerIdx(playerIdx);
-    setPlayers([...players, player]);
-    setStartGame(true);
+    player.ready = true;
+    game.addPlayer(player);
+    // setStartGame(true);
   };
+
   return (
     <Modal animationType='slide' transparent={true} visible={!startGame}>
       <View style={styles.container}>

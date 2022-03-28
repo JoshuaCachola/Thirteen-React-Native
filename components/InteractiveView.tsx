@@ -16,7 +16,6 @@ interface InteractiveProps {
   cardPosition: Position;
   handlePlayCards: () => void;
   isValid: boolean;
-  playerIdx: number;
 }
 
 export default function InteractiveView({

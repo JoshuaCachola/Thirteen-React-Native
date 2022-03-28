@@ -12,7 +12,7 @@ import { GameContext } from '../context/GameContext';
 
 export default function Game() {
   const player = new Player('Joshua', false);
-  const [playerIdx, setPlayerIdx] = useState<number>();
+
   const { startGame } = useContext(GameContext);
 
   return (
@@ -36,13 +36,13 @@ export default function Game() {
         </View>
 
         {/* Bottom */}
-        {playerIdx !== undefined && (
+        {startGame && (
           <View style={styles.bottomContainer}>
-            <Hand playerIdx={playerIdx} />
+            <Hand player={player} />
           </View>
         )}
       </View>
-      {!startGame && <ReadyModal player={player} setPlayerIdx={setPlayerIdx} />}
+      {!startGame && <ReadyModal player={player} />}
     </GameProvider>
   );
 }

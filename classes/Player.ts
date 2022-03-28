@@ -1,10 +1,6 @@
+import { computed, makeObservable, observable } from 'mobx';
 import { CardType } from './Card';
 import { ActionType, Combination } from './GameState';
-
-export interface PlayerInterface {
-  setReady: (r: boolean) => void;
-  getName: () => string;
-}
 
 export type ActionPayload = {
   action: ActionType;
@@ -13,26 +9,45 @@ export type ActionPayload = {
   newHand: CardType[];
 };
 
-export class Player implements PlayerInterface {
-  name: string;
-  hand: CardType[];
+export interface PlayerInterface {
+  readonly _name: string;
   ready: boolean;
+  hand: CardType[];
+  play: () => void;
+}
+
+export class Player implements PlayerInterface {
+  readonly _name: string;
+  _hand: CardType[];
+  _ready: boolean;
 
   constructor(name: string, ready: boolean) {
-    this.name = name;
-    this.hand = [];
-    this.ready = ready;
+    this._name = name;
+    this._hand = [];
+    this._ready = ready;
+    makeObservable(this, {
+      _hand: observable,
+      _ready: observable,
+      hand: computed,
+      ready: computed,
+    });
   }
 
-  public setReady() {
-    this.ready = !this.ready;
+  public set ready(ready: boolean) {
+    this._ready = ready;
   }
 
-  public isReady() {
-    return this.ready;
+  public get ready() {
+    return this._ready;
   }
 
-  public getName() {
-    return this.name;
+  public get hand() {
+    return this._hand;
   }
+
+  public set hand(hand: CardType[]) {
+    this._hand = hand;
+  }
+
+  public play() {}
 }
