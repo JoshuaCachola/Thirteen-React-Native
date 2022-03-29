@@ -22,6 +22,7 @@ export interface GameStateInterface {
   updateCurrentPlayer: (p: PlayerInterface) => void;
   updateCombinationType: (t: Combination) => void;
   updatePlayerRotation: (r: PlayerInterface[]) => void;
+  updateLength: (l: number) => void;
 }
 
 // GameState class
@@ -59,6 +60,7 @@ export class GameState extends Game implements GameStateInterface {
       updateCurrentPlayer: action,
       updateCombinationType: action,
       updatePlayerRotation: action,
+      updateLength: action,
     });
   }
 
@@ -106,22 +108,22 @@ export class GameState extends Game implements GameStateInterface {
   //                only 1 player left resets state
   // action: play - shifts player out and pushes them back in
   public updateRotation = (type: ActionType) => {
-    const shifted = this._playerRotation.shift();
+    const shifted = this.playerRotation.shift();
 
     if (type === ActionType.PLAY) {
-      this._playerRotation.push(shifted!);
+      this.playerRotation.push(shifted!);
     }
 
-    if (type === ActionType.PASS && this._playerRotation.length === 1) {
+    if (type === ActionType.PASS && this.playerRotation.length === 1) {
       const newRotation = this.createPlayerRotation(
-        this._players.indexOf(this._playerRotation[0])
+        this.players.indexOf(this.playerRotation[0])
       );
-      this._playerRotation = newRotation;
+      this.playerRotation = newRotation;
       this.updateCombinationType(null);
-      this.updateCurrentPlayer(this._playerRotation[0]);
+      this.updateCurrentPlayer(this.playerRotation[0]);
       this.updateHighestCard([]);
     } else {
-      this.updateCurrentPlayer(this._playerRotation[0]);
+      this.updateCurrentPlayer(this.playerRotation[0]);
     }
   };
 
@@ -143,6 +145,10 @@ export class GameState extends Game implements GameStateInterface {
 
   public updateCurrentPlayer(currentPlayer: PlayerInterface) {
     this.currentPlayer = currentPlayer;
+  }
+
+  public updateLength(length: number) {
+    this.length = length;
   }
 
   // creates the rotation of players
@@ -168,8 +174,8 @@ export class GameState extends Game implements GameStateInterface {
       suit: Number.MAX_VALUE,
       playerIdx: 0,
     };
-    for (let p = 0; p < this._players.length; p++) {
-      const hand = this._players[p].hand;
+    for (let p = 0; p < this.players.length; p++) {
+      const hand = this.players[p].playerHand.hand;
       for (let c = 0; c < hand.length; c++) {
         const card = hand[c];
         if (card.value === 3 && card.suit === 0) {
@@ -198,23 +204,19 @@ export class GameState extends Game implements GameStateInterface {
       this._lastWinner !== null ? this._lastWinner : this.findStartingPlayer();
     console.log(startingPlayerIdx);
     this.updatePlayerRotation(this.createPlayerRotation(startingPlayerIdx));
-    this.updateCurrentPlayer(this._playerRotation[0]);
+    this.updateCurrentPlayer(this.playerRotation[0]);
   };
 
   // deals hands from a newly created and shuffled deck
   private deal() {
-    const hands: CardType[][] = [[], [], [], []];
-    const { deck } = new Deck();
-
-    deck.forEach((card: CardType, idx) => {
-      hands[idx % 4].push(card);
-    });
+    const deck = new Deck();
+    const hands = deck.deal();
 
     this._players.forEach((player, idx) => {
       if (!(player instanceof Computer)) {
-        player.hand = hands[idx];
+        player.playerHand.hand = hands[idx];
       } else {
-        player.hand = sortCards(hands[idx]);
+        player.playerHand.hand = sortCards(hands[idx]);
       }
     });
   }

@@ -1,10 +1,14 @@
 import { useContext, useEffect, useState } from 'react';
 import { GameContext } from '../context/GameContext';
-import { getHighestCard } from '../helper/combinationHelpers';
 import { Computer } from '../classes/Computer';
 import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { ActionPayload, ActionType } from '../constants/Actions';
+import {
+  getRandBottom,
+  getRandLeft,
+  getRandRotation,
+} from '../helper/calculatePositions';
 
 export default observer(function GameProvider(props: any) {
   const { game, playerActions } = useContext(GameContext);
@@ -19,6 +23,12 @@ export default observer(function GameProvider(props: any) {
     }
   }, [startGame]);
 
+  useEffect(() => {
+    if (isGameWon) {
+      setStartGame(false);
+    }
+  }, [isGameWon]);
+
   // useEffect for whenever the current player is a computer
   useEffect(() => {
     if (game.currentPlayer instanceof Computer) {
@@ -26,7 +36,7 @@ export default observer(function GameProvider(props: any) {
         game.currentPlayer.getAction(
           game.combinationType,
           game.highestCard,
-          game.currentPlayer.hand,
+          game.currentPlayer.playerHand.hand,
           game.length,
           turnNumber
         );
@@ -37,29 +47,37 @@ export default observer(function GameProvider(props: any) {
         player: game.currentPlayer,
         length: played.length,
         cards: played,
+        positions: {
+          left: getRandLeft(),
+          bottom: getRandBottom(),
+          rotate: getRandRotation(),
+        },
       };
 
       if (action === ActionType.PLAY) {
         // update combinationType
-        game.combinationType = type;
+        game.updateCombinationType(type);
 
         // update length
-        game.length = played.length;
+        game.updateLength(played.length);
 
         // update hands
-        game.currentPlayer.hand = newHand;
+        game.currentPlayer.playerHand.updateHand(newHand);
 
         // update highestCard
         game.updateHighestCard(played);
       }
-      // unshift action
-      playerActions.unshift(payload);
+      // push action
 
-      // update rotation
-      game.updateRotation(action);
+      setTimeout(() => {
+        playerActions.push(payload);
 
-      // update turn number
-      setTurnNumber(turnNumber + 1);
+        // update rotation
+        game.updateRotation(action);
+
+        // update turn number
+        setTurnNumber(turnNumber + 1);
+      }, 1000);
     }
   }, [game.currentPlayer, game.playerRotation]);
 

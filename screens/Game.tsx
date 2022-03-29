@@ -13,7 +13,7 @@ import { GameContext } from '../context/GameContext';
 export default function Game() {
   const player = new Player('Joshua', false);
 
-  const { startGame } = useContext(GameContext);
+  const { startGame, isGameWon } = useContext(GameContext);
 
   return (
     <GameProvider>
@@ -40,6 +40,7 @@ export default function Game() {
           <Hand player={player} />
         </View>
       </View>
+      {/* {isGameWon && } */}
       {!startGame && <ReadyModal player={player} />}
     </GameProvider>
   );
@@ -70,13 +71,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     transform: [
       {
-        translateX: Dimensions.get('window').width / 2,
+        translateX: Dimensions.get('screen').width / 2,
       },
       {
         translateY: -Dimensions.get('window').height / 8,
       },
     ],
-    zIndex: 10,
+    zIndex: 100,
   },
   topContainer: {
     // flex: 2,

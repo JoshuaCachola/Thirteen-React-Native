@@ -5,6 +5,7 @@ export interface GameInterface {
   addPlayer: (p: PlayerInterface) => void;
   players: PlayerInterface[];
   arePlayersReady: () => boolean;
+  lastWinner: number | null;
 }
 
 export class Game implements GameInterface {
@@ -26,6 +27,14 @@ export class Game implements GameInterface {
       addPlayer: action,
       arePlayersReady: action,
     });
+  }
+
+  public get lastWinner() {
+    return this._lastWinner;
+  }
+
+  public set lastWinner(idx: number | null) {
+    this._lastWinner = idx;
   }
 
   public get players() {

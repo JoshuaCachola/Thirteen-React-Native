@@ -10,31 +10,23 @@ import { cardValues } from '../helper/combinationHelpers';
 interface PlayingCardProp {
   value: number;
   suit: CardSuits;
-  selected?: boolean;
   isValid?: boolean;
+  handleOnPress?: () => void;
 }
 
 // Card Component
-export default function PlayingCard({ value, suit, isValid }: PlayingCardProp) {
+export default function PlayingCard({
+  value,
+  suit,
+  isValid,
+  handleOnPress,
+}: PlayingCardProp) {
   // Handles state of pressing card
   const [isCardSelected, setIsCardSelected] = useState(false);
-
-  const { hand, setHand } = useContext(HandContext);
 
   // hooks to get card suit and card color
   const cardSuit = useSuit(suit);
   const color = useColor(suit);
-
-  const handleOnPress = () => {
-    const newHand: CardType[] = hand!.map((card) => {
-      if (card.value === value && card.suit === suit) {
-        card.selected = !card.selected;
-      }
-      return card;
-    });
-
-    setHand(newHand);
-  };
 
   return (
     <TouchableHighlight
@@ -45,8 +37,10 @@ export default function PlayingCard({ value, suit, isValid }: PlayingCardProp) {
         isCardSelected && !isValid && styles.invalidSelect,
       ]}
       onPress={() => {
-        handleOnPress();
-        setIsCardSelected(!isCardSelected);
+        if (handleOnPress) {
+          handleOnPress();
+          setIsCardSelected(!isCardSelected);
+        }
       }}
     >
       <View style={styles.front}>

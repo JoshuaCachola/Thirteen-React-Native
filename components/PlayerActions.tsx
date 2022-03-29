@@ -1,8 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { CardType } from '../classes/Card';
-import { PlayerActions, PlayerActionsType } from '../classes/PlayerActions';
 import { ActionType } from '../constants/Actions';
 import { GameContext } from '../context/GameContext';
 import PlayingCard from './PlayingCard';
@@ -13,8 +11,8 @@ export default observer(function PlayerActions() {
   return (
     <View style={styles.container}>
       <View style={styles.cards}>
-        {game._PlayerActions &&
-          game._PlayerActions.deque.map((played) => {
+        {game._playerActions &&
+          game._playerActions.deque.map((played) => {
             if (played.action === ActionType.PLAY) {
               played.cards!.map((card) => {
                 return (

@@ -74,8 +74,8 @@ export class Computer extends Player {
       newHand: hand,
     };
 
-    const straights = getStraights(hand, length, highestCard);
-    console.log(straights);
+    // const straights = getStraights(hand, length, highestCard);
+    // console.log(straights);
     return payload;
   }
 

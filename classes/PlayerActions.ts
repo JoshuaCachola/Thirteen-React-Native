@@ -9,12 +9,13 @@ export type PlayerActionsType = {
   player: PlayerInterface;
   type: Combination;
   length?: number;
+  positions?: { bottom: number; left: number; rotate: string };
   action: ActionType;
 };
 
 export interface PlayerActionsInterface {
   deque: PlayerActionsType[];
-  unshift: (d: PlayerActionsType) => void;
+  push: (d: PlayerActionsType) => void;
 }
 
 export class PlayerActions {
@@ -25,7 +26,7 @@ export class PlayerActions {
     makeObservable(this, {
       _deque: observable,
       deque: computed,
-      unshift: action,
+      push: action,
     });
   }
 
@@ -37,7 +38,7 @@ export class PlayerActions {
     this._deque = deque;
   }
 
-  public unshift(played: PlayerActionsType) {
-    this._deque.unshift(played);
+  public push(played: PlayerActionsType) {
+    this._deque.push(played);
   }
 }

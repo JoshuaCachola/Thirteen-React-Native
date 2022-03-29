@@ -2,7 +2,13 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CardType } from '../classes/Card';
 import InteractiveView from './InteractiveView';
-import { calculatePositions, Position } from '../helper/calculatePositions';
+import {
+  calculatePositions,
+  getRandBottom,
+  getRandLeft,
+  getRandRotation,
+  Position,
+} from '../helper/calculatePositions';
 import {
   getHighestCard,
   isValidCombination,
@@ -27,9 +33,11 @@ export default observer(function Hand({ player }: props) {
 
   // useEffect to update hand useState and positions state
   useEffect(() => {
-    setHand(player.hand);
-    setPositions(calculatePositions(player.hand.length));
-  }, [player.hand]);
+    if (player.playerHand.hand) {
+      setHand(player.playerHand.hand);
+      setPositions(calculatePositions(player.playerHand.hand.length));
+    }
+  }, [player.playerHand.hand]);
 
   // recalculates position of cards whenever a player plays a sequence
   // allows hand to be centered
@@ -41,7 +49,7 @@ export default observer(function Hand({ player }: props) {
   // filter selected cards from hand and check if
   // it is a valid combination
   useMemo(() => {
-    const selected = hand.filter((card) => card.selected);
+    const selected = player.playerHand.hand.filter((card) => card.selected);
     const [isValid, _] = isValidCombination(
       selected,
       game.combinationType,
@@ -73,18 +81,23 @@ export default observer(function Hand({ player }: props) {
     );
 
     if (isValid) {
-      game.combinationType = type;
-      game.length = acceptedSequence.length;
+      game.updateCombinationType(type);
+      game.updateLength(acceptedSequence.length);
       game.updateHighestCard(acceptedSequence);
-      player.hand = newHand;
+      player.playerHand.updateHand(newHand);
 
-      // unshift to played Cards
-      playerActions.unshift({
+      // push to played Cards
+      playerActions.push({
         action: ActionType.PLAY,
         player,
         type,
         length: acceptedSequence.length,
         cards: acceptedSequence,
+        positions: {
+          left: getRandLeft(),
+          bottom: getRandBottom(),
+          rotate: getRandRotation(),
+        },
       });
 
       game.updateRotation(ActionType.PLAY);
@@ -96,33 +109,35 @@ export default observer(function Hand({ player }: props) {
   };
 
   return (
-    <HandContext.Provider value={{ hand, setHand }}>
-      <View style={styles.container}>
-        {/* Hand */}
-        <View
-          style={[
-            styles.hand,
-            {
-              transform: [{ translateX: -20 * hand.length }, { translateY: 0 }],
-            },
-          ]}
-        >
-          {hand.map((card: CardType, idx: number) => {
-            return (
-              <InteractiveView
-                key={`hand-${card.value}-${card.suit}`}
-                card={card}
-                cardPosition={positions[idx]}
-                handlePlayCards={handlePlayCards}
-                isValid={isValid}
-              />
-            );
-          })}
-        </View>
-        <Button title='Sort Cards' onPress={() => player.sort()} />
-        <Button title='Pass' onPress={handlePass} />
+    <View style={styles.container}>
+      {/* Hand */}
+      <View
+        style={[
+          styles.hand,
+          {
+            transform: [{ translateX: -20 * hand.length }, { translateY: 0 }],
+          },
+        ]}
+      >
+        {hand.map((card: CardType, idx: number) => {
+          return (
+            <InteractiveView
+              key={`hand-${card.value}-${card.suit}`}
+              cardPosition={positions[idx]}
+              value={card.value}
+              suit={card.suit}
+              selected={card.selected}
+              hand={hand}
+              setHand={setHand}
+              handlePlayCards={handlePlayCards}
+              isValid={isValid}
+            />
+          );
+        })}
       </View>
-    </HandContext.Provider>
+      <Button title='Sort Cards' onPress={() => player.playerHand.sort(hand)} />
+      <Button title='Pass' onPress={handlePass} />
+    </View>
   );
 });
 

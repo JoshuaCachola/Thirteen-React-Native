@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { Position } from '../helper/calculatePositions';
 import { CardType } from '../classes/Card';
 import PlayingCard from './PlayingCard';
@@ -9,19 +9,28 @@ import {
   State,
   HandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
+import { PlayerInterface } from '../classes/Player';
 
 interface InteractiveProps {
-  card: CardType;
+  value: number;
+  suit: number;
+  selected: boolean;
   cardPosition: Position;
+  hand: CardType[];
   handlePlayCards: () => void;
   isValid: boolean;
+  setHand: (h: CardType[]) => void;
 }
 
 export default function InteractiveView({
-  card,
+  value,
+  suit,
+  selected,
   cardPosition,
   handlePlayCards,
+  setHand,
   isValid,
+  hand,
 }: InteractiveProps) {
   const handleStateChange = ({ nativeEvent }: HandlerStateChangeEvent) => {
     if (nativeEvent.oldState === State.ACTIVE) {
@@ -29,19 +38,42 @@ export default function InteractiveView({
     }
   };
 
+  const rollout = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: 0 },
+        { translateY: 100 },
+        { rotate: '(0, 0, 1, 120)' },
+      ],
+      opacity: 0,
+    };
+  });
+
+  const handleOnPress = () => {
+    if (!hand) return;
+    const newHand: CardType[] = hand.map((card) => {
+      if (card.value === value && card.suit === suit) {
+        card.handleSelected();
+      }
+      return card;
+    });
+
+    setHand(newHand);
+  };
+
   return (
     <FlingGestureHandler
       direction={Directions.UP}
       numberOfPointers={1}
-      enabled={card.selected && isValid}
+      enabled={selected && isValid}
       onHandlerStateChange={handleStateChange}
     >
       <Animated.View style={[styles.hand, cardPosition]}>
         <PlayingCard
-          value={card.value}
-          suit={card.suit}
-          selected={card.selected}
+          value={value}
+          suit={suit}
           isValid={isValid}
+          handleOnPress={handleOnPress}
         />
       </Animated.View>
     </FlingGestureHandler>

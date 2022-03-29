@@ -26,3 +26,15 @@ export function calculatePositions(handLength: number): Position[] {
   }
   return positions;
 }
+
+export const getRandLeft = () => {
+  return Math.random() * (80 - 20) + 20;
+};
+
+export const getRandBottom = () => {
+  return Math.floor(Math.random() * 80);
+};
+
+export const getRandRotation = () => {
+  return Math.floor(Math.random() * 75) + 'deg';
+};

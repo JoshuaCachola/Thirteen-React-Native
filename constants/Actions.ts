@@ -12,6 +12,7 @@ export type ActionPayload = {
   type: Combination;
   played: CardType[];
   newHand: CardType[];
+  positions?: { bottom: number; left: number; rotate: string };
 };
 
 export type Action = {
