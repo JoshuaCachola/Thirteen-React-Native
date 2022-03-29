@@ -75,7 +75,7 @@ export default observer(function Hand({ player }: props) {
     if (isValid) {
       game.combinationType = type;
       game.length = acceptedSequence.length;
-      game.highestCard = getHighestCard(acceptedSequence);
+      game.updateHighestCard(acceptedSequence);
       player.hand = newHand;
 
       // unshift to played Cards

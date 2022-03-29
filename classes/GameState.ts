@@ -7,7 +7,7 @@ import { Computer } from './Computer';
 import { Combination } from '../constants/CombinationConstants';
 import { PlayerActions, PlayerActionsInterface } from './PlayerActions';
 import { ActionType } from '../constants/Actions';
-import { sortCards } from '../helper/combinationHelpers';
+import { getHighestCard, sortCards } from '../helper/combinationHelpers';
 
 export interface GameStateInterface {
   playerRotation: PlayerInterface[];
@@ -18,6 +18,10 @@ export interface GameStateInterface {
   _playerActions: PlayerActionsInterface;
   initGame: () => void;
   updateRotation: (t: ActionType) => void;
+  updateHighestCard: (c: CardType[]) => void;
+  updateCurrentPlayer: (p: PlayerInterface) => void;
+  updateCombinationType: (t: Combination) => void;
+  updatePlayerRotation: (r: PlayerInterface[]) => void;
 }
 
 // GameState class
@@ -51,6 +55,10 @@ export class GameState extends Game implements GameStateInterface {
       length: computed,
       currentPlayer: computed,
       updateRotation: action,
+      updateHighestCard: action,
+      updateCurrentPlayer: action,
+      updateCombinationType: action,
+      updatePlayerRotation: action,
     });
   }
 
@@ -109,13 +117,33 @@ export class GameState extends Game implements GameStateInterface {
         this._players.indexOf(this._playerRotation[0])
       );
       this._playerRotation = newRotation;
-      this._combinationType = null;
-      this._currentPlayer = this._playerRotation[0];
-      this._highestCard = null;
+      this.updateCombinationType(null);
+      this.updateCurrentPlayer(this._playerRotation[0]);
+      this.updateHighestCard([]);
     } else {
-      this._currentPlayer = this._playerRotation[0];
+      this.updateCurrentPlayer(this._playerRotation[0]);
     }
   };
+
+  public updatePlayerRotation(playerRotation: PlayerInterface[]) {
+    this.playerRotation = playerRotation;
+  }
+
+  public updateCombinationType(type: Combination) {
+    this.combinationType = type;
+  }
+
+  public updateHighestCard(cards: CardType[]) {
+    if (cards.length === 0) {
+      this.highestCard = null;
+    } else {
+      this.highestCard = getHighestCard(cards);
+    }
+  }
+
+  public updateCurrentPlayer(currentPlayer: PlayerInterface) {
+    this.currentPlayer = currentPlayer;
+  }
 
   // creates the rotation of players
   private createPlayerRotation = (startingPlayerIdx: number) => {
@@ -169,8 +197,8 @@ export class GameState extends Game implements GameStateInterface {
     const startingPlayerIdx =
       this._lastWinner !== null ? this._lastWinner : this.findStartingPlayer();
     console.log(startingPlayerIdx);
-    this._playerRotation = this.createPlayerRotation(startingPlayerIdx);
-    this._currentPlayer = this._playerRotation[0];
+    this.updatePlayerRotation(this.createPlayerRotation(startingPlayerIdx));
+    this.updateCurrentPlayer(this._playerRotation[0]);
   };
 
   // deals hands from a newly created and shuffled deck

@@ -3,19 +3,15 @@ import {
   Combination,
   combinationConstants,
 } from '../constants/CombinationConstants';
-import { isValidCombination } from '../helper/combinationHelpers';
+import {
+  CardValues,
+  cardValues,
+  getMultiples,
+  getStraights,
+  isValidCombination,
+} from '../helper/combinationHelpers';
 import { CardType } from './Card';
 import { Player } from './Player';
-
-interface ComputerInterface {
-  getAction: (
-    c: Combination,
-    hi: CardType | null,
-    h: CardType[],
-    l: number,
-    t: number
-  ) => ActionPayload;
-}
 
 export class Computer extends Player {
   constructor(name: string) {
@@ -44,7 +40,17 @@ export class Computer extends Player {
       // atm computer will always play single when they can play anything
       case null:
       case combinationConstants.SINGLE:
-        return this.playSingle(hand, highestCard, combinationType);
+        return this.canPlaySingle(hand, highestCard, combinationType);
+      case combinationConstants.DOUBLE:
+      case combinationConstants.TRIPLE:
+        return this.canPlayMultiple(hand, highestCard!, combinationType);
+      case combinationConstants.STRAIGHT:
+        return this.canPlayStraight(
+          hand,
+          highestCard!,
+          combinationType,
+          length
+        );
       default:
         return {
           action: ActionType.PASS,
@@ -53,6 +59,73 @@ export class Computer extends Player {
           newHand: hand,
         };
     }
+  }
+
+  private canPlayStraight(
+    hand: CardType[],
+    highestCard: CardType,
+    combinationType: Combination,
+    length: number
+  ) {
+    let payload: ActionPayload = {
+      action: ActionType.PASS,
+      type: combinationType,
+      played: [],
+      newHand: hand,
+    };
+
+    const straights = getStraights(hand, length, highestCard);
+    console.log(straights);
+    return payload;
+  }
+
+  private canPlayMultiple(
+    hand: CardType[],
+    highestCard: CardType,
+    combinationType: Combination
+  ) {
+    let payload: ActionPayload = {
+      action: ActionType.PASS,
+      type: combinationType,
+      played: [],
+      newHand: hand,
+    };
+    const doubles = getMultiples(hand, combinationType!);
+    console.log(doubles);
+    for (const [value, indicies] of Object.entries(doubles)) {
+      const parsedValue = cardValues.indexOf(value);
+      if (parsedValue === highestCard.value) {
+        for (let i = 0; i < indicies.length; i++) {
+          return this.playCards(hand, indicies[i], payload);
+        }
+      } else if (parsedValue > highestCard.value) {
+        return this.playCards(hand, indicies[0], payload);
+      }
+    }
+    return payload;
+  }
+
+  private playCards(
+    hand: CardType[],
+    indicies: number[],
+    payload: ActionPayload
+  ) {
+    const played: CardType[] = [];
+    const newHand: CardType[] = [];
+
+    hand.forEach((card, idx) => {
+      if (indicies.includes(idx)) {
+        played.push(card);
+      } else {
+        newHand.push(card);
+      }
+    });
+
+    payload.played = played;
+    payload.newHand = newHand;
+    payload.action = ActionType.PLAY;
+
+    return payload;
   }
 
   private playLowestThree(hand: CardType[]) {
@@ -69,7 +142,7 @@ export class Computer extends Player {
     return [[hand[0]], hand.slice(1)];
   }
 
-  private playSingle(
+  private canPlaySingle(
     hand: CardType[],
     high: CardType | null,
     combinationType: Combination

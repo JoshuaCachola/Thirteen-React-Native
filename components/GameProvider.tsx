@@ -1,9 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { CardType } from '../classes/Card';
-import { GameState } from '../classes/GameState';
 import { GameContext } from '../context/GameContext';
-import { PlayerInterface } from '../classes/Player';
-import uuid from 'react-native-uuid';
 import { getHighestCard } from '../helper/combinationHelpers';
 import { Computer } from '../classes/Computer';
 import { reaction } from 'mobx';
@@ -35,16 +31,15 @@ export default observer(function GameProvider(props: any) {
           turnNumber
         );
 
-      if (action === ActionType.PLAY) {
-        // unshift player actions
-        playerActions.unshift({
-          action: ActionType.PLAY,
-          type,
-          player: game.currentPlayer,
-          length: played.length,
-          cards: played,
-        });
+      const payload = {
+        action: action,
+        type,
+        player: game.currentPlayer,
+        length: played.length,
+        cards: played,
+      };
 
+      if (action === ActionType.PLAY) {
         // update combinationType
         game.combinationType = type;
 
@@ -55,10 +50,15 @@ export default observer(function GameProvider(props: any) {
         game.currentPlayer.hand = newHand;
 
         // update highestCard
-        game.highestCard = getHighestCard(played);
+        game.updateHighestCard(played);
       }
+      // unshift action
+      playerActions.unshift(payload);
+
       // update rotation
       game.updateRotation(action);
+
+      // update turn number
       setTurnNumber(turnNumber + 1);
     }
   }, [game.currentPlayer, game.playerRotation]);

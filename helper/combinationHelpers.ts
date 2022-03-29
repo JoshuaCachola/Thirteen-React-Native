@@ -294,11 +294,12 @@ const areAllSameValue = (cards: CardType[]) => {
   return true;
 };
 
-type cardCombinations = { [key: string]: number[] };
+type cardCombinations = { [key: string]: number[][] };
 
 // creates an array of pairs of cards by index
 // returns the array and length
 export const getMultiples = (cards: CardType[], type: string) => {
+  sortCards(cards);
   const values = Array(16).fill(null);
   const pairs: cardCombinations = {};
 
@@ -345,30 +346,38 @@ const createStraight = (
 ) => {
   const straight = [];
   for (let i = startingValue; i < startingValue + length; i++) {
-    const popped = handMap[i].pop();
+    const value: number = parseInt(cardValues[i]!);
+    const popped = handMap[value].pop();
     straight.push(popped);
   }
   return straight;
 };
 
-export const getStraights = (hand: CardType[], straightLength: number) => {
-  sortCards(hand);
+export const getStraights = (
+  hand: CardType[],
+  straightLength: number,
+  highestCard: CardType
+) => {
   const handMap = createHandMap(hand);
-  const straights = [];
+  const straights: number[] = [];
 
-  let start = 3;
-  let i = 1;
-  while (start + i <= 15) {
-    if (start in handMap && handMap[start].length > 0) {
-      i += 1;
-    } else {
-      start += 1;
-      i = 1;
+  let previousValue;
+  let length = 1;
+  for (const [value, indicies] of Object.entries(handMap)) {
+    const currentValue = cardValues.indexOf(value);
+    if (!previousValue) {
+      previousValue = currentValue;
       continue;
+    } else if (currentValue === previousValue + 1) {
+      length++;
+    } else {
+      length = 1;
     }
-    if (i === straightLength) {
-      straights.push(createStraight(handMap, start, straightLength));
-      i = 1;
+    previousValue = currentValue;
+
+    if (length === straightLength) {
+      straights.push(currentValue);
+      length = 1;
     }
   }
   return straights;
