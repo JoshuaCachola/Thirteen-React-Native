@@ -1,34 +1,40 @@
+import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { CardType } from '../classes/Card';
+import { PlayerActions, PlayerActionsType } from '../classes/PlayerActions';
+import { ActionType } from '../constants/Actions';
 import { GameContext } from '../context/GameContext';
 import PlayingCard from './PlayingCard';
 
-export default function PlayedCardsStack() {
-  const { playedCards } = useContext(GameContext);
+export default observer(function PlayerActions() {
+  const { game } = useContext(GameContext);
 
   return (
     <View style={styles.container}>
       <View style={styles.cards}>
-        {playedCards &&
-          playedCards.map((sequences: CardType[]) => {
-            return sequences.map((card: CardType, idx) => {
+        {game._PlayerActions &&
+          game._PlayerActions.deque.map((played) => {
+            if (played.action === ActionType.PLAY) {
+              played.cards!.map((card) => {
+                return (
+                  <View>
+                    <PlayingCard value={card.value} suit={card.suit} />
+                  </View>
+                );
+              });
+            } else {
               return (
-                <View key={card.value.toString() + card.suit.toString()}>
-                  <PlayingCard
-                    idx={idx}
-                    value={card.value}
-                    suit={card.suit}
-                    selected={card.selected}
-                  />
+                <View>
+                  <Text>{played.action}</Text>
                 </View>
               );
-            });
+            }
           })}
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

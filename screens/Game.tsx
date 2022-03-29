@@ -4,7 +4,7 @@ import Hand from '../components/Hand';
 import { useContext, useState } from 'react';
 import PlayArea from '../components/PlayArea';
 import PlayerStack from '../components/PlayerStack';
-import PlayedCardsStack from '../components/PlayedCardsStack';
+import PlayerActions from '../components/PlayerActions';
 import ReadyModal from '../components/ReadyModal';
 import { Player } from '../classes/Player';
 import GameProvider from '../components/GameProvider';
@@ -25,14 +25,14 @@ export default function Game() {
 
         {/* Top Middle */}
         <View style={styles.topContainer}>
-          <View style={styles.playedCardsArea}>
+          <View style={styles.playerActionsArea}>
             <PlayArea />
           </View>
         </View>
 
         {/* Top Right */}
-        <View style={styles.playedCardsStack}>
-          <PlayedCardsStack />
+        <View style={styles.playerActions}>
+          <PlayerActions />
         </View>
 
         {/* Bottom */}
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     backgroundColor: 'rgb(194,192,226)',
   },
-  playedCardsArea: {
+  playerActionsArea: {
     borderWidth: 1,
     borderStyle: 'dashed',
     backgroundColor: 'blue',
@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
         translateY: -Dimensions.get('window').height / 8,
       },
     ],
+    zIndex: 10,
   },
   topContainer: {
     // flex: 2,
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     flexDirection: 'row',
   },
-  playedCardsStack: {
+  playerActions: {
     position: 'absolute',
     top: 0,
     right: 0,

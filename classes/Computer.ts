@@ -1,8 +1,11 @@
-import { combinationConstants } from '../constants/CombinationConstants';
+import { ActionPayload, ActionType } from '../constants/Actions';
+import {
+  Combination,
+  combinationConstants,
+} from '../constants/CombinationConstants';
 import { isValidCombination } from '../helper/combinationHelpers';
 import { CardType } from './Card';
-import { ActionType, Combination } from './GameState';
-import { ActionPayload, Player } from './Player';
+import { Player } from './Player';
 
 interface ComputerInterface {
   getAction: (
@@ -53,16 +56,17 @@ export class Computer extends Player {
   }
 
   private playLowestThree(hand: CardType[]) {
-    const updatedHands: [CardType[], CardType[]] = [[], []];
-    for (let idx = 0; idx < hand.length; idx++) {
-      const card = hand[idx];
-      if (card.value === 3 && card.suit === 0) {
-        updatedHands[0] = [card];
-        updatedHands[1] = [...hand.slice(0, idx), ...hand.slice(idx + 1)];
-        break;
-      }
-    }
-    return updatedHands;
+    // const updatedHands: [CardType[], CardType[]] = [[], []];
+    // for (let idx = 0; idx < hand.length; idx++) {
+    //   const card = hand[idx];
+    //   if (card.value === 3 && card.suit === 0) {
+    //     updatedHands[0] = [card];
+    //     updatedHands[1] = [...hand.slice(0, idx), ...hand.slice(idx + 1)];
+    //     break;
+    //   }
+    // }
+    // return updatedHands;
+    return [[hand[0]], hand.slice(1)];
   }
 
   private playSingle(

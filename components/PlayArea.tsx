@@ -1,32 +1,41 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PlayingCard from './PlayingCard';
 import { GameContext } from '../context/GameContext';
+import { observer } from 'mobx-react-lite';
+import { ActionType } from '../constants/Actions';
+import { PlayerActionsType } from '../classes/PlayerActions';
 
-export default function PlayArea() {
-  // const { playedCards } = useContext(GameContext);
+export default observer(function PlayArea() {
+  const { playerActions } = useContext(GameContext);
+  const [playerActionsStack, setPlayerActionsStack] = useState<
+    PlayerActionsType[]
+  >(playerActions.deque);
+
+  useEffect(() => {
+    setPlayerActionsStack(playerActions.deque);
+  }, [playerActions.deque]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Play Area</Text>
       <View style={styles.cards}>
-        {/* {playedCards.length !== 0 &&
-          playedCards[0].map((card, idx) => {
-            return (
-              <View key={`played-${card.value}-${card.suit}`}>
-                <PlayingCard
-                  idx={idx}
-                  value={card.value}
-                  suit={card.suit}
-                  selected={false}
-                />
-              </View>
-            );
-          })} */}
+        {playerActionsStack.map((played) => {
+          return (
+            played.action === ActionType.PLAY &&
+            played.cards!.map((card) => {
+              return (
+                <View key={`played-${card.value}-${card.suit}`}>
+                  <PlayingCard value={card.value} suit={card.suit} />
+                </View>
+              );
+            })
+          );
+        })}
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -40,6 +49,5 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
   },
 });

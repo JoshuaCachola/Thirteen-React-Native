@@ -4,16 +4,18 @@ import { GameContext } from '../context/GameContext';
 import FaIcon from '../helper/fontAwsomeHelper';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { PlayerInterface } from '../classes/Player';
+import { observer } from 'mobx-react-lite';
 
-export default function PlayerStack() {
-  // const { playerRotation } = useContext(GameContext);
+export default observer(function PlayerStack() {
+  const { game } = useContext(GameContext);
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.text}>Players Stack</Text>
       </View>
-      {/* {playerRotation.length !== 0 &&
-        playerRotation.map((player: PlayerInterface) => {
+      {game.playerRotation.length !== 0 &&
+        game.playerRotation.map((player: PlayerInterface) => {
           return (
             <View style={styles.userRow} key={player._name}>
               <View style={styles.iconContainer}>
@@ -24,10 +26,10 @@ export default function PlayerStack() {
               </View>
             </View>
           );
-        })} */}
+        })}
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

@@ -1,14 +1,6 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { sortCards } from '../helper/combinationHelpers';
 import { CardType } from './Card';
-import { ActionType, Combination } from './GameState';
-
-export type ActionPayload = {
-  action: ActionType;
-  type: Combination;
-  played: CardType[];
-  newHand: CardType[];
-};
 
 export interface PlayerInterface {
   readonly _name: string;

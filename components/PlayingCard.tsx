@@ -8,10 +8,9 @@ import { HandContext } from '../context/HandContext';
 import { cardValues } from '../helper/combinationHelpers';
 
 interface PlayingCardProp {
-  idx: number;
   value: number;
   suit: CardSuits;
-  selected: boolean;
+  selected?: boolean;
   isValid?: boolean;
 }
 

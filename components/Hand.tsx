@@ -6,15 +6,13 @@ import { calculatePositions, Position } from '../helper/calculatePositions';
 import {
   getHighestCard,
   isValidCombination,
-  sortCards,
 } from '../helper/combinationHelpers';
 import { GameContext } from '../context/GameContext';
 import { HandContext } from '../context/HandContext';
 import Button from './Button';
-import { ActionType } from '../classes/GameState';
 import { PlayerInterface } from '../classes/Player';
 import { observer } from 'mobx-react-lite';
-import { action } from 'mobx';
+import { ActionType } from '../constants/Actions';
 
 interface props {
   player: PlayerInterface;
@@ -22,10 +20,12 @@ interface props {
 
 // This component displays holding a hand of cards
 export default observer(function Hand({ player }: props) {
+  const { game, playerActions } = useContext(GameContext);
   const [hand, setHand] = useState<CardType[]>([]);
   const [isValid, setIsValid] = useState(false);
   const [positions, setPositions] = useState<Position[]>([]);
 
+  // useEffect to update hand useState and positions state
   useEffect(() => {
     setHand(player.hand);
     setPositions(calculatePositions(player.hand.length));
@@ -42,65 +42,57 @@ export default observer(function Hand({ player }: props) {
   // it is a valid combination
   useMemo(() => {
     const selected = hand.filter((card) => card.selected);
-    // const [isValid, _] = isValidCombination(
-    //   selected,
-    //   combinationType,
-    //   highestCard,
-    //   length
-    // );
+    const [isValid, _] = isValidCombination(
+      selected,
+      game.combinationType,
+      game.highestCard,
+      game.length
+    );
     setIsValid(isValid);
   }, [hand]);
 
   // handles playing cards when cards are selected
   // and play button is pressed
   const handlePlayCards = () => {
-    //   const acceptedSequence: CardType[] = [];
-    //   const newHand: CardType[] = [];
-    //   hands[playerIdx].forEach((card) => {
-    //     if (card.selected) {
-    //       acceptedSequence.push(card);
-    //     } else {
-    //       newHand.push(card);
-    //     }
-    //     card.selected = false;
-    //   });
-    //   const [_, type] = isValidCombination(
-    //     acceptedSequence,
-    //     combinationType,
-    //     highestCard,
-    //     acceptedSequence.length
-    //   );
-    //   setCombinationType(type);
-    //   setLength(acceptedSequence.length);
-    //   hands[playerIdx] = newHand;
-    //   setHands([...hands]);
-    //   setHand([...newHand]);
-    //   setPlayedCards([acceptedSequence, ...playedCards]);
-    //   setHighestCard(getHighestCard(acceptedSequence));
-    //   const payload = updateRotation(ActionType.PLAY, playerRotation, players);
-    //   if ('combinationType' in payload) {
-    //     setCombinationType(payload.combinationType!);
-    //     setHighestCard(payload.highestCard!);
-    //   }
-    //   setCurrentPlayer(payload.currentPlayer!);
-    //   setPlayerRotation(payload.playerRotation);
-    //   setTurnNumber(turnNumber + 1);
+    const acceptedSequence: CardType[] = [];
+    const newHand: CardType[] = [];
+    hand.forEach((card) => {
+      if (card.selected) {
+        acceptedSequence.push(card);
+      } else {
+        newHand.push(card);
+      }
+      card.selected = false;
+    });
+
+    const [isValid, type] = isValidCombination(
+      acceptedSequence,
+      game.combinationType,
+      game.highestCard,
+      acceptedSequence.length
+    );
+
+    if (isValid) {
+      game.combinationType = type;
+      game.length = acceptedSequence.length;
+      game.highestCard = getHighestCard(acceptedSequence);
+      player.hand = newHand;
+
+      // unshift to played Cards
+      playerActions.unshift({
+        action: ActionType.PLAY,
+        player,
+        type,
+        length: acceptedSequence.length,
+        cards: acceptedSequence,
+      });
+
+      game.updateRotation(ActionType.PLAY);
+    }
   };
 
-  // const handleSortCards = () => {
-  //   const sorted = sortCards(hand!);
-  //   setHand([...sorted]);
-  // };
-
   const handlePass = () => {
-    //   const payload = updateRotation(ActionType.PASS, playerRotation, players);
-    //   if ('combinationType' in payload) {
-    //     setCombinationType(payload.combinationType!);
-    //     setHighestCard(payload.highestCard!);
-    //   }
-    //   setCurrentPlayer(payload.currentPlayer!);
-    //   setPlayerRotation(payload.playerRotation);
-    //   setTurnNumber(turnNumber + 1);
+    game.updateRotation(ActionType.PASS);
   };
 
   return (
@@ -119,7 +111,6 @@ export default observer(function Hand({ player }: props) {
             return (
               <InteractiveView
                 key={`hand-${card.value}-${card.suit}`}
-                idx={idx}
                 card={card}
                 cardPosition={positions[idx]}
                 handlePlayCards={handlePlayCards}

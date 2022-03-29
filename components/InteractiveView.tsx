@@ -12,7 +12,6 @@ import {
 
 interface InteractiveProps {
   card: CardType;
-  idx: number;
   cardPosition: Position;
   handlePlayCards: () => void;
   isValid: boolean;
@@ -20,7 +19,6 @@ interface InteractiveProps {
 
 export default function InteractiveView({
   card,
-  idx,
   cardPosition,
   handlePlayCards,
   isValid,
@@ -40,7 +38,6 @@ export default function InteractiveView({
     >
       <Animated.View style={[styles.hand, cardPosition]}>
         <PlayingCard
-          idx={idx}
           value={card.value}
           suit={card.suit}
           selected={card.selected}

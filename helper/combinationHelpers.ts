@@ -1,6 +1,8 @@
 import { CardType } from '../classes/Card';
-import { Combination } from '../classes/GameState';
-import { combinationConstants } from '../constants/CombinationConstants';
+import {
+  Combination,
+  combinationConstants,
+} from '../constants/CombinationConstants';
 
 export const CardValues = {
   '3': 3,

@@ -1,21 +1,9 @@
-import { CardType } from './Card';
-import { Combination } from './GameState';
-import { PlayerInterface } from './Player';
-
-export type ActionType = 'PASS' | 'PLAY';
+import { Action } from '../constants/Actions';
 
 export interface ActionsInterface {
   pushAction: (a: Action) => void;
   getLastAction: () => Action | null;
 }
-
-export type Action = {
-  player: PlayerInterface | null;
-  action: ActionType;
-  type?: Combination;
-  length?: number;
-  high?: CardType;
-};
 
 export class Actions implements ActionsInterface {
   actions: Action[];

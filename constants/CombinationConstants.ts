@@ -1,5 +1,3 @@
-import { Combination } from '../classes/GameState';
-
 export const combinationConstants: { [key: string]: Combination } = {
   SINGLE: 'SINGLE',
   DOUBLE: 'DOUBLE',
@@ -9,3 +7,13 @@ export const combinationConstants: { [key: string]: Combination } = {
   DOUBLE_BOMB: 'DOUBLE_BOMB',
   TRIPLE_BOMB: 'TRIPLE_BOMB',
 };
+
+export type Combination =
+  | 'SINGLE'
+  | 'DOUBLE'
+  | 'TRIPLE'
+  | 'STRAIGHT'
+  | 'BOMB'
+  | 'DOUBLE_BOMB'
+  | 'TRIPLE_BOMB'
+  | null;
