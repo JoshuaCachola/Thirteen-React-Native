@@ -144,9 +144,9 @@ export default observer(function Hand({ player }: props) {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    // flex: 1,
+    // flexDirection: 'row',
+    // justifyContent: 'center',
   },
   hand: {
     marginVertical: 0,

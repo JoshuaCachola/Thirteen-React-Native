@@ -1,5 +1,9 @@
 import { StyleSheet } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { Position } from '../helper/calculatePositions';
 import { CardType } from '../classes/Card';
 import PlayingCard from './PlayingCard';
@@ -32,20 +36,23 @@ export default function InteractiveView({
   isValid,
   hand,
 }: InteractiveProps) {
+  const translateY = useSharedValue(0);
+  const rotateZ = useSharedValue(0);
+
   const handleStateChange = ({ nativeEvent }: HandlerStateChangeEvent) => {
     if (nativeEvent.oldState === State.ACTIVE) {
-      handlePlayCards();
+      setTimeout(() => {
+        handlePlayCards();
+      }, 1000);
     }
   };
 
   const rollout = useAnimatedStyle(() => {
     return {
       transform: [
-        { translateX: 0 },
-        { translateY: 100 },
-        { rotate: '(0, 0, 1, 120)' },
+        { translateY: translateY.value },
+        { rotate: rotateZ.value + 'deg' },
       ],
-      opacity: 0,
     };
   });
 
@@ -68,7 +75,7 @@ export default function InteractiveView({
       enabled={selected && isValid}
       onHandlerStateChange={handleStateChange}
     >
-      <Animated.View style={[styles.hand, cardPosition]}>
+      <Animated.View style={[styles.card, cardPosition]}>
         <PlayingCard
           value={value}
           suit={suit}
@@ -81,7 +88,7 @@ export default function InteractiveView({
 }
 
 const styles = StyleSheet.create({
-  hand: {
+  card: {
     position: 'absolute',
     right: 0,
   },
