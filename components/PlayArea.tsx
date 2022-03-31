@@ -31,7 +31,7 @@ export default observer(function PlayArea() {
                     styles.card,
                     {
                       left: played.positions?.left,
-                      bottom: played.positions?.bottom,
+                      top: played.positions?.top,
                       transform: [{ rotate: played.positions!.rotate }],
                     },
                   ]}
@@ -49,7 +49,7 @@ export default observer(function PlayArea() {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
+    // height: '100%',
     // position: 'relative',
   },
   text: {
@@ -59,13 +59,11 @@ const styles = StyleSheet.create({
   cards: {
     position: 'relative',
     transform: [
-      { translateX: Dimensions.get('screen').width / 4 },
-      { translateY: Dimensions.get('screen').height / 10 },
+      { translateX: Dimensions.get('screen').width / 3 },
+      // { translateY: Dimensions.get('screen').height / 6 },
     ],
   },
   card: {
     position: 'absolute',
-    top: 0,
-    left: 0,
   },
 });

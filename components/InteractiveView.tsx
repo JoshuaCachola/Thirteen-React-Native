@@ -3,8 +3,14 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
-import { Position } from '../helper/calculatePositions';
+import {
+  getRandLeft,
+  getRandRotation,
+  getRandTop,
+  Position,
+} from '../helper/calculatePositions';
 import { CardType } from '../classes/Card';
 import PlayingCard from './PlayingCard';
 import {
@@ -21,7 +27,7 @@ interface InteractiveProps {
   selected: boolean;
   cardPosition: Position;
   hand: CardType[];
-  handlePlayCards: () => void;
+  handlePlayCards: (p: { left: number; top: number; rotate: string }) => void;
   isValid: boolean;
   setHand: (h: CardType[]) => void;
 }
@@ -41,8 +47,15 @@ export default function InteractiveView({
 
   const handleStateChange = ({ nativeEvent }: HandlerStateChangeEvent) => {
     if (nativeEvent.oldState === State.ACTIVE) {
+      const positions = {
+        top: getRandTop(),
+        left: getRandLeft(),
+        rotate: getRandRotation() + 'deg',
+      };
+
+      translateY.value = withTiming(-1000, { duration: 1000 });
       setTimeout(() => {
-        handlePlayCards();
+        handlePlayCards(positions);
       }, 1000);
     }
   };
@@ -51,7 +64,9 @@ export default function InteractiveView({
     return {
       transform: [
         { translateY: translateY.value },
-        { rotate: rotateZ.value + 'deg' },
+        { rotateZ: rotateZ.value + 'deg' },
+        { rotate: cardPosition.transform[0].rotate },
+        { perspective: cardPosition.transform[1].perspective },
       ],
     };
   });
@@ -75,7 +90,17 @@ export default function InteractiveView({
       enabled={selected && isValid}
       onHandlerStateChange={handleStateChange}
     >
-      <Animated.View style={[styles.card, cardPosition]}>
+      <Animated.View
+        style={[
+          styles.card,
+          rollout,
+          {
+            bottom: cardPosition.bottom,
+            left: cardPosition.left,
+            zIndex: cardPosition.zIndex,
+          },
+        ]}
+      >
         <PlayingCard
           value={value}
           suit={suit}
@@ -90,6 +115,5 @@ export default function InteractiveView({
 const styles = StyleSheet.create({
   card: {
     position: 'absolute',
-    right: 0,
   },
 });

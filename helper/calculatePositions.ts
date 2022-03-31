@@ -19,7 +19,8 @@ export function calculatePositions(handLength: number): Position[] {
           perspective: 1000,
         },
       ],
-      bottom: i <= mid ? -4 * (mid - i) : handLength - i - 1,
+      // bottom: i <= mid ? -4 * (mid - i) : handLength - i - 1,
+      bottom: i <= mid ? 4 * i : 4 * (handLength - i),
       left: i * 40,
       zIndex: i,
     });
@@ -28,13 +29,17 @@ export function calculatePositions(handLength: number): Position[] {
 }
 
 export const getRandLeft = () => {
-  return Math.random() * (80 - 20) + 20;
+  return Math.random() * (200 - 25) + 25;
 };
 
-export const getRandBottom = () => {
-  return Math.floor(Math.random() * 80);
+export const getRandTop = () => {
+  return Math.random() * (40 - 20) + 20;
 };
 
 export const getRandRotation = () => {
-  return Math.floor(Math.random() * 75) + 'deg';
+  const random = Math.floor(Math.random() * 75);
+  if (random % 2 === 0) {
+    return random + 'deg';
+  }
+  return random * -1 + 'deg';
 };

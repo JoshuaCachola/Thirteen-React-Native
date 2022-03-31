@@ -5,9 +5,9 @@ import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { ActionPayload, ActionType } from '../constants/Actions';
 import {
-  getRandBottom,
   getRandLeft,
   getRandRotation,
+  getRandTop,
 } from '../helper/calculatePositions';
 
 export default observer(function GameProvider(props: any) {
@@ -49,7 +49,7 @@ export default observer(function GameProvider(props: any) {
         cards: played,
         positions: {
           left: getRandLeft(),
-          bottom: getRandBottom(),
+          top: getRandTop(),
           rotate: getRandRotation(),
         },
       };

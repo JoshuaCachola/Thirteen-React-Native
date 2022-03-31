@@ -24,9 +24,12 @@ export default function Game() {
         </View>
 
         {/* Top Middle */}
-        <View style={styles.topContainer}>
-          <View style={styles.playerActionsArea}>
+        <View style={styles.game}>
+          <View style={styles.playArea}>
             <PlayArea />
+          </View>
+          <View style={styles.hand}>
+            <Hand player={player} />
           </View>
         </View>
 
@@ -36,9 +39,6 @@ export default function Game() {
         </View>
 
         {/* Bottom */}
-        <View style={styles.bottomContainer}>
-          <Hand player={player} />
-        </View>
       </View>
       {/* {isGameWon && } */}
       {!startGame && <ReadyModal player={player} />}
@@ -64,6 +64,19 @@ const styles = StyleSheet.create({
         translateX: Dimensions.get('window').width / 5,
       },
     ],
+  },
+  game: {
+    height: '100%',
+    display: 'flex',
+    position: 'relative',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  playArea: {
+    justifyContent: 'flex-start',
+  },
+  hand: {
+    justifyContent: 'flex-end',
   },
   bottomContainer: {
     position: 'absolute',

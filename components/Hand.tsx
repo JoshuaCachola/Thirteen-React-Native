@@ -1,24 +1,21 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { CardType } from '../classes/Card';
 import InteractiveView from './InteractiveView';
 import {
   calculatePositions,
-  getRandBottom,
+  getRandTop,
   getRandLeft,
   getRandRotation,
   Position,
 } from '../helper/calculatePositions';
-import {
-  getHighestCard,
-  isValidCombination,
-} from '../helper/combinationHelpers';
+import { isValidCombination } from '../helper/combinationHelpers';
 import { GameContext } from '../context/GameContext';
-import { HandContext } from '../context/HandContext';
 import Button from './Button';
 import { PlayerInterface } from '../classes/Player';
 import { observer } from 'mobx-react-lite';
 import { ActionType } from '../constants/Actions';
+import PlayingCard from './PlayingCard';
 
 interface props {
   player: PlayerInterface;
@@ -61,7 +58,11 @@ export default observer(function Hand({ player }: props) {
 
   // handles playing cards when cards are selected
   // and play button is pressed
-  const handlePlayCards = () => {
+  const handlePlayCards = (positions: {
+    top: number;
+    left: number;
+    rotate: string;
+  }) => {
     const acceptedSequence: CardType[] = [];
     const newHand: CardType[] = [];
     hand.forEach((card) => {
@@ -93,11 +94,7 @@ export default observer(function Hand({ player }: props) {
         type,
         length: acceptedSequence.length,
         cards: acceptedSequence,
-        positions: {
-          left: getRandLeft(),
-          bottom: getRandBottom(),
-          rotate: getRandRotation(),
-        },
+        positions,
       });
 
       game.updateRotation(ActionType.PLAY);
@@ -113,9 +110,12 @@ export default observer(function Hand({ player }: props) {
       {/* Hand */}
       <View
         style={[
-          styles.hand,
           {
-            transform: [{ translateX: -20 * hand.length }, { translateY: 0 }],
+            transform: [
+              {
+                translateX: 30 * (13 - hand.length + 1),
+              },
+            ],
           },
         ]}
       >
@@ -135,21 +135,32 @@ export default observer(function Hand({ player }: props) {
           );
         })}
       </View>
-      <Button title='Sort Cards' onPress={() => player.playerHand.sort(hand)} />
-      <Button title='Pass' onPress={handlePass} />
+      <View style={styles.buttons}>
+        <Button
+          title='Sort Cards'
+          onPress={() => player.playerHand.sort(hand)}
+        />
+        <Button title='Pass' onPress={handlePass} />
+      </View>
     </View>
   );
 });
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
-    // flex: 1,
-    // flexDirection: 'row',
-    // justifyContent: 'center',
+    display: 'flex',
+    // flexDirection: 'column',
   },
-  hand: {
-    marginVertical: 0,
-    marginHorizontal: 'auto',
+  proof: {
+    position: 'absolute',
+    bottom: 200,
+    left: 350,
+    // top: 0,
+    zIndex: 200,
+  },
+  buttons: {
+    position: 'absolute',
+    right: 10,
+    bottom: 10,
   },
 });

@@ -9,7 +9,7 @@ export type PlayerActionsType = {
   player: PlayerInterface;
   type: Combination;
   length?: number;
-  positions?: { bottom: number; left: number; rotate: string };
+  positions?: { top: number; left: number; rotate: string };
   action: ActionType;
 };
 
