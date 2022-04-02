@@ -8,6 +8,7 @@ import { Combination } from '../constants/CombinationConstants';
 import { PlayerActions, PlayerActionsInterface } from './PlayerActions';
 import { ActionType } from '../constants/Actions';
 import { getHighestCard, sortCards } from '../helper/combinationHelpers';
+import { Hand } from './Hand';
 
 export interface GameStateInterface {
   playerRotation: PlayerInterface[];
@@ -15,6 +16,7 @@ export interface GameStateInterface {
   highestCard: CardType | null;
   length: number;
   currentPlayer: PlayerInterface | null;
+  isGameWon: boolean;
   _playerActions: PlayerActionsInterface;
   initGame: () => void;
   updateRotation: (t: ActionType) => void;
@@ -23,6 +25,7 @@ export interface GameStateInterface {
   updateCombinationType: (t: Combination) => void;
   updatePlayerRotation: (r: PlayerInterface[]) => void;
   updateLength: (l: number) => void;
+  checkForWinner: () => void;
 }
 
 // GameState class
@@ -61,6 +64,7 @@ export class GameState extends Game implements GameStateInterface {
       updateCombinationType: action,
       updatePlayerRotation: action,
       updateLength: action,
+      checkForWinner: action,
     });
   }
 
@@ -179,7 +183,6 @@ export class GameState extends Game implements GameStateInterface {
       for (let c = 0; c < hand.length; c++) {
         const card = hand[c];
         if (card.value === 3 && card.suit === 0) {
-          console.log('found lowest 3', p);
           return p;
         }
 
@@ -195,13 +198,27 @@ export class GameState extends Game implements GameStateInterface {
     return lowestCard.playerIdx;
   };
 
+  private reset() {
+    this.players.forEach((player) => {
+      player.clearHand();
+    });
+
+    this._playerActions = new PlayerActions();
+  }
+
+  // starts the game
   public initGame = () => {
-    for (let i = this._players.length; i < 4; i++) {
-      this._players.push(new Computer(`Computer ${i}`));
+    if (this.players.length < 4) {
+      for (let i = this.players.length; i < 4; i++) {
+        this.players.push(new Computer(`Computer ${i}`));
+      }
     }
+
+    this.reset();
+
     this.deal();
     const startingPlayerIdx =
-      this._lastWinner !== null ? this._lastWinner : this.findStartingPlayer();
+      this.lastWinner !== null ? this.lastWinner : this.findStartingPlayer();
     console.log(startingPlayerIdx);
     this.updatePlayerRotation(this.createPlayerRotation(startingPlayerIdx));
     this.updateCurrentPlayer(this.playerRotation[0]);
@@ -220,52 +237,12 @@ export class GameState extends Game implements GameStateInterface {
       }
     });
   }
+
+  // when player plays cards, checkForWinner will check is the current players
+  // hand length === 0, if so the game has a winner
+  public checkForWinner() {
+    if (this.currentPlayer?.playerHand.hand.length === 0) {
+      this.isGameWon = true;
+    }
+  }
 }
-
-// Starting player is the player with the lowest card
-// This is when there is no previous winner and is the first game player
-// finds the player with the lowest card
-// if there are four players return when the three of spades - suit: 0 - is found
-// private findStartingPlayer = (hands: CardType[][]) => {
-//   let lowestCard = { value: Number.MAX_VALUE, suit: Number.MAX_VALUE, hand: 0 };
-//   for (let h = 0; h < hands.length; h++) {
-//     const hand = hands[h];
-//     for (let c = 0; c < hand.length; c++) {
-//       const card = hand[c];
-//       if (card.value === 3 && card.suit === 0) {
-//         return h;
-//       }
-
-//       if (
-//         card.value < lowestCard.value ||
-//         (card.value === lowestCard.value && card.suit < lowestCard.suit)
-//       ) {
-//         lowestCard = { value: card.value, suit: card.suit, hand: h };
-//       }
-//     }
-//   }
-
-//   return lowestCard.hand;
-// };
-
-// export const canPlayCombination = (
-//   selected: CardType[]
-// ): [boolean, Combination] => {
-//   const [isValid, combination] = isValidCombination(selected);
-//   return [isValid, combination];
-// };
-
-// starts the game and sets
-// export const initGame = (
-//   players: PlayerInterface[],
-//   hands: CardType[][],
-//   lastWinner: number | null
-// ) => {
-//   lastWinner = lastWinner !== null ? lastWinner : findLowestThree(hands)!;
-//   const playerRotation = createPlayerRotation(lastWinner, players);
-
-//   return {
-//     playerRotation,
-//     currentPlayer: players[lastWinner],
-//   };
-// };

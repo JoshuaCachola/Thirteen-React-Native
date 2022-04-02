@@ -1,10 +1,11 @@
-import { computed, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import { Hand, HandInterface } from './Hand';
 
 export interface PlayerInterface {
   readonly _name: string;
   ready: boolean;
   playerHand: HandInterface;
+  clearHand: () => void;
 }
 
 export class Player implements PlayerInterface {
@@ -20,6 +21,7 @@ export class Player implements PlayerInterface {
       playerHand: observable,
       _ready: observable,
       ready: computed,
+      clearHand: action,
     });
   }
 
@@ -29,5 +31,9 @@ export class Player implements PlayerInterface {
 
   public get ready() {
     return this._ready;
+  }
+
+  public clearHand() {
+    this.playerHand = new Hand();
   }
 }

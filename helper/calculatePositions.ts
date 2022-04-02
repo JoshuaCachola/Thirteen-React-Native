@@ -19,7 +19,6 @@ export function calculatePositions(handLength: number): Position[] {
           perspective: 1000,
         },
       ],
-      // bottom: i <= mid ? -4 * (mid - i) : handLength - i - 1,
       bottom: i <= mid ? 4 * i : 4 * (handLength - i),
       left: i * 40,
       zIndex: i,

@@ -31,6 +31,7 @@ export default observer(function GameProvider(props: any) {
 
   // useEffect for whenever the current player is a computer
   useEffect(() => {
+    console.log(game.combinationType);
     if (game.currentPlayer instanceof Computer) {
       const { action, type, played, newHand }: ActionPayload =
         game.currentPlayer.getAction(
@@ -71,6 +72,11 @@ export default observer(function GameProvider(props: any) {
 
       setTimeout(() => {
         playerActions.push(payload);
+        game.checkForWinner();
+        console.log(played, newHand);
+        if (game.isGameWon) {
+          return;
+        }
 
         // update rotation
         game.updateRotation(action);

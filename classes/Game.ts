@@ -1,4 +1,4 @@
-import { makeObservable, computed, action } from 'mobx';
+import { makeObservable, computed, action, observable } from 'mobx';
 import { PlayerInterface } from './Player';
 
 export interface GameInterface {
@@ -10,8 +10,8 @@ export interface GameInterface {
 
 export class Game implements GameInterface {
   readonly roomId: string;
-  private _isGameWon: boolean;
-  private _gameNumber: number;
+  protected _isGameWon: boolean;
+  protected _gameNumber: number;
   protected _players: PlayerInterface[];
   protected _lastWinner: number | null;
 
@@ -26,7 +26,16 @@ export class Game implements GameInterface {
       players: computed,
       addPlayer: action,
       arePlayersReady: action,
+      isGameWon: computed,
     });
+  }
+
+  public get isGameWon() {
+    return this._isGameWon;
+  }
+
+  public set isGameWon(hasWinner: boolean) {
+    this._isGameWon = hasWinner;
   }
 
   public get lastWinner() {

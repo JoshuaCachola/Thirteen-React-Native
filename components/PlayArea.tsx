@@ -10,12 +10,13 @@ export default observer(function PlayArea() {
   const { playerActions } = useContext(GameContext);
   const [playerActionsStack, setPlayerActionsStack] = useState<
     PlayerActionsType[]
-  >(playerActions.deque);
+  >(playerActions.stack);
 
   useEffect(() => {
-    setPlayerActionsStack(playerActions.deque);
-  }, [playerActions.deque]);
+    setPlayerActionsStack(playerActions.stack);
+  }, [playerActions.stack]);
 
+  console.log(playerActionsStack);
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Play Area</Text>
@@ -23,14 +24,14 @@ export default observer(function PlayArea() {
         {playerActionsStack.map((played) => {
           return (
             played.action === ActionType.PLAY &&
-            played.cards!.map((card) => {
+            played.cards!.map((card, idx) => {
               return (
                 <View
                   key={`played-${card.value}-${card.suit}`}
                   style={[
                     styles.card,
                     {
-                      left: played.positions?.left,
+                      left: idx * 20 + played.positions?.left!,
                       top: played.positions?.top,
                       transform: [{ rotate: played.positions!.rotate }],
                     },

@@ -1,9 +1,7 @@
 import { StyleSheet } from 'react-native';
 import Animated, {
-  interpolate,
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
 } from 'react-native-reanimated';
 import {
   getRandLeft,
@@ -19,7 +17,6 @@ import {
   State,
   HandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
-import { PlayerInterface } from '../classes/Player';
 
 interface InteractiveProps {
   value: number;
@@ -53,10 +50,11 @@ export default function InteractiveView({
         rotate: getRandRotation() + 'deg',
       };
 
-      translateY.value = withTiming(-1000, { duration: 1000 });
-      setTimeout(() => {
-        handlePlayCards(positions);
-      }, 1000);
+      // translateY.value = withTiming(-1000, { duration: 1000 });
+      // setTimeout(() => {
+      //   handlePlayCards(positions);
+      // }, 1000);
+      handlePlayCards(positions);
     }
   };
 

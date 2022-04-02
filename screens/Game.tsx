@@ -41,7 +41,7 @@ export default function Game() {
         {/* Bottom */}
       </View>
       {/* {isGameWon && } */}
-      {!startGame && <ReadyModal player={player} />}
+      {!startGame && !isGameWon && <ReadyModal player={player} />}
     </GameProvider>
   );
 }

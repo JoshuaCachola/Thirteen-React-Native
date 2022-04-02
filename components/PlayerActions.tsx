@@ -12,7 +12,7 @@ export default observer(function PlayerActions() {
     <View style={styles.container}>
       <View style={styles.cards}>
         {game._playerActions &&
-          game._playerActions.deque.map((played) => {
+          game._playerActions.stack.map((played) => {
             if (played.action === ActionType.PLAY) {
               played.cards!.map((card) => {
                 return (

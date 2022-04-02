@@ -9,10 +9,12 @@ interface props {
 }
 
 export default observer(function ReadyModal({ player }: props) {
-  const { startGame, game, setStartGame } = useContext(GameContext);
+  const { startGame, game, setStartGame, setIsGameWon } =
+    useContext(GameContext);
   const onPress = () => {
     game.addPlayer(player);
     player.ready = true;
+    setIsGameWon(false);
     setStartGame(true);
   };
 

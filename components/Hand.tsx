@@ -23,7 +23,8 @@ interface props {
 
 // This component displays holding a hand of cards
 export default observer(function Hand({ player }: props) {
-  const { game, playerActions } = useContext(GameContext);
+  const { game, playerActions, setStartGame, setTurnNumber, turnNumber } =
+    useContext(GameContext);
   const [hand, setHand] = useState<CardType[]>([]);
   const [isValid, setIsValid] = useState(false);
   const [positions, setPositions] = useState<Position[]>([]);
@@ -97,6 +98,13 @@ export default observer(function Hand({ player }: props) {
         positions,
       });
 
+      game.checkForWinner();
+
+      if (game.isGameWon) {
+        setStartGame(false);
+      }
+
+      setTurnNumber(turnNumber + 1);
       game.updateRotation(ActionType.PLAY);
     }
   };

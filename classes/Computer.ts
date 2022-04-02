@@ -91,12 +91,14 @@ export class Computer extends Player {
       newHand: hand,
     };
     const doubles = getMultiples(hand, combinationType!);
-    console.log(doubles);
     for (const [value, indicies] of Object.entries(doubles)) {
       const parsedValue = cardValues.indexOf(value);
       if (parsedValue === highestCard.value) {
         for (let i = 0; i < indicies.length; i++) {
-          return this.playCards(hand, indicies[i], payload);
+          const high = indicies[i][indicies[i].length - 1];
+          if (hand[high].suit > highestCard.suit) {
+            return this.playCards(hand, indicies[i], payload);
+          }
         }
       } else if (parsedValue > highestCard.value) {
         return this.playCards(hand, indicies[0], payload);
