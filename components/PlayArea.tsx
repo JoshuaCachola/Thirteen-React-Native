@@ -7,16 +7,19 @@ import { ActionType } from '../constants/Actions';
 import { PlayerActionsType } from '../classes/PlayerActions';
 
 export default observer(function PlayArea() {
-  const { playerActions } = useContext(GameContext);
+  const { playerActions, isGameWon } = useContext(GameContext);
   const [playerActionsStack, setPlayerActionsStack] = useState<
     PlayerActionsType[]
-  >(playerActions.stack);
+  >([]);
 
   useEffect(() => {
     setPlayerActionsStack(playerActions.stack);
-  }, [playerActions.stack]);
 
-  console.log(playerActionsStack);
+    return () => {
+      setPlayerActionsStack([]);
+    };
+  }, [playerActions.stack, isGameWon]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Play Area</Text>

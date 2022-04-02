@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { GameContext } from '../context/GameContext';
 import { Computer } from '../classes/Computer';
-import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { ActionPayload, ActionType } from '../constants/Actions';
 import {
@@ -19,19 +18,14 @@ export default observer(function GameProvider(props: any) {
   // useEffect for starting the game
   useEffect(() => {
     if (startGame) {
+      playerActions.clear();
       game.initGame();
     }
   }, [startGame]);
 
-  useEffect(() => {
-    if (isGameWon) {
-      setStartGame(false);
-    }
-  }, [isGameWon]);
-
   // useEffect for whenever the current player is a computer
   useEffect(() => {
-    console.log(game.combinationType);
+    if (isGameWon || !startGame) return;
     if (game.currentPlayer instanceof Computer) {
       const { action, type, played, newHand }: ActionPayload =
         game.currentPlayer.getAction(
@@ -62,20 +56,19 @@ export default observer(function GameProvider(props: any) {
         // update length
         game.updateLength(played.length);
 
-        // update hands
+        // update hand
         game.currentPlayer.playerHand.updateHand(newHand);
 
         // update highestCard
         game.updateHighestCard(played);
       }
-      // push action
 
+      // push action and update rotation after a second
       setTimeout(() => {
         playerActions.push(payload);
-        game.checkForWinner();
-        console.log(played, newHand);
-        if (game.isGameWon) {
-          return;
+        if (game.checkForWinner()) {
+          setIsGameWon(true);
+          setStartGame(false);
         }
 
         // update rotation
@@ -86,15 +79,6 @@ export default observer(function GameProvider(props: any) {
       }, 1000);
     }
   }, [game.currentPlayer, game.playerRotation]);
-
-  // reaction(
-  //   () => game.arePlayersReady(),
-  //   (ready,) => {
-  //     console.log(ready);
-  //     setStartGame(true);
-  //     if (ready) game.initGame();
-  //   }
-  // );
 
   return (
     <GameContext.Provider

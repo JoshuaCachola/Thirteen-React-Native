@@ -8,7 +8,6 @@ import { Combination } from '../constants/CombinationConstants';
 import { PlayerActions, PlayerActionsInterface } from './PlayerActions';
 import { ActionType } from '../constants/Actions';
 import { getHighestCard, sortCards } from '../helper/combinationHelpers';
-import { Hand } from './Hand';
 
 export interface GameStateInterface {
   playerRotation: PlayerInterface[];
@@ -25,7 +24,7 @@ export interface GameStateInterface {
   updateCombinationType: (t: Combination) => void;
   updatePlayerRotation: (r: PlayerInterface[]) => void;
   updateLength: (l: number) => void;
-  checkForWinner: () => void;
+  checkForWinner: () => boolean;
 }
 
 // GameState class
@@ -147,7 +146,7 @@ export class GameState extends Game implements GameStateInterface {
     }
   }
 
-  public updateCurrentPlayer(currentPlayer: PlayerInterface) {
+  public updateCurrentPlayer(currentPlayer: PlayerInterface | null) {
     this.currentPlayer = currentPlayer;
   }
 
@@ -202,8 +201,9 @@ export class GameState extends Game implements GameStateInterface {
     this.players.forEach((player) => {
       player.clearHand();
     });
-
-    this._playerActions = new PlayerActions();
+    this.updateCombinationType(null);
+    this.updateHighestCard([]);
+    this.updateCurrentPlayer(null);
   }
 
   // starts the game
@@ -215,11 +215,9 @@ export class GameState extends Game implements GameStateInterface {
     }
 
     this.reset();
-
     this.deal();
     const startingPlayerIdx =
       this.lastWinner !== null ? this.lastWinner : this.findStartingPlayer();
-    console.log(startingPlayerIdx);
     this.updatePlayerRotation(this.createPlayerRotation(startingPlayerIdx));
     this.updateCurrentPlayer(this.playerRotation[0]);
   };
@@ -228,12 +226,11 @@ export class GameState extends Game implements GameStateInterface {
   private deal() {
     const deck = new Deck();
     const hands = deck.deal();
-
-    this._players.forEach((player, idx) => {
+    this.players.forEach((player, idx) => {
       if (!(player instanceof Computer)) {
-        player.playerHand.hand = hands[idx];
+        player.playerHand.updateHand(hands[idx]);
       } else {
-        player.playerHand.hand = sortCards(hands[idx]);
+        player.playerHand.updateHand(sortCards(hands[idx]));
       }
     });
   }
@@ -242,7 +239,9 @@ export class GameState extends Game implements GameStateInterface {
   // hand length === 0, if so the game has a winner
   public checkForWinner() {
     if (this.currentPlayer?.playerHand.hand.length === 0) {
-      this.isGameWon = true;
+      this.lastWinner = this.players.indexOf(this.currentPlayer);
+      return true;
     }
+    return false;
   }
 }

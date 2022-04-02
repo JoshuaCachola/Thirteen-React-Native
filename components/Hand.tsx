@@ -15,7 +15,6 @@ import Button from './Button';
 import { PlayerInterface } from '../classes/Player';
 import { observer } from 'mobx-react-lite';
 import { ActionType } from '../constants/Actions';
-import PlayingCard from './PlayingCard';
 
 interface props {
   player: PlayerInterface;
@@ -23,8 +22,14 @@ interface props {
 
 // This component displays holding a hand of cards
 export default observer(function Hand({ player }: props) {
-  const { game, playerActions, setStartGame, setTurnNumber, turnNumber } =
-    useContext(GameContext);
+  const {
+    game,
+    playerActions,
+    setStartGame,
+    setTurnNumber,
+    turnNumber,
+    setIsGameWon,
+  } = useContext(GameContext);
   const [hand, setHand] = useState<CardType[]>([]);
   const [isValid, setIsValid] = useState(false);
   const [positions, setPositions] = useState<Position[]>([]);
@@ -98,10 +103,9 @@ export default observer(function Hand({ player }: props) {
         positions,
       });
 
-      game.checkForWinner();
-
-      if (game.isGameWon) {
+      if (game.checkForWinner()) {
         setStartGame(false);
+        setIsGameWon(true);
       }
 
       setTurnNumber(turnNumber + 1);

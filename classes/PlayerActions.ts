@@ -16,6 +16,7 @@ export type PlayerActionsType = {
 export interface PlayerActionsInterface {
   stack: PlayerActionsType[];
   push: (d: PlayerActionsType) => void;
+  clear: () => void;
 }
 
 export class PlayerActions {
@@ -27,6 +28,7 @@ export class PlayerActions {
       _stack: observable,
       stack: computed,
       push: action,
+      clear: action,
     });
   }
 
@@ -40,5 +42,9 @@ export class PlayerActions {
 
   public push(played: PlayerActionsType) {
     this._stack.push(played);
+  }
+
+  public clear() {
+    this.stack = [];
   }
 }

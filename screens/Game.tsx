@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import PlayArea from '../components/PlayArea';
 import PlayerStack from '../components/PlayerStack';
 import PlayerActions from '../components/PlayerActions';
@@ -13,7 +13,11 @@ import { GameContext } from '../context/GameContext';
 export default function Game() {
   const player = new Player('Joshua', false);
 
-  const { startGame, isGameWon } = useContext(GameContext);
+  const { startGame, isGameWon, game } = useContext(GameContext);
+
+  useEffect(() => {
+    game.addPlayer(player);
+  }, []);
 
   return (
     <GameProvider>
@@ -23,7 +27,7 @@ export default function Game() {
           <PlayerStack />
         </View>
 
-        {/* Top Middle */}
+        {/* Middle */}
         <View style={styles.game}>
           <View style={styles.playArea}>
             <PlayArea />
