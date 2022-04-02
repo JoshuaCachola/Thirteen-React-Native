@@ -94,7 +94,7 @@ export default observer(function Hand({ player }: props) {
       player.playerHand.updateHand(newHand);
 
       // push to played Cards
-      playerActions.push({
+      playerActions.unshift({
         action: ActionType.PLAY,
         player,
         type,

@@ -14,37 +14,37 @@ export type PlayerActionsType = {
 };
 
 export interface PlayerActionsInterface {
-  stack: PlayerActionsType[];
-  push: (d: PlayerActionsType) => void;
+  deque: PlayerActionsType[];
+  unshift: (d: PlayerActionsType) => void;
   clear: () => void;
 }
 
 export class PlayerActions {
-  _stack: PlayerActionsType[];
+  _deque: PlayerActionsType[];
 
   constructor() {
-    this._stack = [];
+    this._deque = [];
     makeObservable(this, {
-      _stack: observable,
-      stack: computed,
-      push: action,
+      _deque: observable,
+      deque: computed,
+      unshift: action,
       clear: action,
     });
   }
 
-  public get stack() {
-    return this._stack;
+  public get deque() {
+    return this._deque;
   }
 
-  public set stack(stack: PlayerActionsType[]) {
-    this._stack = stack;
+  public set deque(deque: PlayerActionsType[]) {
+    this.deque = deque;
   }
 
-  public push(played: PlayerActionsType) {
-    this._stack.push(played);
+  public unshift(played: PlayerActionsType) {
+    this.deque.unshift(played);
   }
 
   public clear() {
-    this.stack = [];
+    this.deque = [];
   }
 }

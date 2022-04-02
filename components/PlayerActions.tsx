@@ -1,34 +1,36 @@
 import { observer } from 'mobx-react-lite';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { ActionType } from '../constants/Actions';
+import { PlayerActionsType } from '../classes/PlayerActions';
 import { GameContext } from '../context/GameContext';
 import PlayingCard from './PlayingCard';
 
 export default observer(function PlayerActions() {
-  const { game } = useContext(GameContext);
+  const { playerActions } = useContext(GameContext);
+
+  const [actions, setActions] = useState<PlayerActionsType[]>([]);
+
+  const createAction = (action: PlayerActionsType) => {
+    if (action.action === 0) {
+      return (
+        <View style={styles.actionContainer}>
+          {/* User Image */}
+          <View></View>
+        </View>
+      );
+    }
+  };
+
+  useEffect(() => {
+    setActions(playerActions.deque);
+  }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.cards}>
-        {game._playerActions &&
-          game._playerActions.stack.map((played) => {
-            if (played.action === ActionType.PLAY) {
-              played.cards!.map((card) => {
-                return (
-                  <View>
-                    <PlayingCard value={card.value} suit={card.suit} />
-                  </View>
-                );
-              });
-            } else {
-              return (
-                <View>
-                  <Text>{played.action}</Text>
-                </View>
-              );
-            }
-          })}
+        {actions.slice(0, 5).map((action) => {
+          return createAction(action);
+        })}
       </View>
     </View>
   );
@@ -52,4 +54,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  actionContainer: {},
 });

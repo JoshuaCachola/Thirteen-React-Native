@@ -65,7 +65,7 @@ export default observer(function GameProvider(props: any) {
 
       // push action and update rotation after a second
       setTimeout(() => {
-        playerActions.push(payload);
+        playerActions.unshift(payload);
         if (game.checkForWinner()) {
           setIsGameWon(true);
           setStartGame(false);
