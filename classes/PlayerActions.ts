@@ -37,11 +37,11 @@ export class PlayerActions {
   }
 
   public set deque(deque: PlayerActionsType[]) {
-    this.deque = deque;
+    this._deque = deque;
   }
 
   public unshift(played: PlayerActionsType) {
-    this.deque.unshift(played);
+    this._deque.unshift(played);
   }
 
   public clear() {

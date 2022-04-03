@@ -8,23 +8,21 @@ import { PlayerActionsType } from '../classes/PlayerActions';
 
 export default observer(function PlayArea() {
   const { playerActions, isGameWon } = useContext(GameContext);
-  const [playerActionsStack, setPlayerActionsStack] = useState<
-    PlayerActionsType[]
-  >([]);
+  const [actionsStack, setActionsStack] = useState<PlayerActionsType[]>([]);
 
   useEffect(() => {
-    setPlayerActionsStack(playerActions.stack);
+    setActionsStack(playerActions.deque);
 
     return () => {
-      setPlayerActionsStack([]);
+      setActionsStack([]);
     };
-  }, [playerActions.stack, isGameWon]);
+  }, [playerActions.deque, isGameWon]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Play Area</Text>
       <View style={styles.cards}>
-        {playerActionsStack.map((played) => {
+        {actionsStack.map((played) => {
           return (
             played.action === ActionType.PLAY &&
             played.cards!.map((card, idx) => {
