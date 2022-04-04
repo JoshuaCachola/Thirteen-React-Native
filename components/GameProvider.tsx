@@ -12,7 +12,7 @@ import {
 export default observer(function GameProvider(props: any) {
   const { game, playerActions } = useContext(GameContext);
   const [startGame, setStartGame] = useState(false);
-  const [turnNumber, setTurnNumber] = useState(0);
+  const [turnNumber, setTurnNumber] = useState(1);
   const [isGameWon, setIsGameWon] = useState(false);
 
   // useEffect for starting the game

@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
     height: Dimensions.get('window').height,
-    backgroundColor: 'rgb(194,192,226)',
   },
   playerActionsArea: {
     borderWidth: 1,
@@ -82,41 +81,22 @@ const styles = StyleSheet.create({
   hand: {
     justifyContent: 'flex-end',
   },
-  bottomContainer: {
-    position: 'absolute',
-    left: 0,
-    bottom: 0,
-    transform: [
-      {
-        translateX: Dimensions.get('screen').width / 2,
-      },
-      {
-        translateY: -Dimensions.get('window').height / 8,
-      },
-    ],
-    zIndex: 100,
-  },
-  topContainer: {
-    // flex: 2,
-    justifyContent: 'flex-start',
-    backgroundColor: 'green',
-    flexDirection: 'row',
-  },
   playerActions: {
     position: 'absolute',
     top: 0,
     right: 0,
-    width: '20%',
+    width: '30%',
     height: '50%',
     zIndex: 10,
     backgroundColor: 'white',
+    opacity: 0.8,
   },
   playerStack: {
     position: 'absolute',
     top: 0,
     left: 0,
     backgroundColor: 'white',
-    // opacity: 0.3,
+    opacity: 0.8,
     width: '20%',
     height: '50%',
     zIndex: 10,

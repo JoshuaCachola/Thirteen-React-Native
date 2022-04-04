@@ -114,7 +114,12 @@ export default observer(function Hand({ player }: props) {
   };
 
   const handlePass = () => {
+    playerActions.unshift({
+      action: ActionType.PASS,
+      player,
+    });
     game.updateRotation(ActionType.PASS);
+    setTurnNumber(turnNumber + 1);
   };
 
   return (

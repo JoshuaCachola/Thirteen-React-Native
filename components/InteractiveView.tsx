@@ -16,7 +16,9 @@ import {
   Directions,
   State,
   HandlerStateChangeEvent,
+  TouchableHighlight,
 } from 'react-native-gesture-handler';
+import { useState } from 'react';
 
 interface InteractiveProps {
   value: number;
@@ -39,6 +41,7 @@ export default function InteractiveView({
   isValid,
   hand,
 }: InteractiveProps) {
+  const [isCardSelected, setIsCardSelected] = useState(false);
   const translateY = useSharedValue(0);
   const rotateZ = useSharedValue(0);
 
@@ -99,12 +102,22 @@ export default function InteractiveView({
           },
         ]}
       >
-        <PlayingCard
-          value={value}
-          suit={suit}
-          isValid={isValid}
-          handleOnPress={handleOnPress}
-        />
+        <TouchableHighlight
+          style={[
+            styles.container,
+            isCardSelected && styles.selectCard,
+            isCardSelected && isValid && styles.validSelect,
+            isCardSelected && !isValid && styles.invalidSelect,
+          ]}
+          onPress={() => {
+            if (handleOnPress) {
+              handleOnPress();
+              setIsCardSelected(!isCardSelected);
+            }
+          }}
+        >
+          <PlayingCard value={value} suit={suit} size={14} />
+        </TouchableHighlight>
       </Animated.View>
     </FlingGestureHandler>
   );
@@ -113,5 +126,27 @@ export default function InteractiveView({
 const styles = StyleSheet.create({
   card: {
     position: 'absolute',
+  },
+  container: {
+    width: 75,
+    height: 125,
+    borderRadius: 8,
+    borderColor: '#C5C5C5',
+    borderWidth: 1,
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+  },
+  selectCard: {
+    bottom: 30,
+    borderWidth: 2,
+    transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
+  },
+  invalidSelect: {
+    borderColor: 'red',
+    borderStyle: 'dashed',
+  },
+  validSelect: {
+    borderColor: 'green',
+    borderStyle: 'solid',
   },
 });

@@ -26,7 +26,7 @@ export class Computer extends Player {
     turn: number
   ): ActionPayload {
     // play lowest three on first turn
-    if (turn === 0) {
+    if (turn === 1) {
       const [played, newHand] = this.playLowestThree(hand);
       const [_, type] = isValidCombination(
         played,

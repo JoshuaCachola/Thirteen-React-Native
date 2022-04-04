@@ -5,9 +5,9 @@ import { Combination } from '../constants/CombinationConstants';
 import { ActionType } from '../constants/Actions';
 
 export type PlayerActionsType = {
-  cards: CardType[];
+  cards?: CardType[];
   player: PlayerInterface;
-  type: Combination;
+  type?: Combination;
   length?: number;
   positions?: { top: number; left: number; rotate: string };
   action: ActionType;

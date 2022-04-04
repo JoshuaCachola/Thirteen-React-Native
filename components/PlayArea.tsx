@@ -38,7 +38,7 @@ export default observer(function PlayArea() {
                     },
                   ]}
                 >
-                  <PlayingCard value={card.value} suit={card.suit} />
+                  <PlayingCard value={card.value} suit={card.suit} size={14} />
                 </View>
               );
             })
@@ -67,5 +67,11 @@ const styles = StyleSheet.create({
   },
   card: {
     position: 'absolute',
+    backgroundColor: 'white',
+    height: 125,
+    width: 75,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
   },
 });

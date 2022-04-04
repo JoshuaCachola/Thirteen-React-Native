@@ -14,6 +14,7 @@ export default function Action(props: any) {
             <PlayingCard
               value={card.value}
               suit={card.suit}
+              size={8}
               key={Math.random()}
             />
           );
