@@ -12,7 +12,7 @@ export default observer(function PlayerStack() {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.text}>Players Stack</Text>
+        <Text style={styles.text}>Rotation</Text>
       </View>
       {game.playerRotation.length !== 0 &&
         game.playerRotation.map((player: PlayerInterface) => {

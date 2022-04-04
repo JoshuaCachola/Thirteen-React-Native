@@ -9,7 +9,8 @@ interface props {
 }
 
 export default observer(function ReadyModal({ player }: props) {
-  const { startGame, setStartGame, setIsGameWon } = useContext(GameContext);
+  const { startGame, setStartGame, setIsGameWon, game } =
+    useContext(GameContext);
   const onPress = () => {
     player.ready = true;
     setIsGameWon(false);
@@ -18,6 +19,13 @@ export default observer(function ReadyModal({ player }: props) {
 
   return (
     <Modal animationType='slide' transparent={true} visible={!startGame}>
+      {game.lastWinner !== null && (
+        <View>
+          <Text style={{ fontSize: 42, fontWeight: '600' }}>
+            {game.players[game.lastWinner].name} WINS!
+          </Text>
+        </View>
+      )}
       <View style={styles.container}>
         <Button title='Ready up' onPress={onPress} />
         <Text>Waiting for players to ready up...</Text>

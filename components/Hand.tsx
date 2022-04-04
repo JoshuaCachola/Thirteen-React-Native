@@ -1,14 +1,8 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { CardType } from '../classes/Card';
 import InteractiveView from './InteractiveView';
-import {
-  calculatePositions,
-  getRandTop,
-  getRandLeft,
-  getRandRotation,
-  Position,
-} from '../helper/calculatePositions';
+import { calculatePositions, Position } from '../helper/calculatePositions';
 import { isValidCombination } from '../helper/combinationHelpers';
 import { GameContext } from '../context/GameContext';
 import Button from './Button';
@@ -104,20 +98,27 @@ export default observer(function Hand({ player }: props) {
       });
 
       if (game.checkForWinner()) {
+        game.lastWinner = game.players.indexOf(game.currentPlayer!);
         setStartGame(false);
         setIsGameWon(true);
+      } else {
+        setTurnNumber(turnNumber + 1);
+        game.updateRotation(ActionType.PLAY);
       }
-
-      setTurnNumber(turnNumber + 1);
-      game.updateRotation(ActionType.PLAY);
     }
   };
 
   const handlePass = () => {
+    // user cannot pass when there is not a combination type
+    if (game.combinationType === null) {
+      return;
+    }
+
     playerActions.push({
       action: ActionType.PASS,
       player,
     });
+
     game.updateRotation(ActionType.PASS);
     setTurnNumber(turnNumber + 1);
   };
@@ -166,14 +167,6 @@ export default observer(function Hand({ player }: props) {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    // flexDirection: 'column',
-  },
-  proof: {
-    position: 'absolute',
-    bottom: 200,
-    left: 350,
-    // top: 0,
-    zIndex: 200,
   },
   buttons: {
     position: 'absolute',

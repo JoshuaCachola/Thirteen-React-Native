@@ -1,4 +1,4 @@
-import { makeObservable, computed, action, observable } from 'mobx';
+import { makeObservable, computed, action } from 'mobx';
 import { PlayerInterface } from './Player';
 
 export interface GameInterface {

@@ -24,6 +24,7 @@ export default observer(function GameProvider(props: any) {
   }, [startGame]);
 
   // useEffect for whenever the current player is a computer
+  // simulates computer gameplay
   useEffect(() => {
     if (isGameWon || !startGame) return;
     if (game.currentPlayer instanceof Computer) {
@@ -67,15 +68,16 @@ export default observer(function GameProvider(props: any) {
       setTimeout(() => {
         playerActions.push(payload);
         if (game.checkForWinner()) {
+          game.lastWinner = game.players.indexOf(game.currentPlayer!);
           setIsGameWon(true);
           setStartGame(false);
+        } else {
+          // update rotation
+          game.updateRotation(action);
+
+          // update turn number
+          setTurnNumber(turnNumber + 1);
         }
-
-        // update rotation
-        game.updateRotation(action);
-
-        // update turn number
-        setTurnNumber(turnNumber + 1);
       }, 1000);
     }
   }, [game.currentPlayer, game.playerRotation]);
