@@ -6,6 +6,7 @@ export interface PlayerInterface {
   ready: boolean;
   playerHand: HandInterface;
   clearHand: () => void;
+  name: string;
 }
 
 export class Player implements PlayerInterface {
@@ -23,6 +24,10 @@ export class Player implements PlayerInterface {
       ready: computed,
       clearHand: action,
     });
+  }
+
+  public get name() {
+    return this._name;
   }
 
   public set ready(ready: boolean) {

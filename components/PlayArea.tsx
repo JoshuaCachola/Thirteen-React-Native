@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import PlayingCard from './PlayingCard';
 import { GameContext } from '../context/GameContext';
 import { observer } from 'mobx-react-lite';
@@ -11,53 +11,42 @@ export default observer(function PlayArea() {
   const [actionsStack, setActionsStack] = useState<PlayerActionsType[]>([]);
 
   useEffect(() => {
-    setActionsStack(playerActions.deque);
+    setActionsStack(playerActions.stack);
 
     return () => {
       setActionsStack([]);
     };
-  }, [playerActions.deque, isGameWon]);
+  }, [playerActions.stack, isGameWon]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Play Area</Text>
-      <View style={styles.cards}>
-        {actionsStack.map((played) => {
-          return (
-            played.action === ActionType.PLAY &&
-            played.cards!.map((card, idx) => {
-              return (
-                <View
-                  key={`played-${card.value}-${card.suit}`}
-                  style={[
-                    styles.card,
-                    {
-                      left: idx * 20 + played.positions?.left!,
-                      top: played.positions?.top,
-                      transform: [{ rotate: played.positions!.rotate }],
-                    },
-                  ]}
-                >
-                  <PlayingCard value={card.value} suit={card.suit} size={14} />
-                </View>
-              );
-            })
-          );
-        })}
-      </View>
+    <View style={styles.cards}>
+      {actionsStack.map((played) => {
+        return (
+          played.action === ActionType.PLAY &&
+          played.cards!.map((card, idx) => {
+            return (
+              <View
+                key={`played-${card.value}-${card.suit}`}
+                style={[
+                  styles.card,
+                  {
+                    left: idx * 20 + played.positions?.left!,
+                    top: played.positions?.top,
+                    transform: [{ rotate: played.positions!.rotate }],
+                  },
+                ]}
+              >
+                <PlayingCard value={card.value} suit={card.suit} size={14} />
+              </View>
+            );
+          })
+        );
+      })}
     </View>
   );
 });
 
 const styles = StyleSheet.create({
-  container: {
-    // height: '100%',
-    // position: 'relative',
-  },
-  text: {
-    textAlign: 'center',
-    color: 'grey',
-  },
   cards: {
     position: 'relative',
     transform: [

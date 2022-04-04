@@ -28,7 +28,7 @@ export function calculatePositions(handLength: number): Position[] {
 }
 
 export const getRandLeft = () => {
-  return Math.random() * (200 - 25) + 25;
+  return Math.random() * (125 - 10) + 10;
 };
 
 export const getRandTop = () => {

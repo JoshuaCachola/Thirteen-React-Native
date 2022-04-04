@@ -24,7 +24,7 @@ export default function PlayingCard({ value, suit, size }: PlayingCardProp) {
           {cardValues[value]}
         </Text>
         <Text>
-          <FaIcon size={size} icon={cardSuit} color={color} />
+          <FaIcon size={size - 2} icon={cardSuit} color={color} />
         </Text>
       </View>
       <View style={[styles.rankAndSuit, styles.bottomValueAndSuit]}>
@@ -32,7 +32,7 @@ export default function PlayingCard({ value, suit, size }: PlayingCardProp) {
           {cardValues[value]}
         </Text>
         <Text>
-          <FaIcon size={size} icon={cardSuit} color={color} />
+          <FaIcon size={size - 2} icon={cardSuit} color={color} />
         </Text>
       </View>
     </View>

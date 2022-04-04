@@ -9,27 +9,29 @@ import FaIcon from '../helper/fontAwsomeHelper';
 import PlayingCard from './PlayingCard';
 
 export default observer(function PlayerActions() {
-  const { game, playerActions, startGame, turnNumber } =
-    useContext(GameContext);
+  const { game, playerActions, startGame } = useContext(GameContext);
 
   const [actions, setActions] = useState<PlayerActionsType[]>([]);
 
   useEffect(() => {
-    setActions(playerActions.deque);
+    setActions(playerActions.stack);
 
     return () => {
       setActions([]);
     };
-  }, [playerActions.deque, startGame]);
+  }, [playerActions.stack, startGame]);
 
   const createAction = (action: PlayerActionsType) => {
     if (action.action === 0) {
       return (
-        <View style={styles.action}>
-          {action.cards!.map((card) => {
+        <View style={styles.actionPlay}>
+          {action.cards!.map((card, idx) => {
             return (
-              <View style={styles.actionCard} key={Math.random()}>
-                <PlayingCard value={card.value} suit={card.suit} size={10} />
+              <View
+                style={[styles.actionCard, { left: idx * 2 }]}
+                key={Math.random()}
+              >
+                <PlayingCard value={card.value} suit={card.suit} size={11} />
               </View>
             );
           })}
@@ -37,7 +39,7 @@ export default observer(function PlayerActions() {
       );
     } else {
       return (
-        <View style={styles.action}>
+        <View style={styles.actionPass}>
           <Text style={{ fontWeight: '500', fontSize: 16 }}>PASS</Text>
         </View>
       );
@@ -50,26 +52,29 @@ export default observer(function PlayerActions() {
 
   return (
     <View style={styles.container}>
-      <Text>
+      <Text style={styles.combinationType}>
         {game.combinationType !== null
           ? displayCombinationType(game.combinationType, game.length)
           : 'Play anything'}
       </Text>
       <ScrollView>
         <View style={styles.cards}>
-          {actions.map((action) => {
-            return (
-              <View style={styles.actionContainer} key={`${Math.random()}`}>
-                {/* User Image */}
-                <View style={styles.iconContainer}>
-                  <FaIcon size={20} icon={faUser} color='black' />
-                  <Text>{action.player._name}</Text>
+          {actions
+            .slice()
+            .reverse()
+            .map((action) => {
+              return (
+                <View style={styles.actionContainer} key={`${Math.random()}`}>
+                  {/* User Image */}
+                  <View style={styles.iconContainer}>
+                    <FaIcon size={20} icon={faUser} color='black' />
+                    <Text style={{ marginLeft: 8 }}>{action.player.name}</Text>
+                  </View>
+                  {/* <Action action={action} /> */}
+                  {createAction(action)}
                 </View>
-                {/* <Action action={action} /> */}
-                {createAction(action)}
-              </View>
-            );
-          })}
+              );
+            })}
         </View>
       </ScrollView>
     </View>
@@ -85,7 +90,6 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 8,
     margin: 'auto',
-    opacity: 0.5,
   },
   cards: {
     display: 'flex',
@@ -93,10 +97,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   actionContainer: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    height: 80,
   },
   iconContainer: {
     justifyContent: 'flex-start',
@@ -104,9 +110,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
+    marginLeft: 8,
   },
-  action: {
+  actionPlay: {
     justifyContent: 'flex-end',
+    position: 'absolute',
+    right: 0,
+    display: 'flex',
+    flexDirection: 'row',
+    width: '40%',
+  },
+  actionPass: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '40%',
   },
   actionCard: {
     backgroundColor: 'white',
@@ -115,5 +132,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'black',
+    position: 'absolute',
+    top: 0,
+  },
+  combinationType: {
+    fontWeight: '600',
+    textAlign: 'center',
+    fontSize: 24,
+    color: 'black',
   },
 });

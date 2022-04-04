@@ -17,12 +17,12 @@ export default observer(function PlayerStack() {
       {game.playerRotation.length !== 0 &&
         game.playerRotation.map((player: PlayerInterface) => {
           return (
-            <View style={styles.userRow} key={player._name}>
+            <View style={styles.userRow} key={player.name}>
               <View style={styles.iconContainer}>
                 <FaIcon size={20} icon={faUser} color='black' />
               </View>
               <View style={styles.userText}>
-                <Text style={styles.text}>{player._name}</Text>
+                <Text style={styles.text}>{player.name}</Text>
               </View>
             </View>
           );
