@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
   },
   rankAndSuit: {
     fontWeight: 'bold',
-    // fontSize: 12,
     display: 'flex',
     flexDirection: 'column',
     marginHorizontal: 8,

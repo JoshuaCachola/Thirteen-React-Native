@@ -52,11 +52,13 @@ export default observer(function PlayerActions() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.combinationType}>
-        {game.combinationType !== null
-          ? displayCombinationType(game.combinationType, game.length)
-          : 'Play anything'}
-      </Text>
+      <View style={styles.combinationTextContainer}>
+        <Text style={styles.combinationText}>
+          {game.combinationType !== null
+            ? displayCombinationType(game.combinationType, game.length)
+            : 'Play anything'}
+        </Text>
+      </View>
       <ScrollView>
         <View style={styles.cards}>
           {actions
@@ -83,11 +85,8 @@ export default observer(function PlayerActions() {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    borderColor: 'black',
-    borderWidth: 1,
     width: '100%',
     height: '100%',
-    borderRadius: 8,
     margin: 'auto',
   },
   cards: {
@@ -129,14 +128,20 @@ const styles = StyleSheet.create({
     height: 75,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: '#C5C5C5',
     position: 'absolute',
     top: 0,
   },
-  combinationType: {
+  combinationText: {
     fontWeight: '600',
     textAlign: 'center',
-    fontSize: 24,
-    color: 'black',
+    fontSize: 20,
+    color: 'white',
+  },
+  combinationTextContainer: {
+    borderColor: 'black',
+    borderWidth: 4,
+    backgroundColor: 'black',
+    transform: [{ rotate: '10deg' }, { translateY: 0 }, { translateX: 4 }],
   },
 });

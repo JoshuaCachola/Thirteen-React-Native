@@ -208,7 +208,7 @@ export const isValidBomb = (incoming: CardType[], type: string) => {
   }
 
   // values cannont include a "TWO" - value: 15
-  if (values.includes(15)) {
+  if (values.includes(CardValues['2'])) {
     return false;
   }
 
@@ -262,7 +262,7 @@ export const isValidCombination = (
     return checkCombinationByCardLength(incoming);
   }
 
-  // switch by combination type
+  // switch case by combination type
   switch (type) {
     case combinationConstants.SINGLE:
       return isValidSingle(current, incoming);

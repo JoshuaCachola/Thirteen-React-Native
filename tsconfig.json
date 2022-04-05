@@ -4,6 +4,6 @@
     "strict": true
   },
   "exclude": [
-    "__tests__/**/*.test.ts"
+    "classes/__tests__/**/*.test.ts"
   ]
 }

@@ -73,7 +73,10 @@ export default function InteractiveView({
   });
 
   const handleOnPress = () => {
-    if (!hand) return;
+    if (!hand) {
+      return;
+    }
+
     const newHand: CardType[] = hand.map((card) => {
       if (card.value === value && card.suit === suit) {
         card.handleSelected();

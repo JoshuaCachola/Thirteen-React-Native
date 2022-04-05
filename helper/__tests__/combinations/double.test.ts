@@ -1,7 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
-import { Card, CardType } from '../../classes/Card';
-import { combinationConstants } from '../../constants/CombinationConstants';
-import { isValidCombination } from '../../helper/combinationHelpers';
+import { Card, CardType } from '../../../classes/Card';
+import { combinationConstants } from '../../../constants/CombinationConstants';
+import { isValidCombination } from '../../combinationHelpers';
 
 // Doubles
 describe('double combinations', () => {
