@@ -1,6 +1,5 @@
-import { describe, test, expect, beforeAll } from '@jest/globals';
+import { describe, test, expect } from '@jest/globals';
 import { Card, CardType } from '../../classes/Card';
-import { GameState, GameStateInterface } from '../../classes/GameState';
 import { combinationConstants } from '../../constants/CombinationConstants';
 import { isValidCombination } from '../../helper/combinationHelpers';
 
@@ -10,25 +9,63 @@ describe('double combinations', () => {
     test('double fives beats double fours', () => {
       const incoming: CardType[] = [new Card(0, 5), new Card(1, 5)];
       const current = new Card(1, 4);
-      expect(
-        isValidCombination(incoming, combinationConstants.DOUBLE, current, 2)
-      ).toBeTruthy();
+      const [isValid, _] = isValidCombination(
+        incoming,
+        combinationConstants.DOUBLE,
+        current,
+        2
+      );
+      expect(isValid).toBeTruthy();
     });
   });
 
   describe('checks for invalid double combination by value of card', () => {
-    test('double sevens does not beat double jacks', () => {});
+    test('double sevens does not beat double jacks', () => {
+      const incoming: CardType[] = [new Card(0, 7), new Card(1, 7)];
+      const current = new Card(1, 11);
+      const [isValid, _] = isValidCombination(
+        incoming,
+        combinationConstants.DOUBLE,
+        current,
+        2
+      );
+      expect(isValid).toBeFalsy();
+    });
   });
 
   describe('checks for valid incoming double with same value, but better suit than current', () => {
-    test('jack of diamonds beats jack of clubs', () => {});
+    test('jack of diamonds beats jack of clubs', () => {
+      const incoming: CardType[] = [new Card(0, 11), new Card(3, 11)];
+      const current = new Card(1, 11);
+      const [isValid, _] = isValidCombination(
+        incoming,
+        combinationConstants.DOUBLE,
+        current,
+        2
+      );
+      expect(isValid).toBeTruthy();
+    });
   });
 
   describe('checks for double with same value, but worse suit than current', () => {
-    test('jack of spades does not beat jack of hearts', () => {});
+    test('jack of clubs does not beat jack of hearts', () => {
+      const incoming: CardType[] = [new Card(0, 11), new Card(1, 11)];
+      const current = new Card(3, 11);
+      const [isValid, _] = isValidCombination(
+        incoming,
+        combinationConstants.DOUBLE,
+        current,
+        2
+      );
+      expect(isValid).toBeFalsy();
+    });
   });
 
   describe('checks for invalid double by length', () => {
-    test('combination of ten and jack returns false', () => {});
+    test('combination of ten and jack returns false', () => {
+      const incoming: CardType[] = [new Card(0, 10), new Card(1, 11)];
+      const [isValid, _] = isValidCombination(incoming, null, null);
+      expect(isValid).toBeFalsy();
+    });
   });
 });
