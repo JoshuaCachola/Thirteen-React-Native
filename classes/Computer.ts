@@ -4,10 +4,8 @@ import {
   combinationConstants,
 } from '../constants/CombinationConstants';
 import {
-  CardValues,
   cardValues,
   getMultiples,
-  getStraights,
   isValidCombination,
 } from '../helper/combinationHelpers';
 import { CardType } from './Card';
@@ -74,8 +72,6 @@ export class Computer extends Player {
       newHand: hand,
     };
 
-    // const straights = getStraights(hand, length, highestCard);
-    // console.log(straights);
     return payload;
   }
 
@@ -131,16 +127,6 @@ export class Computer extends Player {
   }
 
   private playLowestThree(hand: CardType[]) {
-    // const updatedHands: [CardType[], CardType[]] = [[], []];
-    // for (let idx = 0; idx < hand.length; idx++) {
-    //   const card = hand[idx];
-    //   if (card.value === 3 && card.suit === 0) {
-    //     updatedHands[0] = [card];
-    //     updatedHands[1] = [...hand.slice(0, idx), ...hand.slice(idx + 1)];
-    //     break;
-    //   }
-    // }
-    // return updatedHands;
     return [[hand[0]], hand.slice(1)];
   }
 

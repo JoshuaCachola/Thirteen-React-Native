@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import PlayArea from '../components/PlayArea';
 import PlayerStack from '../components/PlayerStack';
 import PlayerActions from '../components/PlayerActions';
@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
     height: Dimensions.get('window').height,
+    backgroundColor: 'green',
   },
   playerActionsArea: {
     borderWidth: 1,
@@ -97,8 +98,8 @@ const styles = StyleSheet.create({
     left: 0,
     backgroundColor: 'white',
     opacity: 0.8,
-    width: '20%',
-    height: '50%',
+    width: '25%',
+    height: '60%',
     zIndex: 10,
   },
 });

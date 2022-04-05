@@ -12,7 +12,7 @@ export default observer(function PlayerStack() {
   return (
     <View style={styles.container}>
       <View style={styles.title}>
-        <Text style={styles.text}>Rotation</Text>
+        <Text style={styles.titleText}>Rotation</Text>
       </View>
       {game.playerRotation.length !== 0 &&
         game.playerRotation.map((player: PlayerInterface) => {
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
     borderRadius: 4,
-    width: Dimensions.get('window').width / 4,
+    width: '100%',
     height: '100%',
     margin: 'auto',
     display: 'flex',
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 8,
   },
-  userIcon: {},
   userText: {
     width: '60%',
     textAlign: 'center',
@@ -71,7 +71,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
   },
+  titleText: {
+    fontWeight: '600',
+    fontSize: 24,
+  },
   text: {
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
 });

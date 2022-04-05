@@ -116,7 +116,7 @@ export default function InteractiveView({
             }
           }}
         >
-          <PlayingCard value={value} suit={suit} size={14} />
+          <PlayingCard value={value} suit={suit} size={18} />
         </TouchableHighlight>
       </Animated.View>
     </FlingGestureHandler>
@@ -128,13 +128,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   container: {
-    width: 75,
+    width: 90,
     height: 125,
     borderRadius: 8,
     borderColor: '#C5C5C5',
     borderWidth: 1,
     backgroundColor: 'white',
     justifyContent: 'space-between',
+    shadowColor: 'black',
+    shadowRadius: 3,
+    shadowOffset: { width: -10, height: 10 },
+    shadowOpacity: 0.2,
   },
   selectCard: {
     bottom: 30,

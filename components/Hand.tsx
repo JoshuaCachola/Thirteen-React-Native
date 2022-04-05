@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { CardType } from '../classes/Card';
 import InteractiveView from './InteractiveView';
 import { calculatePositions, Position } from '../helper/calculatePositions';
@@ -9,6 +9,12 @@ import Button from './Button';
 import { PlayerInterface } from '../classes/Player';
 import { observer } from 'mobx-react-lite';
 import { ActionType } from '../constants/Actions';
+import {
+  Directions,
+  FlingGestureHandler,
+  HandlerStateChangeEvent,
+  State,
+} from 'react-native-gesture-handler';
 
 interface props {
   player: PlayerInterface;
@@ -123,54 +129,78 @@ export default observer(function Hand({ player }: props) {
     setTurnNumber(turnNumber + 1);
   };
 
+  const handleStateChange = ({ nativeEvent }: HandlerStateChangeEvent) => {
+    if (nativeEvent.oldState === State.ACTIVE) {
+      handlePass();
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      {/* Hand */}
-      <View
-        style={[
-          {
-            transform: [
-              {
-                translateX: 30 * (13 - hand.length + 1),
-              },
-            ],
-          },
-        ]}
-      >
-        {hand.map((card: CardType, idx: number) => {
-          return (
-            <InteractiveView
-              key={`hand-${card.value}-${card.suit}`}
-              cardPosition={positions[idx]}
-              value={card.value}
-              suit={card.suit}
-              selected={card.selected}
-              hand={hand}
-              setHand={setHand}
-              handlePlayCards={handlePlayCards}
-              isValid={isValid}
-            />
-          );
-        })}
+    <FlingGestureHandler
+      direction={Directions.LEFT}
+      numberOfPointers={1}
+      enabled={player === game.currentPlayer}
+      onHandlerStateChange={handleStateChange}
+    >
+      <View style={styles.container}>
+        {/* Hand */}
+        <View
+          style={[
+            {
+              transform: [
+                {
+                  translateX:
+                    Dimensions.get('window').width / (hand.length + 1),
+                },
+              ],
+            },
+          ]}
+        >
+          {hand.map((card: CardType, idx: number) => {
+            return (
+              <InteractiveView
+                key={`hand-${card.value}-${card.suit}`}
+                cardPosition={positions[idx]}
+                value={card.value}
+                suit={card.suit}
+                selected={card.selected}
+                hand={hand}
+                setHand={setHand}
+                handlePlayCards={handlePlayCards}
+                isValid={isValid}
+              />
+            );
+          })}
+        </View>
+        <View style={styles.buttons}>
+          <Button
+            title='Sort Cards'
+            onPress={() => player.playerHand.sort(hand)}
+          />
+          <Button title='Pass' onPress={handlePass} />
+        </View>
       </View>
-      <View style={styles.buttons}>
-        <Button
-          title='Sort Cards'
-          onPress={() => player.playerHand.sort(hand)}
-        />
-        <Button title='Pass' onPress={handlePass} />
-      </View>
-    </View>
+    </FlingGestureHandler>
   );
 });
 
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
+    position: 'relative',
+    zIndex: 100,
+    shadowColor: 'gray',
+    shadowOffset: { width: -10, height: 10 },
+    shadowRadius: 10,
+    borderColor: 'white',
+    borderWidth: 1,
   },
   buttons: {
     position: 'absolute',
-    right: 10,
+    right: 0,
     bottom: 10,
+  },
+  hand: {
+    justifyContent: 'center',
   },
 });

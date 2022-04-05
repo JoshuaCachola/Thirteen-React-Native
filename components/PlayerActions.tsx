@@ -28,7 +28,7 @@ export default observer(function PlayerActions() {
           {action.cards!.map((card, idx) => {
             return (
               <View
-                style={[styles.actionCard, { left: idx * 2 }]}
+                style={[styles.actionCard, { left: idx * 5 }]}
                 key={Math.random()}
               >
                 <PlayingCard value={card.value} suit={card.suit} size={11} />
@@ -67,8 +67,7 @@ export default observer(function PlayerActions() {
                 <View style={styles.actionContainer} key={`${Math.random()}`}>
                   {/* User Image */}
                   <View style={styles.iconContainer}>
-                    <FaIcon size={20} icon={faUser} color='black' />
-                    <Text style={{ marginLeft: 8 }}>{action.player.name}</Text>
+                    <FaIcon size={24} icon={faUser} color='black' />
                   </View>
                   {/* <Action action={action} /> */}
                   {createAction(action)}
@@ -108,9 +107,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     display: 'flex',
     flexDirection: 'row',
-    flex: 1,
     alignItems: 'center',
-    marginLeft: 8,
+    marginLeft: 15,
   },
   actionPlay: {
     justifyContent: 'flex-end',
@@ -118,12 +116,12 @@ const styles = StyleSheet.create({
     right: 0,
     display: 'flex',
     flexDirection: 'row',
-    width: '40%',
+    width: '70%',
   },
   actionPass: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: '40%',
+    width: '70%',
   },
   actionCard: {
     backgroundColor: 'white',
