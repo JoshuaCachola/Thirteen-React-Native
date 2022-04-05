@@ -5,7 +5,6 @@ import PlayingCard from './PlayingCard';
 import { View } from './Themed';
 
 export default function Action(props: any) {
-  console.log(props);
   if (props.action.action === 0) {
     return (
       <View style={styles.action}>

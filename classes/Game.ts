@@ -63,7 +63,6 @@ export class Game implements GameInterface {
     this._players.forEach((player) => {
       ready = ready && player.ready;
     });
-    console.log(ready);
     return ready;
   }
 }

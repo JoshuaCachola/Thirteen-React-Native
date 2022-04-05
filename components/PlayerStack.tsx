@@ -1,10 +1,9 @@
 import { useContext } from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import { GameContext } from '../context/GameContext';
-import FaIcon from '../helper/fontAwsomeHelper';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { PlayerInterface } from '../classes/Player';
 import { observer } from 'mobx-react-lite';
+import Player from './Player';
 
 export default observer(function PlayerStack() {
   const { game } = useContext(GameContext);
@@ -15,17 +14,8 @@ export default observer(function PlayerStack() {
         <Text style={styles.titleText}>ROTATION</Text>
       </View>
       {game.playerRotation.length !== 0 &&
-        game.playerRotation.map((player: PlayerInterface) => {
-          return (
-            <View style={styles.userRow} key={player.name}>
-              <View style={styles.iconContainer}>
-                <FaIcon size={20} icon={faUser} color='black' />
-              </View>
-              <View style={styles.userText}>
-                <Text style={styles.text}>{player.name}</Text>
-              </View>
-            </View>
-          );
+        game.playerRotation.map((player: PlayerInterface, idx) => {
+          return <Player player={player} key={player.name} />;
         })}
     </View>
   );

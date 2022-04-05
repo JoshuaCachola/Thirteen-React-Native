@@ -116,7 +116,7 @@ export default observer(function Hand({ player }: props) {
 
   const handlePass = () => {
     // user cannot pass when there is not a combination type
-    if (game.combinationType === null) {
+    if (game.combinationType === null || game.currentPlayer !== player) {
       return;
     }
 

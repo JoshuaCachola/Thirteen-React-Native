@@ -64,8 +64,6 @@ export default observer(function GameProvider(props: any) {
         game.updateHighestCard(played);
       }
 
-      console.log(game.currentPlayer, played, newHand);
-
       // push action and update rotation after a second
       setTimeout(() => {
         playerActions.push(payload);

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -19,6 +19,7 @@ import {
   TouchableHighlight,
 } from 'react-native-gesture-handler';
 import { useState } from 'react';
+import SelectedCard from './SelectedCard';
 
 interface InteractiveProps {
   value: number;
@@ -105,13 +106,7 @@ export default function InteractiveView({
           },
         ]}
       >
-        <TouchableHighlight
-          style={[
-            styles.container,
-            isCardSelected && styles.selectCard,
-            isCardSelected && isValid && styles.validSelect,
-            isCardSelected && !isValid && styles.invalidSelect,
-          ]}
+        <Pressable
           onPress={() => {
             if (handleOnPress) {
               handleOnPress();
@@ -119,8 +114,10 @@ export default function InteractiveView({
             }
           }}
         >
-          <PlayingCard value={value} suit={suit} size={18} />
-        </TouchableHighlight>
+          <SelectedCard isValid={isValid} isSelected={isCardSelected}>
+            <PlayingCard value={value} suit={suit} size={18} />
+          </SelectedCard>
+        </Pressable>
       </Animated.View>
     </FlingGestureHandler>
   );

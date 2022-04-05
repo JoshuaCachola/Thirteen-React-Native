@@ -47,7 +47,7 @@ export default observer(function PlayerActions() {
   };
 
   const displayCombinationType = (type: Combination, length: number) => {
-    return type !== 'STRAIGHT' ? type : `${length} card ${type}`;
+    return type !== 'STRAIGHT' ? type : `${length} CARD ${type}`;
   };
 
   return (
@@ -56,7 +56,7 @@ export default observer(function PlayerActions() {
         <Text style={styles.combinationText}>
           {game.combinationType !== null
             ? displayCombinationType(game.combinationType, game.length)
-            : 'Play anything'}
+            : 'PLAY ANYTHING'}
         </Text>
       </View>
       <ScrollView>
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '70%',
+    transform: [{ translateY: 8 }],
   },
   actionPass: {
     justifyContent: 'center',
@@ -142,6 +143,6 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 4,
     backgroundColor: 'black',
-    transform: [{ rotate: '10deg' }, { translateY: 0 }, { translateX: 4 }],
+    transform: [{ rotate: '10deg' }, { translateY: 8 }, { translateX: 4 }],
   },
 });
