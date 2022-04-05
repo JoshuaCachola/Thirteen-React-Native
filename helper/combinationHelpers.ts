@@ -1,4 +1,5 @@
-import { CardType } from '../classes/Card';
+import { values } from 'mobx';
+import { Card, CardType } from '../classes/Card';
 import {
   Combination,
   combinationConstants,
@@ -53,7 +54,7 @@ type combination = { [key: number]: number[] };
 // of a card and the suits stored in an array as the value of
 // the keys
 export const createObj = (cards: CardType[]) => {
-  const obj: combination = {};
+  const obj: { [key: number]: number[] } = {};
   cards.forEach((card) => {
     if (card.value in obj) {
       obj[card.value].push(card.suit);
@@ -80,14 +81,68 @@ export const isValidSingle = (
         combinationConstants.SINGLE,
       ];
     case 4:
+      if (current.value !== CardValues['2']) {
+        return [false, combinationConstants.SINGLE];
+      }
       return [areAllSameValue(incoming), combinationConstants.BOMB];
     case 6:
+      if (current.value !== CardValues['2']) {
+        return [false, combinationConstants.SINGLE];
+      }
       return [
         isValidBomb(incoming, combinationConstants.BOMB!),
         combinationConstants.BOMB,
       ];
     default:
       return [false, combinationConstants.SINGLE];
+  }
+};
+
+// checks for valid doubles and double bombs
+const isValidDouble = (
+  current: CardType,
+  incoming: CardType[]
+): [boolean, Combination] => {
+  switch (incoming.length) {
+    case 2:
+      return [
+        areAllSameValue(incoming) && isIncomingHigherValue(current, incoming),
+        combinationConstants.DOUBLE,
+      ];
+    case 8:
+      if (current.value !== CardValues['2']) {
+        return [false, combinationConstants.DOUBLE];
+      }
+      return [
+        isValidBomb(incoming, combinationConstants.DOUBLE_BOMB!),
+        combinationConstants.DOUBLE_BOMB,
+      ];
+    default:
+      return [false, combinationConstants.DOUBLE];
+  }
+};
+
+// checks for valid doubles and double bombs
+const isValidTriple = (
+  current: CardType,
+  incoming: CardType[]
+): [boolean, Combination] => {
+  switch (incoming.length) {
+    case 3:
+      return [
+        areAllSameValue(incoming) && isIncomingHigherValue(current, incoming),
+        combinationConstants.TRIPLE,
+      ];
+    case 10:
+      if (current.value !== CardValues['2']) {
+        return [false, combinationConstants.TRIPLE];
+      }
+      return [
+        isValidBomb(incoming, combinationConstants.TRIPLE_BOMB!),
+        combinationConstants.TRIPLE_BOMB,
+      ];
+    default:
+      return [false, combinationConstants.TRIPLE];
   }
 };
 
@@ -147,9 +202,14 @@ export const isValidBomb = (incoming: CardType[], type: string) => {
 
   const incomingObj = createObj(incoming);
   const values = [];
-  for (let [k, v] of Object.entries(incomingObj)) {
-    if (v.length !== 2) return false;
-    values.push(parseInt(k));
+  for (let [v, indicies] of Object.entries(incomingObj)) {
+    if (indicies.length !== 2) return false;
+    values.push(parseInt(v));
+  }
+
+  // values cannont include a "TWO" - value: 15
+  if (values.includes(15)) {
+    return false;
   }
 
   switch (type) {
@@ -169,7 +229,7 @@ export const isValidBomb = (incoming: CardType[], type: string) => {
       }
       break;
     default:
-      break;
+      return false;
   }
 
   values.sort();
@@ -207,19 +267,9 @@ export const isValidCombination = (
     case combinationConstants.SINGLE:
       return isValidSingle(current, incoming);
     case combinationConstants.DOUBLE:
-      return [
-        areAllSameValue(incoming) &&
-          isIncomingHigherValue(current, incoming) &&
-          incoming.length === length,
-        combinationConstants.DOUBLE,
-      ];
+      return isValidDouble(current, incoming);
     case combinationConstants.TRIPLE:
-      return [
-        areAllSameValue(incoming) &&
-          isIncomingHigherValue(current, incoming) &&
-          incoming.length === length,
-        combinationConstants.TRIPLE,
-      ];
+      return isValidTriple(current, incoming);
     case combinationConstants.BOMB:
       return [
         isValidBomb(incoming, combinationConstants.BOMB!) &&
