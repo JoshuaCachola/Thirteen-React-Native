@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     position: 'absolute',
+    transform: [{ translateX: -50 }],
     right: 0,
     bottom: 0,
   },

@@ -143,17 +143,4 @@ const styles = StyleSheet.create({
     shadowOffset: { width: -10, height: 10 },
     shadowOpacity: 0.2,
   },
-  selectCard: {
-    bottom: 30,
-    borderWidth: 2,
-    transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }],
-  },
-  invalidSelect: {
-    borderColor: 'red',
-    borderStyle: 'dashed',
-  },
-  validSelect: {
-    borderColor: 'green',
-    borderStyle: 'solid',
-  },
 });
