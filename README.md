@@ -1,6 +1,6 @@
 # Thirteen
 
-## A card game originating from Southeast Asia made for mobile devices
+_A card game originating from Southeast Asia made for mobile devices_
 
 ## Technologies used
 
