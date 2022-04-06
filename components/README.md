@@ -92,7 +92,7 @@ export class Computer extends Player {
     }
     return payload;
   }
-  }
+}
 ```
 
 ## Still in progress
