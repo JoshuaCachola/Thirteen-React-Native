@@ -31,7 +31,7 @@ export default observer(function PlayArea() {
                   styles.card,
                   {
                     left: idx * 20 + played.positions?.left!,
-                    top: played.positions?.top,
+                    bottom: played.positions?.bottom,
                     transform: [{ rotate: played.positions!.rotate }],
                   },
                 ]}

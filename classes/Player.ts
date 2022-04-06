@@ -13,11 +13,13 @@ export class Player implements PlayerInterface {
   readonly _name: string;
   playerHand: HandInterface;
   _ready: boolean;
+  // _avatar: string;
 
   constructor(name: string, ready: boolean) {
     this._name = name;
     this.playerHand = new Hand();
     this._ready = ready;
+    // this._avatar = '';
     makeObservable(this, {
       playerHand: observable,
       _ready: observable,

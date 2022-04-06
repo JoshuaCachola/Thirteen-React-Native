@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, ImageBackground, StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 import Hand from '../components/Hand';
 import { useContext, useEffect } from 'react';
@@ -22,29 +22,30 @@ export default function Game() {
   return (
     <GameProvider>
       <View style={styles.container}>
-        {/* Top Left */}
-        <View style={styles.playerStack}>
-          <PlayerStack />
-        </View>
-
-        {/* Middle */}
-        <View style={styles.game}>
-          <View style={styles.playArea}>
-            <PlayArea />
+        <ImageBackground
+          source={require('../assets/images/cyan_bkg5.png')}
+          resizeMode='cover'
+          style={styles.image}
+        >
+          {/* Top Left */}
+          <View style={styles.playerStack}>
+            <PlayerStack />
           </View>
-          <View style={styles.hand}>
-            <Hand player={player} />
+          {/* Middle */}
+          <View style={styles.game}>
+            <View style={styles.playArea}>
+              <PlayArea />
+            </View>
+            <View style={styles.hand}>
+              <Hand player={player} />
+            </View>
           </View>
-        </View>
-
-        {/* Top Right */}
-        <View style={styles.playerActions}>
-          <PlayerActions />
-        </View>
-
-        {/* Bottom */}
+          {/* Top Right */}
+          <View style={styles.playerActions}>
+            <PlayerActions />
+          </View>
+        </ImageBackground>
       </View>
-      {/* {isGameWon && } */}
       {!startGame && !isGameWon && <ReadyModal player={player} />}
     </GameProvider>
   );
@@ -54,33 +55,21 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
     height: Dimensions.get('window').height,
-    backgroundColor: 'green',
-  },
-  playerActionsArea: {
-    borderWidth: 1,
-    borderStyle: 'dashed',
-    backgroundColor: 'blue',
-    position: 'absolute',
-    width: '60%',
-    height: Dimensions.get('window').height,
-    transform: [
-      {
-        translateX: Dimensions.get('window').width / 5,
-      },
-    ],
+    // backgroundColor: 'blue',
+    // width: Dimensions.get('window').width,
   },
   game: {
-    height: '100%',
+    // height: Dimensions.get('screen').height,
     display: 'flex',
     position: 'relative',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    // justifyContent: 'center',
   },
   playArea: {
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
   },
   hand: {
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   playerActions: {
     position: 'absolute',
@@ -89,17 +78,19 @@ const styles = StyleSheet.create({
     width: '25%',
     height: '50%',
     zIndex: 10,
-    backgroundColor: 'white',
     opacity: 0.8,
   },
   playerStack: {
     position: 'absolute',
     top: 0,
     left: 0,
-    backgroundColor: 'white',
     opacity: 0.8,
     width: '25%',
     height: '60%',
     zIndex: 10,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });

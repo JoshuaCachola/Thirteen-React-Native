@@ -16,6 +16,9 @@ export default function useCachedResources() {
         await Font.loadAsync({
           ...FontAwesome.font,
           'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
+          'cartograph-thin': require('../assets/fonts/CartographCF-Thin.ttf'),
+          'cartograph-bold-italic': require('../assets/fonts/CartographCF-BoldItalic.ttf'),
+          'cartograph-bold': require('../assets/fonts/CartographCF-Bold.ttf'),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

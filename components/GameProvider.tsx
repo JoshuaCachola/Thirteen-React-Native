@@ -6,7 +6,7 @@ import { ActionPayload, ActionType } from '../constants/Actions';
 import {
   getRandLeft,
   getRandRotation,
-  getRandTop,
+  getRandBottom,
 } from '../helper/calculatePositions';
 
 export default observer(function GameProvider(props: any) {
@@ -45,7 +45,7 @@ export default observer(function GameProvider(props: any) {
         cards: played,
         positions: {
           left: getRandLeft(),
-          top: getRandTop(),
+          bottom: getRandBottom(),
           rotate: getRandRotation(),
         },
       };

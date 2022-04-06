@@ -64,10 +64,13 @@ const styles = StyleSheet.create({
   },
   value: {
     marginLeft: 1,
-    marginBottom: 2,
+    marginBottom: 4,
+    fontFamily: 'cartograph-bold',
   },
   bottomValue: {
+    fontFamily: 'cartograph-bold',
     marginRight: 3,
+    marginBottom: 5,
     transform: [
       {
         rotateY: '180deg',

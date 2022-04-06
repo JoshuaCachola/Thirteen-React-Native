@@ -1,6 +1,6 @@
 export interface Position {
   transform: [{ rotate: string }, { perspective: number }];
-  bottom: number;
+  top: number;
   left: number;
   zIndex: number;
 }
@@ -19,7 +19,7 @@ export function calculatePositions(handLength: number): Position[] {
           perspective: 1000,
         },
       ],
-      bottom: i <= mid ? 4 * i : 4 * (handLength - i),
+      top: i <= mid ? -4 * i : -4 * (handLength - i),
       left: i * 40,
       zIndex: i,
     });
@@ -31,7 +31,7 @@ export const getRandLeft = () => {
   return Math.random() * (125 - 10) + 10;
 };
 
-export const getRandTop = () => {
+export const getRandBottom = () => {
   return Math.random() * (40 - 20) + 20;
 };
 

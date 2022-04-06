@@ -6,7 +6,7 @@ import Animated, {
 import {
   getRandLeft,
   getRandRotation,
-  getRandTop,
+  getRandBottom,
   Position,
 } from '../helper/calculatePositions';
 import { CardType } from '../classes/Card';
@@ -16,7 +16,6 @@ import {
   Directions,
   State,
   HandlerStateChangeEvent,
-  TouchableHighlight,
 } from 'react-native-gesture-handler';
 import { useState } from 'react';
 import SelectedCard from './SelectedCard';
@@ -27,7 +26,11 @@ interface InteractiveProps {
   selected: boolean;
   cardPosition: Position;
   hand: CardType[];
-  handlePlayCards: (p: { left: number; top: number; rotate: string }) => void;
+  handlePlayCards: (p: {
+    left: number;
+    bottom: number;
+    rotate: string;
+  }) => void;
   isValid: boolean;
   setHand: (h: CardType[]) => void;
 }
@@ -49,7 +52,7 @@ export default function InteractiveView({
   const handleStateChange = ({ nativeEvent }: HandlerStateChangeEvent) => {
     if (nativeEvent.oldState === State.ACTIVE) {
       const positions = {
-        top: getRandTop(),
+        bottom: getRandBottom(),
         left: getRandLeft(),
         rotate: getRandRotation() + 'deg',
       };
@@ -100,7 +103,7 @@ export default function InteractiveView({
           styles.card,
           rollout,
           {
-            bottom: cardPosition.bottom,
+            top: cardPosition.top,
             left: cardPosition.left,
             zIndex: cardPosition.zIndex,
           },

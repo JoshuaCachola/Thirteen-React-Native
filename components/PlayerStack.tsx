@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { GameContext } from '../context/GameContext';
 import { PlayerInterface } from '../classes/Player';
 import { observer } from 'mobx-react-lite';
@@ -27,32 +27,10 @@ const styles = StyleSheet.create({
     height: '100%',
     margin: 'auto',
     display: 'flex',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
   },
   player: {
     fontWeight: 'bold',
-  },
-  userRow: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  iconContainer: {
-    borderColor: 'black',
-    borderWidth: 2,
-    borderRadius: 50,
-    width: 30,
-    height: 30,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 8,
-  },
-  userText: {
-    width: '60%',
-    textAlign: 'center',
-    alignSelf: 'center',
   },
   title: {
     width: '80%',
@@ -74,8 +52,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'white',
     textAlign: 'center',
-  },
-  text: {
-    fontWeight: '600',
+    fontFamily: 'cartograph-bold-italic',
   },
 });

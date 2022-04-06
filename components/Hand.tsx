@@ -65,7 +65,7 @@ export default observer(function Hand({ player }: props) {
   // handles playing cards when cards are selected
   // and play button is pressed
   const handlePlayCards = (positions: {
-    top: number;
+    bottom: number;
     left: number;
     rotate: string;
   }) => {
@@ -187,18 +187,19 @@ export default observer(function Hand({ player }: props) {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    position: 'relative',
+    // position: 'absolute',
     zIndex: 100,
     shadowColor: 'gray',
     shadowOffset: { width: -10, height: 10 },
     shadowRadius: 10,
-    borderColor: 'white',
     borderWidth: 1,
+    justifyContent: 'flex-start',
+    // top: 50,
   },
   buttons: {
     position: 'absolute',
     right: 0,
-    bottom: 10,
+    top: 0,
   },
   hand: {
     justifyContent: 'center',

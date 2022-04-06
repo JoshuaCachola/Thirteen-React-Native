@@ -4,8 +4,8 @@ export const combinationConstants: { [key: string]: Combination } = {
   TRIPLE: 'TRIPLE',
   STRAIGHT: 'STRAIGHT',
   BOMB: 'BOMB',
-  DOUBLE_BOMB: 'DOUBLE_BOMB',
-  TRIPLE_BOMB: 'TRIPLE_BOMB',
+  DOUBLE_BOMB: 'DOUBLE BOMB',
+  TRIPLE_BOMB: 'TRIPLE BOMB',
 };
 
 export type Combination =
@@ -14,6 +14,6 @@ export type Combination =
   | 'TRIPLE'
   | 'STRAIGHT'
   | 'BOMB'
-  | 'DOUBLE_BOMB'
-  | 'TRIPLE_BOMB'
+  | 'DOUBLE BOMB'
+  | 'TRIPLE BOMB'
   | null;
