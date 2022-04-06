@@ -54,6 +54,7 @@ export default observer(function PlayerActions() {
             style={{
               fontSize: 16,
               fontFamily: 'cartograph-bold',
+              color: 'white',
             }}
           >
             PASS
@@ -78,7 +79,7 @@ export default observer(function PlayerActions() {
             : 'PLAY ANYTHING'}
         </Text>
       </View>
-      <ScrollView>
+      <ScrollView overScrollMode='never' scrollsToTop={true}>
         <View style={styles.cards}>
           {actions
             .slice()
@@ -107,6 +108,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     margin: 'auto',
+    elevation: 20,
   },
   cards: {
     display: 'flex',
@@ -158,12 +160,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'cartograph-bold-italic',
     fontSize: 20,
-    color: 'white',
+    color: '#FAE3B0',
   },
   combinationTextContainer: {
-    borderColor: 'black',
+    borderColor: '#161320',
     borderWidth: 4,
-    backgroundColor: 'black',
+    backgroundColor: '#161320',
     transform: [{ rotate: '10deg' }, { translateY: 8 }, { translateX: 4 }],
   },
 });

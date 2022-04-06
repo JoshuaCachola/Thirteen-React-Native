@@ -13,10 +13,9 @@ export default observer(function PlayerStack() {
       <View style={styles.title}>
         <Text style={styles.titleText}>ROTATION</Text>
       </View>
-      {game.playerRotation.length !== 0 &&
-        game.playerRotation.map((player: PlayerInterface, idx) => {
-          return <Player player={player} key={player.name} />;
-        })}
+      {game.playerRotation.map((player: PlayerInterface, idx) => {
+        return <Player player={player} key={player.name} idx={idx} />;
+      })}
     </View>
   );
 });
@@ -36,21 +35,24 @@ const styles = StyleSheet.create({
     width: '80%',
     alignSelf: 'center',
     borderWidth: 4,
-    borderColor: 'black',
-    backgroundColor: 'black',
+    borderColor: '#161320',
+    backgroundColor: '#161320',
     transform: [
       {
         rotate: '-10deg',
       },
       {
-        translateX: -25,
+        translateX: -20,
+      },
+      {
+        translateY: -8,
       },
     ],
   },
   titleText: {
     fontWeight: '600',
     fontSize: 24,
-    color: 'white',
+    color: '#FAE3B0',
     textAlign: 'center',
     fontFamily: 'cartograph-bold-italic',
   },

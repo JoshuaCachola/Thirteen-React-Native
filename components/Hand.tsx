@@ -177,7 +177,7 @@ export default observer(function Hand({ player }: props) {
             title='Sort Cards'
             onPress={() => player.playerHand.sort(hand)}
           />
-          <Button title='Pass' onPress={handlePass} />
+          {/* <Button title='Pass' onPress={handlePass} /> */}
         </View>
       </View>
     </FlingGestureHandler>
@@ -187,19 +187,16 @@ export default observer(function Hand({ player }: props) {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    // position: 'absolute',
     zIndex: 100,
     shadowColor: 'gray',
     shadowOffset: { width: -10, height: 10 },
     shadowRadius: 10,
-    borderWidth: 1,
-    justifyContent: 'flex-start',
-    // top: 50,
+    transform: [{ translateY: 60 }],
   },
   buttons: {
     position: 'absolute',
     right: 0,
-    top: 0,
+    bottom: 0,
   },
   hand: {
     justifyContent: 'center',

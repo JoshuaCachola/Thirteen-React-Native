@@ -65,7 +65,7 @@ describe('bombs', () => {
         2
       );
       expect(isValid).toBeTruthy();
-      expect(type).toBe('DOUBLE_BOMB');
+      expect(type).toBe('DOUBLE BOMB');
     });
   });
 
@@ -91,7 +91,7 @@ describe('bombs', () => {
         3
       );
       expect(isValid).toBeTruthy();
-      expect(type).toBe('TRIPLE_BOMB');
+      expect(type).toBe('TRIPLE BOMB');
     });
   });
 

@@ -22,6 +22,7 @@ export default function Game() {
   return (
     <GameProvider>
       <View style={styles.container}>
+        {!startGame && !isGameWon && <ReadyModal player={player} />}
         <ImageBackground
           source={require('../assets/images/cyan_bkg5.png')}
           resizeMode='cover'
@@ -46,16 +47,17 @@ export default function Game() {
           </View>
         </ImageBackground>
       </View>
-      {!startGame && !isGameWon && <ReadyModal player={player} />}
     </GameProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: 'relative',
-    height: Dimensions.get('window').height,
-    // backgroundColor: 'blue',
+    // position: 'relative',
+    // height: Dimensions.get('window').height,
+    // backgroundColor: '#96CDFB',
+    flex: 1,
+    justifyContent: 'center',
     // width: Dimensions.get('window').width,
   },
   game: {
@@ -63,13 +65,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     position: 'relative',
     flexDirection: 'column',
-    // justifyContent: 'center',
+    backgroundColor: 'red',
   },
   playArea: {
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   hand: {
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
   },
   playerActions: {
     position: 'absolute',
@@ -79,6 +81,8 @@ const styles = StyleSheet.create({
     height: '50%',
     zIndex: 10,
     opacity: 0.8,
+    backgroundColor: '#161320',
+    borderRadius: 4,
   },
   playerStack: {
     position: 'absolute',
@@ -88,6 +92,8 @@ const styles = StyleSheet.create({
     width: '25%',
     height: '60%',
     zIndex: 10,
+    backgroundColor: '#161320',
+    borderRadius: 4,
   },
   image: {
     flex: 1,

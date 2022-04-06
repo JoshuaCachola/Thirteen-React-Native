@@ -32,6 +32,7 @@ export default observer(function PlayArea() {
                   {
                     left: idx * 20 + played.positions?.left!,
                     bottom: played.positions?.bottom,
+                    elevation: idx * 10,
                     transform: [{ rotate: played.positions!.rotate }],
                   },
                 ]}

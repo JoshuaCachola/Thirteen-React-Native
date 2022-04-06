@@ -15,11 +15,17 @@ export default function Button({ title, onPress }: ButtonProps) {
 
 const styles = StyleSheet.create({
   button: {
-    width: 40,
-    height: 20,
-    backgroundColor: 'white',
+    width: 95,
+    height: 40,
+    backgroundColor: '#161320',
+    borderColor: '#161320',
+    opacity: 0.7,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 6,
   },
   buttonText: {
-    color: 'black',
+    color: '#FAE3B0',
+    fontFamily: 'cartograph-bold',
   },
 });
